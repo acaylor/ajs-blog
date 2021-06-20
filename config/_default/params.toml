@@ -1,0 +1,136 @@
+logoText = "AJ's Blog" # Logo text that appears in the site navigation bar.
+logoType = "short" # long, short -> short: squre shape includes logo text, long: rectangle shape not includes logo text
+logo = true # Logo that appears in the site navigation bar.
+description = "AJ's personal blog" # for SEO
+custom_css = [] # custom_css = ["scss/custom.scss"] and then make file at root/assets/scss/custom.scss
+custom_js = [] # custom_js = ["js/custom.js"] and then make file at root/assets/js/custom.js
+useFaviconGenerator = false # https://www.favicon-generator.org/
+
+themeOptions = ["dark", "light", "hacker", "solarized", "kimbie"] # select options for site color theme
+notAllowedTypesInHome = ["contact", "talks", "about", "showcase", "publication", "presentation", "resume"] # not allowed page types in home page. type can be set in front matter or default to folder name.
+notAllowedTypesInHomeSidebar = ["about", "archive", "showcase", "publication", "presentation", "resume"] # not allowed page types in home page sidebar(recent post titles).
+notAllowedTypesInArchive = ["about", "talks", "showcase", "publication", "presentation", "resume"] # not allowed page types in archive page
+notAllowedTypesInHomeFeed = ["about", "archive", "contact", "talks", "showcase", "publication", "presentation", "resume", "gallery"]
+enablePinnedPosts = true # show pinned posts first in the main view
+
+viewportSize = "normal" # widest, wider, wide, normal, narrow
+enableUiAnimation = true
+hideSingleContentsWhenJSDisabled = false
+minItemsToShowInTagCloud = 1 # Minimum items to show in tag cloud
+
+# search
+enableSearch = true # site search with Fuse
+enableSearchHighlight = true # when true, search keyword will be highlighted
+searchContent = true
+searchDistance = 100
+searchThreshold = 0.4
+
+# appbar
+enableAppbarSearchIcon = false
+enableAppbarLangIcon = false
+
+# header
+homeHeaderType = "text" # text, img, slide, typewriter
+hideHomeHeaderWhenMobile = false
+
+# menu
+showMobileMenuTerms = ["tags", "categories"]
+
+# navbar
+enableThemeChange = true # site color theme
+
+# body
+enableBreadcrumb = true # breadcrumb for list, single page
+enableGoToTop = true # scroll to top
+enableWhoami = true # at the end of single page
+summaryShape = "classic" # card, classic, compact
+archiveGroupByDate = "2006" # "2006-01": group by month, "2006": group by year
+archivePaginate = 13 # items per page
+paginateWindow = 1 # setting it to 1 gives 7 buttons, 2 gives 9, etc. If set 1: [1 ... 4 5 6 ... 356] [1 2 3 4 5 ... 356] etc
+talksPaginate = 8 # items per page
+talksGroupByDate = "2006" # "2006-01": group by month, "2006": group by year
+
+# whoami: usage - home page sidebar, single page bottom of post. all values can be empty
+myname = "aj"
+email = "ayyyj@icloud.com"
+whoami = "IT Pro"
+bioImageUrl = "" # image url like "http//..." or "images/anyfoldername/mybioimage.jpg" If not set, we find a avatar image in root/static/images/whoami/avatar.(png|jpg|svg)
+useGravatar = false # we use this option highest priority
+location = "Southeastern United States"
+link = "https://gitlab.com/acaylor/example_blog"
+
+# sidebar
+enableBio = true # in home page sidebar
+enableBioImage = true # in home page sidebar
+enableSidebar = true # Set to false to create the full width of the content.
+enableSidebarTags = true # if you want to use tags.
+enableSidebarSeries = false
+enableSidebarCategories = true
+enableHomeSidebarTitles = true
+enableListSidebarTitles = true
+enableToc = true # single page table of contents, you can replace this param to toc(toc = true)
+hideToc = false # Hide or Show toc
+tocPosition = "outer" # inner, outer
+tocFolding = false
+enableTocSwitch = true # single page table of contents visibility switch
+itemsPerCategory = 5 # maximum number of posts shown in the sidebar.
+sidebarPosition = "right" # bio, profile component layout position
+tocLevels = ["h2", "h3", "h4"] # minimum h2, maximum h4 in your article
+enableSidebarPostsByOrder = false # another lists in the sidebar
+
+# footer
+showPoweredBy = true # show footer text: Powered by Hugo and Zzo theme
+showFeedLinks = true # RSS Feed 
+showSocialLinks = true # email, facebook, twitter ...
+enableLangChange = false # show button at bottom left of footer.
+
+# comment
+enableComment = true
+disqus_shortname = "ayyyj" 
+commento = false
+
+[socialOptions] # if set, social icons will show up.
+  email = "mailto:ayyyj@icloud.com"
+  phone = ""
+  facebook = ""
+  twitter = ""
+  github = "https://github.com/acaylor"
+  stack-overflow = ""
+  instagram = ""
+  google-plus = ""
+  youtube = ""
+  medium = ""
+  tumblr = ""
+  linkedin = "https://linkedin.com/"
+  pinterest = ""
+  stack-exchange = ""
+  telegram = ""
+  steam = "https://steamcommunity.com/"
+  weibo = ""
+  douban = ""
+  csdn = ""
+  gitlab = "https://gitlab.com/acaylor"
+  mastodon = ""
+  jianshu = ""
+  zhihu = ""
+  signal = ""
+  whatsapp = ""
+  matrix = ""
+  xmpp = ""
+  dev-to = ""
+  gitea = ""
+  google-scholar = ""
+  twitch = ""
+
+[copyrightOptions]
+  enableCopyrightLink = false # if set, you can add copyright link
+  copyrightLink = ""
+  copyrightLinkImage = ""
+  copyrightLinkText = ""
+
+[[footerLinks]]
+  name = ""
+  link = ""
+[[footerLinks]]
+  name = ""
+  link = ""
