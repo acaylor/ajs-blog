@@ -1,7 +1,7 @@
 ---
 title: About
 author: aj
-type: page
+type: about
 date: 2021-04-11T18:49:19+00:00
 
 ---
