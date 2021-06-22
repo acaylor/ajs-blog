@@ -2,7 +2,6 @@
 title: Building this blog with Hugo
 author: aj
 date: 2021-06-21
-draft: true
 categories:
   - Utilities
 tags:
@@ -24,6 +23,8 @@ I have uploaded an example hugo blog on [my personal gitlab profile][4]. I will 
 * Hugo: https://gohugo.io/getting-started/installing/
 * Git: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 
+Both of these programs are available for macOS, Linux, and Windows.
+
 ### 2. Create a new site
 
 Once hugo is installed, create a new site by typing the following command into your shell:
@@ -44,6 +45,8 @@ git init
 git submodule add https://github.com/zzossig/hugo-theme-zzo.git themes/zzo
 ```
 
+In powershell the commands should be the same but always press <key>TAB</key> when entering the name of a file or directory for the shell to auto-complete you command.
+
 ### 4. Configure the site
 
 The default config file `config.toml` can be deleted. Next create a directory called `config` and then `_default` within.
@@ -51,6 +54,14 @@ The default config file `config.toml` can be deleted. Next create a directory ca
 ```bash
 rm config.toml
 mkdir -p config/_default
+```
+
+In powershell:
+
+```powershell
+Remove-Item '.\config.toml'
+New-Item -Path '.\config'
+New-Item -Path '.\config\_default'
 ```
 
 Within this new directory, create four files to configure the hugo theme:
