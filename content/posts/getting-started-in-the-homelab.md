@@ -21,7 +21,9 @@ I will be installing pi-hole on a Raspberry Pi as I have used the same Pi for ye
 
 ### Installing with Git and bash
 
-I will clone the project&#8217;s source repository and then run the installation script from my copy of the repo.
+If you do not have git installed visit: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+
+Once git is installed, use `git clone` to download the pi-hole project.
 
 ```bash
 git clone --depth 1 https://github.com/pi-hole/pi-hole.git
