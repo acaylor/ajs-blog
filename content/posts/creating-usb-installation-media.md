@@ -3,7 +3,7 @@ title: Creating USB installation media
 author: aj
 date: 2021-07-03
 categories:
-  - USB
+  - Utilities
 tags:
   - etcher
   - rufus
