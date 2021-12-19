@@ -1,3 +1,4 @@
 resources/
 public/
 oldconfig.toml
+.hugo_build.lock
