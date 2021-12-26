@@ -161,18 +161,27 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 ```
 
+#### Zsh completions
+
+[A plugin][14] that contains tab completion scripts that are not yet available in the main zsh release.
+
+```zsh
+  git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins/zsh-completions
+```
+
 #### Activate plugins
 
 Update your `~/.zshrc` file in the "plugins" section:
 
 ```zshrc
-plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
+plugins=(git zsh-syntax-highlighting zsh-autosuggestions zsh-completions)
 ```
 
 Activate the plugins:
 
 ```zsh
 source ~/.zshrc
+autoload -U compinit && compinit
 ```
 
 Now, when you begin typing, you should see suggestions based on your command history. Valid commands will be green and invalid commands will be red.
@@ -193,3 +202,5 @@ Now, when you begin typing, you should see suggestions based on your command his
  [11]: https://github.com/romkatv/powerlevel10k
  [12]: https://github.com/zsh-users/zsh-syntax-highlighting
  [13]: https://github.com/zsh-users/zsh-autosuggestions
+ [14]: https://github.com/zsh-users/zsh-completions
+ [15]: https://github.com/junegunn/fzf
