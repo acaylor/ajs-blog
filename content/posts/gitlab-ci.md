@@ -1,7 +1,7 @@
 ---
 title: GitLab CI/CD and building containers
 author: aj
-date: 2022-1-2
+date: 2022-01-02
 categories:
   - Containers
 tags:
