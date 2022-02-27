@@ -162,15 +162,17 @@ Regardless of proxy or port forwarding, the default credentials for grafana are:
 
 ### Add data source
 
-Grafana needs to be configured to utilize prometheus as a data source. Navigate to the lefthand menu and find the Gear icon, then select "Data Sources".
+Grafana needs to be configured to utilize prometheus as a data source. 
 
-Select "Add data source" and then find Prometheus.
+1. Navigate to the lefthand menu and find the Gear icon, then select "Data Sources".
 
-All that is really needed is the `HTTP.URL` configured:
+2. Select "Add data source" and then find Prometheus.
 
-Enter http://prometheus:9090
+3. All that is really needed is the `HTTP.URL` configured:
 
-Select "Save and test" to save the configuration.
+4. Enter `http://prometheus:9090`
+
+5. Select "Save and test" to save the configuration.
 
 ### Add a dashboard
 
@@ -182,15 +184,15 @@ https://grafana.com/grafana/dashboards/
 
 I will add Node Exporter Full to utilize the metrics from the node_exporter container.
 
-At this time it has the ID 1860.
+At this time it has the ID `1860`.
 
-Navigate to the lefthand menu and Select "+" > "Import" > "Import via grafana.com"
+1. Navigate to the lefthand menu and Select "+" > "Import" > "Import via grafana.com"
 
-Enter the ID of the dashboard you would like to import and then select "Load"
+2. Enter the ID of the dashboard you would like to import and then select "Load"
 
-You should now see a dashboard like below.
+3. You should now see a dashboard like below.
 
-![grafana_node_exporter](grafana_node_exporter_full.png)
+![grafana_node_exporter](/images/grafana_node_exporter_full.png)
 
 ---
 ### Bonus: add proxmox dashboard
@@ -326,7 +328,7 @@ Parameters are sent to the installer via `msiexec`.
 msiexec /i C:\Users\Administrator\Downloads\windows_exporter.msi ENABLED_COLLECTORS="cpu,cs,logical_disk,net,os,service,system,hyperv" REMOTE_ADDR="<prometheus_host>"
 ```
 
-After the exporter is started, verify it is running. Visit http://localhost:<LISTEN_PORT> in your browser and see if you can browse to /metrics.
+After the exporter is started, verify it is running. Visit `http://localhost:<LISTEN_PORT>` in your browser and see if you can browse to `/metrics`.
 
 #### Adding to prometheus config
 
