@@ -17,7 +17,7 @@ For more information about containers, check out [a previous post][2].
 
 ## Installing Rancher Desktop
 
-Rancher Desktop can be installed on Windows, macOS, and various Linux distributions. The most up to date installation packages will be on the official [GitHub release page.][4] This application has an auto-update feature once it is installed onto you system.
+Rancher Desktop can be installed on Windows, macOS, and various Linux distributions. The most up to date installation packages will be on the official [documentation.][4] This application has an auto-update feature once it is installed onto you system.
 
 ![rancher_desktop](/images/rancher-desktop.png)
 
@@ -120,4 +120,4 @@ Using `nerdctl` is only half of what Rancher Desktop is capable of. It also lets
   [1]: https://rancherdesktop.io/
   [2]: /posts/containers/
   [3]: https://containerd.io/
-  [4]:https://github.com/rancher-sandbox/rancher-desktop/releases
+  [4]: https://docs.rancherdesktop.io/getting-started/installation
