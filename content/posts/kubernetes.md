@@ -2,8 +2,8 @@
 title: Kubernetes
 author: aj
 image: /images/k8s_logo.png
-date: 2022-02-20
-draft: true
+date: 2022-03-19
+
 categories:
   - Containers
   - Kubernetes
@@ -61,6 +61,65 @@ Node components run on every node, running Pods for the cluster.
 - kube-proxy: a network proxy that runs on each node implementing the Pod/container network
 - container runtime: the software that runs containers such as docker, containerd, cri-o or other open source Container Runtime
 
+### Installing kubectl
+
+Installing the `kubectl` utility on your system means that you can interface with any kubernetes cluster. Minikube is an easy way to get started but as the word cluster suggests, kubernetes is designed to pool resources of multiple computers. The `kubectl` utility is mostly human friendly commands that are passed to the kubernetes API over port 6443/tcp.
+
+#### Install kubectl on Linux
+
+Some distributions have package repositories available but you can simply download the appropriate release of `kubectl` and add it to the executable $PATH of a *nix system and get going.
+
+```bash
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+```
+
+This will download the latest stable release but if you need to use a specific older version:
+
+```bash
+curl -LO https://dl.k8s.io/release/v1.18.0/bin/linux/amd64/kubectl
+```
+
+##### Add to PATH
+
+In order to execute `kubectl` commands:
+
+```bash
+sudo cp kubectl /usr/local/bin/kubectl
+sudo chmod 755 /usr/local/bin/kubectl
+```
+
+Now as a non-root user, check the program is working:
+
+```bash
+kubectl version --client
+```
+
+#### Install kubectl on macOS
+
+If you are on macOS, I recommend using the [Homebrew][2] package manager.
+
+```bash
+brew install kubectl
+```
+
+Now as a non-root user, check the program is working:
+
+```bash
+kubectl version --client
+```
+
+#### Install kubectl on Windows
+
+I will be installing kubectl with Chocolatey. Check out [my post on setting up Windows][3] for info on how to get started with Chocolatey.
+
+```powershell
+choco install kubernetes-cli
+```
+
+```powershell
+kubectl version --client
+```
+
 ---
 
 ## Minikube
@@ -69,21 +128,21 @@ In order to try out kubernetes, there is a tool called Minikube that will instal
 
 ### Installing minikube
 
-#### Windows 10
+#### minikube Windows
 
-I will be installing minikube with Chocolatey. Check out [my post on setting up Windows][] for info on how to get started with Chocolatey.
+I will be installing minikube with Chocolatey.
 
 `choco install minikube`
 
 As you can see, with chocolatey the installation is trivial on Windows.
 
-#### macOS
+#### minikube macOS
 
-On macOS, I use [homebrew][] to install and update software. I can install minikube with one command:
+On macOS, I use homebrew to install and update software. I can install minikube with one command:
 
-`brew cask install minikube`
+`brew install minikube --cask`
 
-#### Linux
+#### minikube Linux
 
 There are different distributions of Linux. All distributions can directly download the minikube binary:
 
@@ -122,6 +181,8 @@ minikube config set driver docker
 minikube start
 ```
 
+![minikube_start](/images/minikube_start.png)
+
 Once minikube starts, open a new terminal.
 
 ```bash
@@ -130,41 +191,41 @@ minikube dashboard
 
 This will open the kubernetes dashboard in a web browswer window.
 
+![minikube_dashboard](/images/minikube_dashboard.png)
+
 ### Deploy an application to minikube cluster
 
-A Pod is a group of one or more Containers, tied together for the purposes of administration and networking. A Kubernetes Deployment checks on the health of your Pod and restarts the Pod's Container if it terminates. Deployments are the recommended way to manage the creation and scaling of Pods.
+Kubernetes deploys container applications into Pods.
+
+A `Pod` is a group of one or more Containers, tied together for the purposes of administration and networking. A Kubernetes `Deployment` checks on the health of your Pod and restarts the Pod's Container if it terminates. Deployments are the recommended way to manage the creation and scaling of Pods. This example deployment is a simple web server that will return information in a browser window or command line output.
 
 ```bash
-kubectl create deployment hello-node --image=k8s.gcr.io/echoserver:1.4
+minikube kubectl -- create deployment hello-node --image=k8s.gcr.io/echoserver:1.4
 ```
 
-By default, the Pod is only accessible by its internal IP address within the Kubernetes cluster. To make the hello-node Container accessible from outside the Kubernetes virtual network, you have to expose the Pod as a Kubernetes Service.
+By default, the Pod is only accessible by its internal IP address within the Kubernetes cluster. To make the _hello-node_ Container accessible from outside the Kubernetes virtual network, you have to expose the Pod as a Kubernetes `Service`.
 
 ```bash
-minikube kubectl expose deployment hello-node --type=LoadBalancer --port=8080
+minikube kubectl -- expose deployment hello-node --type=ClusterIP --port=8080
 ```
 
-The --type=LoadBalancer flag indicates that you want to expose your Service outside of the cluster.
+The --type=ClusterIP flag indicates that you want to expose your `Service` to an endpoint inside the kubernetes network.
 
-The application code inside the image k8s.gcr.io/echoserver only listens on TCP port 8080. If you used kubectl expose to expose a different port, clients could not connect to that other port.
-
-On minikube, the LoadBalancer type makes the Service accessible through the minikube service command.
-
-Run this command to access the application:
-
-```bash
-minikube service hello-node
-```
-
-This will open a browser window showing this app.
+The application code inside the image `k8s.gcr.io/echoserver` only listens on TCP port 8080. If you used `kubectl` expose to expose a different port, clients could not connect to that other port.
 
 The service can also be exposed with the `kubectl` program which is how you can forward kubernetes services to a port on your local computer for any kubernetes cluster, not just minikube.
 
+#### Use kubectl to forward a service to a local port
+
 ```bash
-kubectl port-forward service/hello-minikube 7080:8080
+kubectl port-forward service/hello-node 7080:8080
 ```
 
 That will forward connections to the kubernetes service on port `7080` of your computer.
+
+Visit `http://localhost:7080` On your computer to view the app
+
+![minikube_hello](/images/minikube_hello.png)
 
 ## Clean up
 
@@ -177,3 +238,5 @@ minikube delete --all
 ```
 
  [1]: /posts/containers/
+ [2]: https://brew.sh
+ [3]: /posts/setting-up-windows/
