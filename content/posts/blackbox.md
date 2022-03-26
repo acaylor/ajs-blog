@@ -1,16 +1,16 @@
 ---
-title: Monitor web sites with blackbox for Prometheus
+title: Monitor IP services with prometheus blackbox exporter
 author: aj
 type: post
-date: 2022-02-11
-draft: true
+date: 2022-03-26
 
 categories:
-  - cloud
+  - Monitoring
 tags:
   - blackbox
   - prometheus
-  - cloud
+  - containers
+  - grafana
 
 ---
 
