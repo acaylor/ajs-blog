@@ -2,8 +2,7 @@
 title: Rancher Desktop Kubernetes
 author: aj
 image: /images/rancher-desktop-logo.png
-date: 2022-02-18
-draft: true
+date: 2022-04-03
 categories:
   - Containers
   - Kubernetes
@@ -24,6 +23,18 @@ If you are not familiar with Kubernetes, check out [a previous post][3] about ge
 
 Installation is trivial on most platforms, I will briefly touch on installation on Linux as I happen to be using openSUSE at the time of this post.
 
+---
+
+## AppImage install
+
+To use the AppImage, ensure the file is executable and then execute it. This file can be used on multiple Linux distributions, the libraries are bundled with the app.
+
+```bash
+wget https://download.opensuse.org/repositories/isv:/Rancher:/stable/AppImage/rancher-desktop-latest-x86_64.AppImage
+chmod +x rancher-desktop-latest-x86_64.AppImage
+./rancher-desktop-latest-x86_64.AppImage
+```
+
 ## RPM package installation
 
 ⚠️ Note: Red Hat based distributions such as Fedora package QEMU, which is needed here, differently than other distributions. If using a Red Hat distro, use the AppImage download instead.
@@ -35,26 +46,22 @@ sudo zypper addrepo https://download.opensuse.org/repositories/isv:/Rancher:/sta
 sudo zypper install rancher-desktop
 ```
 
+Once the installation completes, you can find the application under the "Development" category on the Application launcher for most Linux desktop environments such as GNOME, KDE, XFCE, or MATE.
+
 ### RPM uninstall
+
+To uninstall this application, remove the package and for `zypper`, add the `--clean-deps` flag to remove dependencies. The command `zypper removerepo` will remove the rancher package repository from your system.
 
 ```bash
 sudo zypper remove --clean-deps rancher-desktop
 sudo zypper removerepo isv_Rancher_stable
 ```
 
-## AppImage install
-
-To use the AppImage, ensure the file is executable and then execute it.
-
-```bash
-wget https://download.opensuse.org/repositories/isv:/Rancher:/stable/AppImage/rancher-desktop-latest-x86_64.AppImage
-chmod +x rancher-desktop-latest-x86_64.AppImage
-./rancher-desktop-latest-x86_64.AppImage
-```
+---
 
 ## Kubernetes
 
-Once Rancher Desktop is installed and running, verify that the kubernetes cluster was created:
+Once Rancher Desktop is installed and running, verify that the kubernetes cluster was created in a terminal. The command `kubectl` should be added to your `$PATH` :
 
 ```bash
 kubectl get nodes
