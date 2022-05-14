@@ -2,8 +2,8 @@
 title: k3os kubernetes cluster
 author: aj
 image: /images/rancher-desktop-logo.png
-date: 2022-01-17
-draft: true
+date: 2022-05-14
+
 categories:
   - Containers
 tags:
@@ -13,7 +13,13 @@ tags:
 
 ---
 
+*Note: I drafted this in January 2022 but I did not realize that this distro seems to be no longer maintained after SUSE acquired Rancher in 2021. I am going to upload this post because I enjoyed how flexible this distro was for running k3s.*
+
+---
+
 [k3OS][1] is a Linux distribution designed to remove as much OS maintenance as possible in a Kubernetes cluster. It is specifically designed to only have what is needed to run [k3s][2]. Nodes only need to join a cluster and then all aspects of the OS can be managed from Kubernetes. Both k3OS and k3s upgrades are handled by the k3OS operator.
+
+If you are not familiar with kubernetes, check out [a previous post][3] to get started.
 
 There are some differences in the file system hierarchy compared to a normal Linux distribution. Only a few directories are persistent while system directories will not persist changes.
 
@@ -69,7 +75,7 @@ k3os:
 
 ### Edit installation .iso
 
-Download the installation .iso image from GitHub and then edit the grub config to configure the automated installation.
+Download the installation .iso image from [GitHub][4] and then edit the grub config to configure the automated installation.
 
 ```bash
 # Deb distros: apt install grub-efi grub-pc-bin mtools xorriso
@@ -124,6 +130,7 @@ menuentry "k3OS Rescue Shell" {
   initrd /k3os/system/kernel/current/initrd
 }
 ```
+
 Once the grub config has been updated, create a new iso image:
 
 ```bash
@@ -143,10 +150,6 @@ Additional nodes can be added using the node token as the value of `k3os.token` 
 
 The k3s is a minimal kubernetes deployment. It does come with an Ingress controller by default.
 
-### Setting up a web app with Ingress
-
-
-
 ## Updating the cluster
 
 Apply node label `k3os.io/upgrade` with the value `latest`.
@@ -157,10 +160,10 @@ metadata:
     foo: bar
     k3os.io/upgrade: latest
 ```
+
 This will cause the k3os system upgrade controller to react and update k3os.
-
-
 
  [1]: https://k3os.io/
  [2]: https://k3s.io/
- [3]: https://github.com/rancher/k3os
+ [3]: /posts/kubernetes/
+ [4]: https://github.com/rancher/k3os/releases
