@@ -2,7 +2,7 @@
 title: Terraform for homelab
 author: aj
 date: 2022-05-22
-image: /images/terraform.jpg
+image: /images/terraform_logo.png
 categories:
   - Proxmox
   - Virtual Machines
