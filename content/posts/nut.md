@@ -1,8 +1,7 @@
 ---
 title: Setting up Network UPS tools
 author: aj
-date: 2022-05-24
-draft: true
+date: 2022-05-29
 
 categories:
   - Rasperry Pi
