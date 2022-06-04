@@ -1,8 +1,8 @@
 ---
 title: Automate and monitor linux backups
 author: aj
-date: 2022-05-26
-draft: true
+date: 2022-06-04
+
 categories:
   - Linux
 tags:
@@ -70,7 +70,7 @@ Next I'm going to configure a cloud software service to monitor backup cron jobs
 
 Once you create an account, create a new check and copy the URL they generate for you under the section "How to Ping".
 
-All you have to do is update your cron job command to send an HTTP request to Healthchecks.io after completing the job. This site can send notifications to email and many messaging platforms such as slack and discord. 
+All you have to do is update your cron job command to send an HTTP request to Healthchecks.io after completing the job. This site can send notifications to email and many messaging platforms such as slack and discord.
 
 ### Set up cron job
 
@@ -91,11 +91,12 @@ With the cron supporting packages installed, run `crontab -e` as the `root` user
 
 0 1 * * 5 /usr/local/sbin/backup-pi.sh && curl -fsS --retry 5 -o /dev/null https://url-from-healthcheck-profile
 ```
+
 This will execute the backup script at 0100 Every Friday.
 
-After the cron job runs on your server, your dashboard on healthchecks.io should look like this:
+Once you configure some cron jobs, your dashboard on healthchecks.io should look like this:
 
-![]()
+![healthchecks](/images/healthchecks.png)
 
 In a future post I may explore the self-hosted version of this application but I try to avoid hosting database engines in the cloud.
 
