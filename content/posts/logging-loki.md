@@ -223,7 +223,11 @@ scrape_configs:
       __path__: /var/log/*log
 ```
 
-This will collect all .log files in `/var/log`. Now if you want to collect logs from docker containers, I found how to reconfigure the promtail agent and docker daemon to format the container logs. Loki includes a docker plugin to send logs but I run docker on raspberry pi systems which have arm64 cpu architecture. The loki docker plugin does not have an arm64 image but the promtail agent does.
+This will collect all .log files in `/var/log`. 
+
+### Collect docker logs
+
+Now if you want to collect logs from docker containers, I found how to reconfigure the promtail agent and docker daemon to format the container logs. Loki includes a docker plugin to send logs but I run docker on raspberry pi systems which have arm64 cpu architecture. The loki docker plugin does not have an arm64 image but the promtail agent does.
 
 We will prepare the promtail config and then configure the docker daemon to alter the format of the container logs to make it easier for us to look at in grafana. Repace the loki url with your system.
 
@@ -296,13 +300,56 @@ services:
         tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
 ```
 
+Start this container with the command:
+
+```bash
+docker-compose up -d
+```
+
 ## Visualize logs in grafana
 
-Now that we have some logs going to loki, we can use grafana to view logs and perform queries to parse through the logs.
+Now that we have some logs going to loki, we can use grafana to view logs and perform queries to parse through the logs. If you are not familiar with grafana, check out a [previous post][1] about visualizing metrics.
+
+Navigate to grafana configuration page for data sources: `grafana.url/datasources`
+
+Select "Add data source" and then select "Loki"
+
+The only section that needs to be filled out is *HTTP* > *URL*
+
+In the URL text box, enter the full URL to your loki instance ex: `http://loki.url:3100`
+
+Once the URL is filled out, select "Save & Test" at the bottom. Barring any error messages, Loki should now be browseable with grafana.
+
+Select "Explore" in the navigation menu and then Select "Loki" to browse logs.
+
+![loki_explore](/images/loki_explore.png)
+
+Now to view logs from the docker containers, enter `{job="containerlogs"}` in the search box. Note that the job name can be modified, I have labeled the jobs with a suffix to determine which host they came from.
+
+![loki_browse](/images/loki_browse.png)
+
+Now, you can search for "error" in your logs with the following query:
+
+```
+{job="containerlogs"} |~ "(?i)error"
+```
+
+The `(?i)` will ignore case of the string so it should pick up "error", "Error", "ERROR", or whatever the app devs decided to use.
+
+Now if you have set up prometheus as well, grafana should be all set up to look at your system metrics and logs all from one interface.
+
+## Next steps
+
+You can save log queries as dashboard panels on grafana, so metrics and logs can be configured on the same dashboard.
+
+Loki is able to import logs from more sources than I covered here. If you use rsyslogd on linux for example, loki can be configured to receive those logs.
+
+I also recommend looking into configuring a firewall for your loki server so that only authorized systems can connect to the loki server. You can also set up a reverse proxy server to encrypt traffic to and from the loki server by serving loki over HTTPS. Check out a [previous post][7] to see how to set up a proxy server with docker.
 
  [1]: /posts/prometheus/
  [2]: https://grafana.com/oss/loki/
- [3]: /posts/proxmox
- [4]: /posts/terraform
- [5]: /posts/ansible
- [6]: /posts/docker
+ [3]: /posts/proxmox-installation/
+ [4]: /posts/terraform/
+ [5]: /posts/ansible/
+ [6]: /posts/containers/
+ [7]: /posts/pi-proxy/
