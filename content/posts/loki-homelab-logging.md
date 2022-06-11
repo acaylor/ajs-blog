@@ -2,6 +2,7 @@
 title: Homelab logging with grafana loki
 author: aj
 date: 2022-06-11
+image: /images/loki_logo.png
 
 categories:
   - Homelab
@@ -15,6 +16,8 @@ tags:
   - logging
 
 ---
+
+![loki_logo](/images/loki_logo.png)
 
 Once there is more than one computer to worry about, having logs in one location to search for errors and troubleshoot applications becomes critical. In [a previous post][1] I set up prometheus to collect metrics and grafana to visualize the metrics. Today I am going to look at another tool from grafana called [loki][2]. Loki will provide a server to collect logs and we will install an agent on systems to send their logs to the loki server.
 

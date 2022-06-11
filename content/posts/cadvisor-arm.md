@@ -2,7 +2,7 @@
 title: cadvisor for arm64
 author: aj
 date: 2022-05-15
-
+image: /images/cadvisor_logo.png
 categories:
   - Homelab
   - Containers
@@ -18,6 +18,7 @@ tags:
 
 ---
 
+![cadvisor_logo](/images/cadvisor_logo.png)
 [cadvisor exporter][1] is used by Prometheus to monitor container metrics. If you are not familiar with prometheus, check out [a previous post][2]. The cadvisor program will collect metrics and make them available on a http server. Prometheus needs to be configured to collect metrics from the cadvisor exporter and then grafana can be used to visualize those metrics.
 
 ## Build docker image
