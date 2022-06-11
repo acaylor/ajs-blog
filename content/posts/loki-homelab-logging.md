@@ -1,12 +1,10 @@
 ---
-title: Centralized logging with grafana loki
+title: Homelab logging with grafana loki
 author: aj
-date: 2022-05-28
-draft: true
+date: 2022-06-11
 
 categories:
   - Homelab
-  - Proxmox
   - Logging
 tags:
   - lxc
@@ -14,6 +12,7 @@ tags:
   - loki
   - proxmox
   - terraform
+  - logging
 
 ---
 
@@ -35,17 +34,28 @@ Before creating the new container, download the image into proxmox storage. If y
 pveam update
 
 pveam available |grep -i suse
+```
 
+Output:
+
+```
 system          opensuse-15.3-default_20210925_amd64.tar.xz
+```
 
+```bash
 pveam download images opensuse-15.3-default_20210925_amd64.tar.xz
+```
+
+Output:
+
+```
 ...
 ...
 calculating checksum...OK, checksum verified
 download of 'http://download.proxmox.com/images/system/opensuse-15.3-default_20210925_amd64.tar.xz' to '/mnt/pve/images/template/cache/opensuse-15.3-default_20210925_amd64.tar.xz' finished
 ```
 
-Note `images` is the name of my NFS storage, replace this with one appropriate for your setup.
+Note `images` is the name of my NFS storage, replace this with a proxmox store appropriate for your setup.
 
 Now the image is available to deploy.
 
@@ -77,6 +87,10 @@ resource "proxmox_lxc" "loki_lxc" {
   }
 }
 ```
+
+Note in the network block, I have entered "dhcp" for testing but if you want to utilize loki permanently, enter a static IP address such as: `"192.168.1.111/24"`. 
+
+You can use the IP later on when configuring systems to send logs to the loki IP address or DNS hostname.
 
 Create the container with terraform:
 
@@ -183,7 +197,7 @@ ansible-playbook playbook.yml -i 'loki.server,'
 
 ## Configure promtail targets
 
-Any system that you want to collect logs will need the promtail agent. I prefer this to using rsyslog because promtail can send logs over HTTPS which means logs will be encrypted in transit unlike with rsyslog which is not encrypted. To make loki more secure, use a reverse proxy for the plain text loki port 3100 to accept traffic from HTTPS port 443. Check out a [previous post][6] for how to set up a proxy server that can be configured through a portal.
+Any system that you want to collect logs will need the promtail agent. I prefer this to using rsyslog because promtail can send logs over HTTPS which means logs will be encrypted in transit unlike with rsyslog which is not encrypted. To make loki more secure, use a reverse proxy for the plain text loki port 3100 to accept traffic from HTTPS port 443. Check out a [previous post][7] for how to set up a proxy server that can be configured through a portal.
 
 There should be one promtail agent already on the lxc system where loki was installed. Before proceeding, verify that loki is operational. Log into another system that you would like to forward logs and see if loki is ready:
 

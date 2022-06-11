@@ -41,7 +41,7 @@ Next you need to create a service account key to allow terraform to contact the 
 2. Click "Create Service Account"
 3. Fill this out with information that you will remember
 4. Click "Create and continue"
-5. Select the role `Project` => `Editor`
+5. Select the role `Project` => `Editor` and the role `IAM` => `Security Admin`
 6. Do not fill anything else out and click "Done"
 7. Select your new account in the list and navigate to the "Keys" tab
 8. Select "Add Key" and Create a new key "JSON" type
@@ -58,41 +58,60 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "3.5.0"
+      version = "4.23.0"
     }
   }
 }
 
 provider "google" {
-  credentials = file("secret_key.json")
+  credentials = file(var.credentials_file_path)
 
-  project = "<project_id>"
-  region  = "us-central1"
-  zone    = "us-central1-c"
-}
-
-resource "google_compute_network" "vpc_network" {
-  name = "tf-network"
+  project = var.project_id
+  region  = var.region
+  zone    = var.zone
 }
 ```
-
-This will create a new virtual network in the cloud.
 
 ## Create a GKE cluster
 
 Now I am going to create a kubernetes cluster in the google cloud to host my services.
 
-Create a file to define the GKE cluster using a terraform module:
+#### Network
+
+Create a file `network.tf` to declare the google cloud virtual network:
+
+```tf
+resource "google_compute_network" "vpc_network" {
+  name                    = "gke-network"
+  auto_create_subnetworks = "true"
+}
+```
+
+#### IAM permissions
+
+The GKE cluster needs a service account to interact with the google cloud api. Create a file `iam.tf`
 
 ```tf
 resource "google_service_account" "gke_acct" {
   account_id   = "gke-account"
   display_name = "GKE Service Account"
 }
+resource "google_project_iam_member" "gke_acct_iam_member" {
+  project = var.project_id
+  count   = length(var.iam_roles_list)
+  role    = var.iam_roles_list[count.index]
+  member  = "serviceAccount:${google_service_account.gke_acct.email}"
+}
+```
 
+#### GKE cluster
+
+Create file to define the GKE cluster using a terraform module `gke.tf`:
+
+```tf
 resource "google_container_cluster" "prod" {
   name     = "gke-1"
-  location = "us-central1"
+  location = var.zone
 
   # The cluster will be created with one node but this will be removed to instead use
   # managed node pool
@@ -105,9 +124,9 @@ resource "google_container_cluster" "prod" {
 
 resource "google_container_node_pool" "primary_nodes" {
   name       = "gke-node-pool"
-  location   = "us-central1"
+  location   = var.zone
   cluster    = google_container_cluster.prod.name
-  node_count = 1
+  node_count = 3
 
   node_config {
     preemptible  = true
@@ -123,11 +142,63 @@ resource "google_container_node_pool" "primary_nodes" {
 
 Make sure to use a separate resource for the node pool. This allows node pools to be added and removed without recreating the cluster.
 
+#### Variables
+
+Create a `variables.tf` file to help you customize the resources:
+
+```tf
+variable "project_id" {
+  type    = string
+  default = "api"
+}
+
+variable "region" {
+  type    = string
+  default = "us-central1"
+}
+
+variable "zone" {
+  type    = string
+  default = "us-central1-c"
+}
+variable "iam_roles_list" {
+  description = "List of IAM roles to be assigned to GKE service account"
+  type        = list(string)
+  default = [
+    "roles/logging.logWriter",
+    "roles/monitoring.metricWriter",
+    "roles/monitoring.viewer",
+    "roles/stackdriver.resourceMetadata.writer",
+  ]
+}
+variable "credentials_file_path" {
+  type    = string
+  default = "creds.json"
+}
+```
+
+Replace the variables with reference to your project and the JSON service account key in order for terraform to work in your GCP environment.
+
 #### Outputs
 
 Create one more terraform file to proccess some `outputs`. These will provide us with information like the address of the kubernetes API.
 
 ```tf
+output "region" {
+  value       = var.region
+  description = "GCloud Region"
+}
+
+output "zone" {
+  value       = var.zone
+  description = "GCloud zone"
+}
+
+output "project_id" {
+  value       = var.project_id
+  description = "GCloud Project ID"
+}
+
 output "kubernetes_cluster_name" {
   value       = google_container_cluster.prod.name
   description = "GKE Cluster Name"
@@ -219,7 +290,7 @@ The last command will configure the gcloud sdk, follow the prompts and select th
 Now that the gcloud utility is configured, enter the following command to get access to the new cluster:
 
 ```bash
-gcloud container clusters get-credentials $(terraform output -raw kubernetes_cluster_name) --region us-central1
+gcloud container clusters get-credentials $(terraform output -raw kubernetes_cluster_name) --region $(terraform output -raw zone)
 ```
 
 Watch for any errors but at this point you should be able to access the cluster with `kubectl`
@@ -327,7 +398,13 @@ This will proxy the container port 80 to your local machine port 8080. Now we ca
 
 ![argo_guestbook](/images/argo_guestbook.png)
 
-And that is a simple of example of how to deploy an application using a git repository and argocd. Argo can deploy manifests and helm charts. I will dive into more detail in future posts.
+And that is a simple of example of how to deploy an application using a git repository and argocd. 
+
+### Next steps
+
+The example app contains a git repository to illustrate how you can structure your application for argo to recognize the manifests and deploy resources to your kubernetes cluster.
+
+Argo can deploy manifests and helm charts. I will dive into more detail in future posts.
 
 ## Clean up
 
