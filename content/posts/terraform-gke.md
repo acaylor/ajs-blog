@@ -1,8 +1,8 @@
 ---
-title: Terraform Google Cloud Platform
+title: Terraform Google Kubernetes Engine
 author: aj
-date: 2022-06-03
-draft: true
+date: 2022-06-18
+
 image: /images/terraform_logo.png
 categories:
   - Cloud
@@ -230,7 +230,9 @@ When it is done you should see:
 Apply Complete!
 ```
 
-## Kubernetes
+---
+
+## Access new Kubernetes cluster
 
 Once the terraform plan completes, we need a couple of tools to interact with the new cluster. First we need `kubectl` and if you need help setting that up, check out a [previous post][6] about getting started with kubernetes.
 
