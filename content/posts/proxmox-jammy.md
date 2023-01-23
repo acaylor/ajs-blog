@@ -1,7 +1,7 @@
 ---
 title: Proxmox Ubuntu 22.04 template
 author: aj
-date: 2023-1-22
+date: 2023-01-22
 categories:
   - Proxmox
   - Virtual Machines
