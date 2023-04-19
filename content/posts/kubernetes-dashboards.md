@@ -183,9 +183,10 @@ The easiest way to use on various linux distributions is to download the latest 
 
 The latest release is published [here][5] on GitHub.
 
+__updated command 04-18-23__ 
 ```bash
-wget https://github.com/derailed/k9s/releases/download/<INSERT_VERSION>/k9s_Linux_x86_64.tar.gz
-tar -xvf k9s_Linux_x86_64.tar.gz
+wget https://github.com/derailed/k9s/releases/download/$LATEST_VERSION/k9s_Linux_amd64.tar.gz
+tar -xvf k9s_Linux_amd64.tar.gz
 ```
 
 This will download and extract the k9s binary. Now we can move it to `/usr/local/bin/` so that you can just type `k9s` in the terminal to launch it.
