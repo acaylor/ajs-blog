@@ -1,33 +1,34 @@
 ---
-title: Factorio container game server
+title: Factorio kubernetes game server
 author: aj
 image: /images/factorio_logo.png
-draft: true
-date: 2022-03-19
+date: 2023-05-13
 categories:
   - Containers
 tags:
   - containers
-  - docker
+  - kubernetes
   - factorio
 
 ---
 
-## Installing factorio on Kubernetes
+In a [previous post][1] I deployed a factorio game server using docker. The same image can be deployed onto kubernetes.
 
-Originally, this post only had steps to install factorio with docker. If you have a suitable k8s platform, proceed. If you are not familiar with Kubernetes, see [a post on the topic][].
+## Installing factorio on Kubernetes
 
 #### Requirements
 
-In order to proceed, you must have a k8s platform, the `kubectl` command line utility, and a persistent storage volume.
+In order to proceed, you must have a k8s platform, the `kubectl` command line utility, and a persistent provider. If you are not familiar with kubernetes, check out a [previous post][2] to get started.
 
-### factorio manifests
+### Deployment to k8s 
 
 In order to deploy factorio onto a kubernetes cluster, the deployment needs to be configured in `YAML` format document.
 
+### factorio manifests
+
 #### factorio-pvc.yaml
 
-This file will request persistent storage for the wiki container(s). This will utilize the `longhorn` storage provider. For more information, see [a previous post][] on the topic.
+This file will request persistent storage for the container(s). This will utilize the `longhorn` storage provider. For more information, see [a previous post][3] on the topic.
 
 ```yaml
 apiVersion: v1
@@ -43,7 +44,7 @@ spec:
       storage: 5Gi
 ```
 
-#### factorio-deployment.yaml
+#### factorio-deploy.yaml
 
 ```yaml
 apiVersion: apps/v1
@@ -79,6 +80,24 @@ spec:
         - name: factorio-storage
           persistentVolumeClaim:
             claimName: factorio-pvc
+```
+
+#### Install to your cluster
+
+To install these on your cluster, use `kubectl`. I recommend creating a dedicated `namespace` in the cluster for this game server.
+
+```bash
+kubectl create namespace factorio
+
+kubectl apply -f factorio-pvc.yaml -n factorio
+
+kubectl apply -f factorio-deploy.yaml -n factorio
+```
+
+Verify it worked:
+
+```bash
+kubectl get all -n factorio
 ```
 
 #### Create an in cluster service object
@@ -134,6 +153,33 @@ Take the name of the ReplicaSet and apply it to the following command to update 
 kubectl scale --replicas=0 rs/factorio-abcdef123
 ```
 
-See original post below for configurations and to expose the game server to the internet, check out [the section below][] regarding port forwarding.
 
+## Mods
 
+In order to move mods onto the container's persistent storage, you will need to copy the files from your game's `mods` directory onto the server using `kubectl cp`
+
+```bash
+kubectl cp mods/ factorio/factorio-57c96d8b8d-7rcf9:/factorio/
+```
+
+Replace with the name of your factorio pod: `kubectl get po -n factorio`
+
+Once the mods are copied, delete the pod to reload the server with the mods.
+
+## Next steps
+
+To delete these resources, delete the objects created for the factorio server: `Deployment` , `Service`, `PersistentVolumeClaim` and `PersistentVolume` if your storage class does not automatically delete unclaimed volumes.
+
+## Troubleshooting
+
+If you have trouble accessing the game server from the game itself, check that there is not a firewall blocking the port exposed as a `NodePort`. 
+
+The logs of the factorio pod may also provide information as to what might be wrong:
+
+`kubectl get logs factorio-foobar`
+
+Replace with the name of your factorio pod: `kubectl get po -n factorio`.
+
+ [1]: /posts/factorio/
+ [2]: /posts/kubernetes/
+ [3]: /posts/longhorn/
