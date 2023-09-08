@@ -3,7 +3,7 @@ title: Vim the ultimate text editor
 author: aj
 date: 2023-09-08
 categories:
-  -Utilities 
+  - Utilities 
 tags:
   - vim
 ---
