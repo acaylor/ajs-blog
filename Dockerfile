@@ -1,5 +1,5 @@
 # Build static site
-ARG HUGOVERSION=0.107.0
+ARG HUGOVERSION=0.111.3
 
 FROM klakegg/hugo:${HUGOVERSION}-ext-onbuild AS hugo
 
