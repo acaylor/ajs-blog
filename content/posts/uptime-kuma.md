@@ -1,7 +1,6 @@
 ---
 title: Configuring a status page in the cloud with uptime kuma
 author: aj
-type: post
 date: 2022-03-13
 categories:
   - cloud
