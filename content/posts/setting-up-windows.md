@@ -103,10 +103,10 @@ You need to open an administrative PowerShell inside my repo and run the `my_cho
 .\my_choco_pkgs.ps1
 ```
 
-{{< notice warning >}}
+⚠️
 You will likely receive an error related to the system's execution policy. As with the script above we can bypass the execution
 policy but it is best practice to review the source code of scripts before executing them on your system.
-{{< /notice >}}
+⚠️
 
 
 All that script is really doing is installing all of the packages in the `mypkgs.config` XML file. I can update that file on my git repository as I install new software through Chocolatey. Now that your software is managed by Chocolatey, you can upgrade your software with one command in an administrative shell:
