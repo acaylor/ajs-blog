@@ -1,16 +1,23 @@
+# menus.en.toml
 [[main]]
   identifier = "posts"
   name = "Posts"
-  url = "posts"
+  url = "/posts"
   weight = 1
 [[main]]
-  identifier = "about"
-  name = "About"
-  url = "about"
+  identifier = "tags"
+  name = "Tags"
+  url = "/tags"
   weight = 2
 
 [[main]]
-  identifier = "archive"
-  name = "Archive"
-  url = "archive"
+  identifier = "categories"
+  name = "Categories"
+  url = "/categories"
   weight = 3
+
+[[main]]
+  identifier = "about"
+  name = "About"
+  url = "/about"
+  weight = 4
