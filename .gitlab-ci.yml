@@ -3,7 +3,7 @@ stages:
   - build
 buildTesting:
   stage: build
-  image: 
+  image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
   variables:
@@ -16,7 +16,7 @@ buildTesting:
     - testing
 buildProduction:
   stage: build
-  image: 
+  image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
   variables:

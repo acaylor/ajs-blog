@@ -31,4 +31,4 @@ Here is the grafana dashboard that is on the lab tv 24/7
 ![grafana_2023](/images/grafana_2023.png)
 
  [1]: /posts/dokuwiki/
- [2]: /posts/homelab-august-2023/
+ [2]: /posts/homelab-august-2022/

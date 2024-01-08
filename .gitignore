@@ -2,3 +2,5 @@ resources/
 public/
 oldconfig.toml
 .hugo_build.lock
+.idea
+.DS_STORE
