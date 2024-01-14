@@ -2,11 +2,13 @@
 title: cadvisor for arm64
 author: aj
 date: 2022-05-15
+updated: 2024-01-14
 image: /images/cadvisor_logo.png
 categories:
   - Homelab
   - Containers
-  - Monitoring
+  - Observability
+  - Rasperry Pi
 tags:
   - containers
   - cadvisor

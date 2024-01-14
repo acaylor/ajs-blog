@@ -2,11 +2,11 @@
 title: Homelab prometheus & grafana dashboard
 author: aj
 date: 2022-02-27
-
+updated: 2024-01-14
 categories:
   - Homelab
   - Containers
-  - Monitoring
+  - Observability
 tags:
   - containers
   - docker

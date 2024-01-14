@@ -2,13 +2,14 @@
 title: Vim the ultimate text editor
 author: aj
 date: 2023-09-08
+updated: 2024-01-14
 categories:
   - Utilities 
 tags:
   - vim
 ---
 
-My prefered text editor is `vim` because it is portable and highly customizable. Text editors can be used to edit configuration files on a system and write source files for scripts and programs. While you can run vim in a separate window in your operating system, it can also be run within a terminal emulator. You can even find the original version `vi` on most *nix systems that do not have any graphical interface. Learning vim will help make debugging systems that only have a terminal easier.
+My preferred text editor is `vim` because it is portable and highly customizable. Text editors can be used to edit configuration files on a system and write source files for scripts and programs. While you can run vim in a separate window in your operating system, it can also be run within a terminal emulator. You can even find the original version `vi` on most *nix systems that do not have any graphical interface. Learning vim will help make debugging systems that only have a terminal easier.
 
 ## Installation
 
@@ -84,18 +85,14 @@ My customizations include showing line numbers, applying the downloaded color th
 set number
 
 let g:PaperColor_Theme_Options = {
-\   'theme': {
-\     'default.dark': {
-  \       'transparent_background': 1
-    \     
-}
-  \   
-}
-  \ 
-}
+\ 'theme': {
+\   'default.dark': {
+    \  'transparent_background': 1
+    \ }
+  \ }
+\ }
 
 colorscheme PaperColor
-
 ```
 
 #### Upgrading plugins

@@ -1,8 +1,7 @@
 ---
 title: 2024 New Blog Theme
 author: aj
-date: 2024-01-08
-draft: true
+date: 2024-01-14
 categories:
   - Utilities
 tags:
@@ -163,6 +162,15 @@ You can view the site in your browser:
 Dark theme:
 
 ![example_blog_dark](/images/example_blog_dark_20240108.png)
+
+## Conclusion
+
+I plan to continue developing the theme. Some features that I am looking to add:
+
+1. Search function
+2. Refine style of metadata like tags and categories.
+3. Eventually move away from bootstrap framework to something more lightweight.
+4. Post view should show an image from the post
 
  [1]: https://www.git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F
  [2]: https://www.markdownguide.org/

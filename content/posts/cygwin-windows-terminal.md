@@ -2,15 +2,15 @@
 title: Cygwin + Windows Terminal
 author: aj
 date: 2021-07-17
+updated: 2024-01-14
 image: /images/image-1.png
 categories:
-  - Windows 10
+  - Windows
 tags:
   - chocolatey
   - cygwin
-  - windows 10
   - windows terminal
-
+  - windows
 ---
  
 
@@ -20,7 +20,9 @@ Cygwin is a collection of open source tools that are commonly found on [GNU/Linu
 
 If you set up Windows 10 per [my previous post][6], you already have this utility installed. If not, I recommend using [Chocolatey][4] to install and maintain this software.
 
-`choco install cygwin`
+```powershell
+choco install cygwin
+```
 
 If you install Cygwin via chocolatey, the binary will be located in:
 
@@ -28,7 +30,7 @@ If you install Cygwin via chocolatey, the binary will be located in:
 
 ## Add Cygwin to Windows Terminal
 
-In my [aforementioned post][6], I installed the [Windows Terminal][5] via Chocolatey also. I highly recommend using this as your terminal on Windows 10 systems. It is GPU accelerated and supports adding multiple &#8220;tabs&#8221; making terminals easier to organize.
+In my [aforementioned post][6], I installed the [Windows Terminal][5] via Chocolatey also. I highly recommend using this as your terminal on Windows 10 systems. It is GPU accelerated and supports adding multiple &#8220;tabs&#8221; making terminals easier to organize. This terminal is included on Windows 11 Systems.
 
 ### Windows Terminal config
 
@@ -38,7 +40,7 @@ On the left-hand bar of the terminal, navigate to the + icon to create a new Pro
 
 ![image](/images/image.png)
 
-Name the profile &#8220;Cygwin&#8221; or whatever you prefer and enter the location of the Cygwin binary as the Command line. You can adjust the appearance in the next tab.
+Name the profile `Cygwin` or whatever you prefer and enter the location of the Cygwin binary as the Command line. You can adjust the appearance in the next tab.
 
 ![image1](/images/image-1.png)
 

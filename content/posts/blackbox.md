@@ -3,9 +3,9 @@ title: Monitor IP services with prometheus blackbox exporter
 author: aj
 type: post
 date: 2022-03-26
-
+updated: 2024-01-14
 categories:
-  - Monitoring
+  - Observability
 tags:
   - blackbox
   - prometheus
