@@ -4,3 +4,4 @@ oldconfig.toml
 .hugo_build.lock
 .idea
 .DS_STORE
+.DS_Store

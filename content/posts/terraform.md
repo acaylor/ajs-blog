@@ -2,6 +2,7 @@
 title: Terraform for homelab
 author: aj
 date: 2022-05-22
+updated: 2024-01-14
 image: /images/terraform_logo.png
 categories:
   - Proxmox
@@ -13,6 +14,7 @@ tags:
   - virtual machine
   - containers
   - terraform
+  - infrastructure as code
 ---
 
 Terraform is a tool for orchestrating infrastructure as code with human-readable configuration files. It can be used to create objects in the cloud and in the homelab. Similar to [ansible][1], terraform abstracts various other APIs used to provision virtual machines, containers, or an entire public cloud ecosystem.
@@ -39,18 +41,17 @@ The good news is that terraform is cross-platform and can run as a single binary
 
 On any platform, you can download the terraform binary and run it in a terminal.
 
-https://www.terraform.io/downloads
+<https://www.terraform.io/downloads>
 
 ### macOS
 
 On macOS, I use [homebrew][2] to install and update software. Terraform can be installed by adding a `tap`.
 
-```bash
-brew tap hashicorp/tap
-brew install hashicorp/tap/terraform
+```shell
+brew install terraform 
 ```
 
-### windows
+### Windows
 
 On windows, I suggest the chocolatey package manager. Check out a [post][3] on setting up windows if you are not familiar with chocolatey.
 
@@ -58,13 +59,13 @@ Install with chocolatey:
 
 `choco install terraform`
 
-### linux
+### Linux
 
-The publishers of terraform have package repositories for the following distributions: Debian/Ubuntu, CentOS/RHEL, and Fedora. I am guilty of distro hopping and at this time I use fedora. Check out the terraform download link above for up to date commands to add terraform repo to your distro.
+The publishers of terraform have package repositories for the following distributions: Debian/Ubuntu, CentOS/RHEL, and Fedora. Check out the download link above for up to date commands to add terraform repo to your distro.
 
-Install repo on fedora:
+Here is an example to install the hashicorp repo on fedora:
 
-```bash
+```shell
 sudo dnf install -y dnf-plugins-core
 sudo dnf config-manager --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
 sudo dnf -y install terraform
@@ -78,8 +79,8 @@ Here are some examples of how I am using terraform demonstrating how to get star
 
 Verify that terraform works by running this in a terminal:
 
-```
-terraform -help
+```shell
+terraform --version
 ```
 
 ### Docker
@@ -90,7 +91,7 @@ Terraform provides another way to manage containers. The reason to use terraform
 
 For this first example, we can create a single terraform template file to start a simple web server container. In the file we must reference the *provider* that defines docker related resources.
 
-```tf
+```hcl
 terraform {
   required_providers {
     # This is the provider mentioned and recognizes docker resources
@@ -125,13 +126,13 @@ resource "docker_container" "nginx" {
 
 That is a very basic example that is equivalent of running:
 
-```bash
+```shell
 docker run -d -p 8000:80 nginx
 ```
 
 Once the file is created, the `terraform init` command is needed to download the configured docker provider.
 
-```
+```shell
 terraform init
 ```
 
@@ -139,26 +140,26 @@ You should see 'Terraform has been successfully initialized' in the output.
 
 Terraform can also format your resource files to clean up white space and indentation:
 
-```
+```shell
 terraform fmt
 ```
 
 Terraform can validate the syntax of the files as well:
 
-```
+```shell
 terraform validate
 Success! The configuration is valid
 ```
 
 And finally we tell terraform to apply the configuration. This command will create resources or verify that they are already running as configured.
 
-```
+```shell
 terraform apply
 ```
 
 Before terraform makes changes, the user is prompted with a summary of what changes terraform will make or it will inform the user that everything is up to date.
 
-```
+```hcl
 Terraform used the selected providers to generate the following execution
 plan. Resource actions are indicated with the following symbols:
   + create
@@ -239,7 +240,7 @@ The output should show 'Apply complete!'
 
 Verify the container is running with a `docker` command:
 
-```
+```shell
 docker ps
 
 CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS          PORTS                  NAMES
@@ -248,7 +249,7 @@ CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS  
 
 After you apply the terraform configuration, a new file is generated in the working directory called `terraform.tfstate` this is a text file that includes metadata about the resources that you have created. This file is used by terraform to determine if new changes are needed. This file can be inspected in a text editor or by running:
 
-```
+```shell
 terraform show
 ```
 
@@ -271,7 +272,7 @@ Log into the proxmox host terminal or GUI and then:
 - Bind the new user to the new role
 - Create an API key and associate it with the new user
 
-```bash
+```shell
 pveum role add TerraformRole -privs "VM.Allocate VM.Clone VM.Config.CDROM VM.Config.CPU VM.Config.Cloudinit VM.Config.Disk VM.Config.HWType VM.Config.Memory VM.Config.Network VM.Config.Options VM.Monitor VM.Audit VM.PowerMgmt Datastore.AllocateSpace Datastore.Audit"
 pveum user add tf@pam --password <password>
 pveum aclmod / -user tf@pam -role TerraformRole
@@ -280,7 +281,7 @@ pveum user token add tf@pam tftoken
 
 Here is a terraform file to manage an existing proxmox lxc container.
 
-```tf
+```hcl
 terraform {
   required_providers {
     proxmox = {
@@ -334,7 +335,7 @@ Once the variables have been declared, you can reference them during execution o
 
 `vars.tfvars`
 
-```tf
+```hcl
 proxmox_api_var = "https://pve.url:8006/api2/json"
 proxmox_api_token_var = "token@pam!tokenid"
 proxmox_api_token_secret_var = "secret"
@@ -342,14 +343,14 @@ proxmox_api_token_secret_var = "secret"
 
 Environment variables can also be used instead of storing the credentials in a file:
 
-```bash
+```shell
 export PM_API_TOKEN_ID="token@pam!tokenid"
 export PM_API_TOKEN_SECRET="secret"
 ```
 
 Once the terraform template and variables file is ready, initialize the provider:
 
-```
+```shell
 terraform init
 ```
 
@@ -377,7 +378,7 @@ Initializing provider plugins...
 
 The example terraform template above was for an existing lxc container. To import it to be managed by terraform, run the following:
 
-```
+```shell
 terraform import proxmox_lxc.foo_lxc node/lxc/id
 ```
 
@@ -415,7 +416,7 @@ Previously I have used [packer][7] to create virtual machine templates but debia
 
 Log into the proxmox host. If you have a cluster of proxmox nodes, I recommend using shared storage so they can all utilize the template easily. If you have a shared directory mounted, head there, otherwise going to `/tmp` is a good option.
 
-```bash
+```shell
 cd /tmp
 wget https://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64.img
 ```
@@ -424,7 +425,7 @@ This will download the latest image for ubuntu 20.04 (focal) into the current di
 
 Now install a package on the proxmox host to tweak this image to support the qemu guest agent:
 
-```bash
+```shell
 apt-get install libguestfs-tools
 
 virt-customize -a focal-server-cloudimg-amd64.img --install qemu-guest-agent
@@ -434,14 +435,14 @@ Now we can import this image into proxmox as a vm template:
 
 Create a vm template using id 999 or another unique number to your proxmox:
 
-```bash
+```shell
 #qm create <UNIQUE_ID> --name <TEMPLATE_NAME> --memory <MEMORY_IN_MB> --net0 <NETWORK_ADAPTER_TYPE,bridge=<PROXMOX_NETWORK_BRIDGE>
 qm create 999 --name focal-template --memory 2048 --net0 virtio,bridge=vmbr0
 ```
 
 Import the cloud-init image as the new template's boot disk. Make sure to replace `local-lvm` with your proxmox storage if you are not using the default storage.
 
-```bash
+```shell
 qm importdisk 999 focal-server-cloudimg-amd64.img local-lvm
 
 qm set 999 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-999-disk-0
@@ -461,7 +462,7 @@ Now this template is ready to be used by terraform.
 
 Use the same terraform template as earlier in this post but replace `proxmox_lxc` block with a new block:
 
-```tf
+```hcl
 variable "proxmox_host" {
   type = string
   default = "pve"
@@ -534,7 +535,7 @@ Initialize the provider with `terraform init`.
 
 Deploy the template with `terraform apply`:
 
-```bash
+```shell
 terraform apply
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
@@ -588,8 +589,8 @@ Now the virtual machine should be remotely accesible and if you cannot login wit
 
 Additional configuration options are included with the providers, check out the documentation:
 
-- https://registry.terraform.io/providers/kreuzwerker/docker/latest/docs
-- https://registry.terraform.io/providers/Telmate/proxmox/latest/docs
+- <https://registry.terraform.io/providers/kreuzwerker/docker/latest/docs>
+- <https://registry.terraform.io/providers/Telmate/proxmox/latest/docs>
 
 Terraform has made it easier for me to create vms to test new software and also makes it easy to clean up after testing is complete.
 
@@ -597,7 +598,7 @@ Terraform has made it easier for me to create vms to test new software and also 
 
 Any resources deployed with terraform can be removed with the command:
 
-```
+```shell
 terraform destroy
 ```
 

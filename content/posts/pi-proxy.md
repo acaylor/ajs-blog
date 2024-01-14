@@ -2,9 +2,13 @@
 title: Using a Raspberry Pi as a reverse proxy
 author: aj
 date: 2021-10-10
+updated: 2024-01-14
 categories:
   - Homelab
   - Containers
+  - Rasperry Pi
+  - Linux
+  - ansible
 tags:
   - containers
   - docker
@@ -12,6 +16,8 @@ tags:
   - nginx proxy manager
   - raspberry pi
   - reverse proxy
+  - pi
+  - linux
 
 ---
  

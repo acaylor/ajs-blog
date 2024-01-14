@@ -13,6 +13,7 @@ tags:
   - google cloud
   - kubernetes
   - argocd
+  - infrastructure as code
 ---
 
 Terraform is perfect for managing resources in public cloud providers. If you are not familiar with terraform, check out [a previous post][1] about terraform in my homelab. I am doing spring cleaning right now, I want to move my public cloud resources from Amazon Web Services to Google Cloud Platform.

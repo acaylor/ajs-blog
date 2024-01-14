@@ -1,0 +1,115 @@
+baseURL = "https://blog.ayjc.net"
+
+# theme
+theme = "ajsTheme"
+# themes directory
+themesDir = "themes"
+
+# website title
+title = "AJ's Blog"
+
+# determines default content language ["en", "zh-cn", "fr", "pl", ...]
+defaultContentLanguage = "en"
+# language code ["en", "zh-CN", "fr", "pl", ...]
+languageCode = "en-us"
+# language name ["English", "简体中文", "Français", "Polski", ...]
+languageName = "English"
+# whether to include Chinese/Japanese/Korean
+hasCJKLanguage = false
+
+# default amount of posts in each pages
+paginate = 6
+# google analytics code [UA-XXXXXXXX-X]
+#googleAnalytics = ""
+# copyright description used only for seo schema
+#copyright = "©{year}, All Rights Reserved" # copyright symbol: $copy; current year: {year}
+
+# whether to use robots.txt
+enableRobotsTXT = true
+# whether to use git commit log
+enableGitInfo = false
+# whether to use emoji code
+enableEmoji = true
+
+# ignore some build errors
+ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
+
+# Author config
+[author]
+  name = "aj"
+    email = "ayyyj@icloud.com"
+      link = "https://gitlab.com/acaylor/example_blog"
+
+
+
+# Sitemap config
+[sitemap]
+  changefreq = "weekly"
+    filename = "sitemap.xml"
+      priority = 0.5
+
+# Permalinks config (https://gohugo.io/content-management/urls/#permalinks)
+[Permalinks]
+  # posts = ":year/:month/:filename"
+    posts = "/posts/:filename"
+
+# Privacy config (https://gohugo.io/about/hugo-and-gdpr/)
+[privacy]
+  # privacy of the Google Analytics (replaced by params.analytics.google)
+    [privacy.googleAnalytics]
+        # ...
+          [privacy.twitter]
+              enableDNT = true
+                [privacy.youtube]
+                    privacyEnhanced = true
+
+# Options to make output .md files
+[mediaTypes]
+  [mediaTypes."text/plain"]
+      suffixes = ["md"]
+
+# Options to make output .md files
+[outputFormats.MarkDown]
+  mediaType = "text/plain"
+    isPlainText = true
+      isHTML = false
+
+# Options to make hugo output files
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+    page = ["HTML", "MarkDown"]
+      section = ["HTML", "RSS"]
+        taxonomy = ["HTML", "RSS"]
+          taxonomyTerm = ["HTML"]
+
+[services]
+  [services.disqus]
+    shortname = 'ayyyj'
+
+# Markup related configuration in Hugo
+[markup]
+  # Syntax Highlighting (https://gohugo.io/content-management/syntax-highlighting)
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    lineNos = true
+    lineNumbersInTable = true
+    # false is a necessary configuration (https://github.com/dillonzq/LoveIt/issues/158)
+    noClasses = false
+  # Goldmark is from Hugo 0.60 the default library used for Markdown
+  [markup.goldmark]
+    [markup.goldmark.extensions]
+      definitionList = true
+      footnote = true
+      linkify = true
+      strikethrough = true
+      table = true
+      taskList = true
+      typographer = true
+    [markup.goldmark.renderer]
+      # whether to use HTML tags directly in the document
+      unsafe = true
+  # Table Of Contents settings
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 6

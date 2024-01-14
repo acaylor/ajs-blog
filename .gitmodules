@@ -1,3 +1,6 @@
 [submodule "themes/zzo"]
 	path = themes/zzo
 	url = https://github.com/zzossig/hugo-theme-zzo.git
+[submodule "themes/ajsTheme"]
+	path = themes/ajsTheme
+	url = https://github.com/acaylor/ajsTheme.git
