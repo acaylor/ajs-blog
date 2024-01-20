@@ -1,18 +1,21 @@
 ---
 title: Colima
 author: aj
-date: 2024-01-13
-draft: true
+date: 2024-01-20
+
 categories:
   - Containers
 tags:
   - containers
   - docker
   - macos
+  - linux
 
 ---
 
-Colima is a tool that allows you to run container runtimes on macOS (and Linux) with minimal setup. It uses Lima, a lightweight virtual machine manager, to create and manage VMs that run Docker or Containerd. Colima also supports Kubernetes integration, so you can run a local cluster with K3s.
+[Colima](https://github.com/abiosoft/colima) is a tool that allows you to run container runtimes on macOS (and Linux) with minimal setup. If you are not familiar with containers and software such as Docker, check out [a previous post](/posts/containers/) to learn more.
+
+It uses Lima, a lightweight virtual machine manager, to create and manage VMs that run Docker or containerd. If you have not worked with virtual machines before, I have an [introductory post](/posts/getting-started-with-virtual-machines/) to explain the concept.
 
 ## Installation
 
@@ -34,11 +37,19 @@ To start Colima, you can use the `colima start` command with some optional flags
 colima start
 ```
 
-- Start Colima with 4 CPUs, 4 GB memory, 100 GB disk, and Containerd runtime:
+- Start Colima with 4 CPUs, 4 GB memory, 100 GB disk, and containerd runtime:
 
 ```shell
 colima start —cpu 4 —memory 4 —disk 100 —runtime containerd
 ```
+
+- Start Colima with Rosetta 2 emulation (for M series Macs):
+
+```shell
+colima start —arch aarch64 —vm-type=vz —vz-rosetta
+```
+
+#### Optional Kubernetes
 
 - Start Colima with Kubernetes enabled and Traefik ingress controller:
 
@@ -46,17 +57,15 @@ colima start —cpu 4 —memory 4 —disk 100 —runtime containerd
 colima start —kubernetes —kubernetes-ingress
 ```
 
-- Start Colima with Rosetta 2 emulation (for M1 Macs):
-
-```shell
-colima start —arch aarch64 —vm-type=vz —vz-rosetta
-```
-
 You can see the full list of available flags by running `colima start —help`.
 
 ## Using Colima
 
-Once Colima is started, you can use the Docker or containerd CLI to interact with your containers. For example, you can run the following commands to pull and run a hello-world image:
+Once Colima is started, you can use the Docker or containerd CLI to interact with your containers. If you would like to know more about containerd, check out [a previous post](/posts/docker-alternatives/) about alternatives to Docker for running containers. 
+
+### Example: run a container in the CLI
+
+For example, you can run the following commands in a terminal to pull and run a `hello-world` image:
 
 ```shell
 # For Docker runtime
@@ -64,21 +73,23 @@ docker pull hello-world
 docker run hello-world
 
 # For containerd runtime
-colima nerdctl pull hello-world
-colima nerdctl run hello-world
+colima nerdctl pull docker.io/hello-world
+colima nerdctl run docker.io/hello-world
 ```
+
+Note that for `nerdctl` which is the containerd CLI, you need to specify `docker.io/` as the domain for the container registry. This step can be skipped when using the `docker` CLI.
 
 You can also use Docker Compose to run multi-container applications. For example, you can create a `docker-compose.yml` file with the following content:
 
 ```yaml
-version: “3.9”
+version: 3.9
 services:
   web:
-    image: nginx
+    image: docker.io/nginx
     ports:
-      - “80:80”
+      - 8080:80
   db:
-    image: mysql
+    image: docker.io/mysql
     environment:
       MYSQL_ROOT_PASSWORD: example
 ```
@@ -93,7 +104,7 @@ docker compose up -d
 colima nerdctl compose up -d
 ```
 
-You can access the web service by visiting http://localhost:80 in your browser.
+You can access the web service by visiting <http://localhost:8080> in your browser.
 
 ### Kubernetes
 
@@ -104,7 +115,9 @@ kubectl cluster-info
 kubectl get nodes
 ```
 
-You can also deploy applications to your cluster using `kubectl` or `helm`. For example, you can run the following commands to install a WordPress application:
+If you are not familiar with Kubernetes, check out a [previous post](/posts/kubernetes/) to get started and install the `kubectl` tool.
+
+You can also deploy applications to your cluster using `kubectl` or `helm`. For example, you can run the following commands to install a WordPress application from the bitnami helm repo:
 
 ```shell
 # Create a namespace for WordPress
@@ -123,4 +136,4 @@ To stop Colima, you can use the `colima stop` command. This will stop the VM and
 
 ## Conclusion
 
-Colima is a simple and powerful tool that lets you run container runtimes on macOS (and Linux) with minimal setup. It leverages Lima to create and manage VMs that run Docker or Containerd. It also supports Kubernetes integration, so you can run a local cluster with K3s. Colima is a great alternative to Docker Desktop, especially for M1 Mac users who want to run containers with Rosetta 2 emulation.
+Colima is a simple and powerful tool that lets you run container runtimes on macOS (and Linux) with minimal setup. It leverages Lima to create and manage VMs that run Docker or containerd. It also supports Kubernetes integration, so you can run a local cluster. Colima is a great alternative to Docker Desktop, especially for M series Mac users who want to run containers with Rosetta 2 emulation. Emulation allows you to run containers that are different CPU architectures. Most desktop computers still use x86_64/amd64 architecture.
