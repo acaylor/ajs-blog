@@ -12,7 +12,6 @@ tags:
   - wireguard
   - linux
   - virtual machine
-
 ---
 
 A [VPN][1] is a way to create a secure tunnel from a remote network onto your own network. When I am not at home I can still trust my DNS requests and access resources from my personal networks. There are different VPN softwares out there and today I will be setting up [WireGuard][2].

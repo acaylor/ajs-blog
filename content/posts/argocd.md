@@ -3,7 +3,7 @@ title: Deploy software on Kubernetes with argoCD
 author: aj
 image: /images/argo_logo.png
 date: 2022-09-25
-
+updated: 2024-02-01
 categories:
   - Containers
   - Kubernetes
@@ -13,7 +13,9 @@ tags:
   - argoCD
 ---
 
-Once you have a kubernetes environment running, a tool like [argoCD][1] can help you manage applications that you want to deploy on kubernetes. ArgoCD expects a pattern of using [git][2] repositories as the source of truth for defining the state of your applications. You can communicate with the kubernetes API by submiting requests in [YAML][3] or [JSON][4] format. I am going to be focusing on managing applications with [helm][5] charts.
+_updated: 2024-02-01_
+
+Once you have a kubernetes environment running, a tool like [argoCD][1] can help you manage applications that you want to deploy on kubernetes. ArgoCD expects a pattern of using [git][2] repositories as the source of truth for defining the state of your applications. You can communicate with the kubernetes API by submitting requests in [YAML][3] or [JSON][4] format. I am going to be focusing on managing applications with [helm][5] charts.
 
 ArgoCD automates the deployment of applications in kubernetes. Application deployments can track updates to git branches, tags, or pinned to a specific version of manifests at a specific commit.
 
@@ -27,7 +29,7 @@ You can try argoCD in any kubernetes environment including dev environments such
 
 To install argo, create the specified namespace and apply the latest version of the argoCD deployment manifest.
 
-```bash
+```shell
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ```
@@ -44,13 +46,13 @@ You will need access to your own kubernetes cluster and the helm CLI installed o
 
 Helm is available on package manager for several operating systems. For the latest release, you can also download pre-compiled binaries on the GitHub release page:
 
-https://github.com/helm/helm/releases
+<https://github.com/helm/helm/releases>
 
 #### Install on macOS
 
 You can install helm using `brew` on macOS:
 
-```sh
+```shell
 brew install helm
 ```
 
@@ -66,7 +68,7 @@ choco install kubernetes-helm
 
 On Fedora, you can install from the fedora repositories using the `dnf` package manager:
 
-```bash
+```shell
 sudo dnf install helm
 ```
 
@@ -75,19 +77,19 @@ sudo dnf install helm
 
 Once you have the `helm` binary installed, add the argoCD helm repository and install the argoCD chart:
 
-```sh
+```shell
 helm repo add argo https://argoproj.github.io/argo-helm
 ```
 
 Then:
 
-```sh
+```shell
 helm install my-release argo/argo-cd
 ```
 
 You can customize the deployment with a `values.yaml` file. For example to deploy in a HA configuration:
 
-```values.yaml
+```yaml
 redis-ha:
   enabled: true
 
@@ -110,7 +112,7 @@ applicationSet:
 
 To install with the values file:
 
-```sh
+```shell
 helm install my-release -f values.yaml argo/argo-cd
 ```
 
@@ -118,8 +120,9 @@ helm install my-release -f values.yaml argo/argo-cd
 
 Here is an example of how to manage an application deployed using a helm chart with argoCD. You can store this in a git repository and apply it to a cluster with argoCD installed.
 
+### argo-example-helm.yaml
 
-```argo-example-helm.yaml
+```yaml
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -134,7 +137,7 @@ spec:
   source:
     chart: longhorn 
     repoURL: https://charts.longhorn.io
-    targetRevision: 1.3.1
+    targetRevision: 1.5.1
     helm:
   syncPolicy:
     automated:
@@ -148,19 +151,19 @@ This manifest uses the api added by argoCD to deploy a argo Application object i
 
 Deploy the application to your cluster using `kubectl` if you do not have this tool, check out [a previous post][6] to find out where to get it.
 
-```sh
+```shell
 kubectl apply -f argo-example-helm.yaml
 ```
 
 You can see resources deployed in your cluster:
 
-```sh
+```shell
 kubectl get all -n argocd
 ```
 
 See argo applications by searching for the custom resource:
 
-```sh
+```shell
 kubectl get applications -n argocd
 ```
 
@@ -175,13 +178,17 @@ longhorn     Synced        Healthy
 
 After you have deployed argoCD, you can access argo using the CLI or the web UI.
 
-There is an intial admin token created to interact with argoCD:
+There is an initial admin token created to interact with argoCD:
 
-```sh
+```shell
 kubectl get secrets -n argocd
 ```
 
 You are looking for `argocd-initial-admin-secret`.
+
+```shell
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+```
 
 This token can be used with the built-in `admin` user to access the UI or CLI.
 
@@ -189,25 +196,25 @@ This token can be used with the built-in `admin` user to access the UI or CLI.
 
 You can access the UI by port forwarding the connecting with `kubectl`
 
-```sh
+```shell
 kubectl get services -n argocd
 ```
 
 You are looking for the service `argocd-server`.
 
-```sh
+```shell
 kubectl port-forward service/argocd-server -n argocd 4443:443
 ```
 
 That will make the argoCD UI available on your `localhost` port `4443`.
 
-In a future post I will be using the argoCD CLI to manage a custom application with a git repository and the `kustomize` utility.
+Access the UI in the browser via `https://localhost:4443` and accept the warning about a self-signed certificate. The proxy will be active until you press <key>CTRL</key> + <key>C</key> to exit the process in your terminal.
 
 ## Clean up
 
 You can remove argoCD from your kubernetes cluster by removing the `argoCD` namespace.
 
-```sh
+```shell
 kubectl delete namespace argocd
 ```
 
