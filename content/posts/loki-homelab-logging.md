@@ -2,6 +2,7 @@
 title: Homelab logging with grafana loki
 author: aj
 date: 2022-06-11
+updated: 2024-02-03
 image: /images/loki_logo.png
 
 categories:
@@ -33,7 +34,7 @@ I am going to use an openSUSE container template because there is a package repo
 
 Before creating the new container, download the image into proxmox storage. If you’re unsure to which one, you can use the `local` storage. For clustered installations, it is preferred to use a shared storage so that all nodes can access those images. I will use NFS storage.
 
-```bash
+```shell
 pveam update
 
 pveam available |grep -i suse
@@ -45,7 +46,7 @@ Output:
 system          opensuse-15.3-default_20210925_amd64.tar.xz
 ```
 
-```bash
+```shell
 pveam download images opensuse-15.3-default_20210925_amd64.tar.xz
 ```
 
@@ -126,7 +127,7 @@ lxc-attach <vmid>
 
 Once connected to the container, add the repo for logging:
 
-```bash
+```shell
 zypper ar https://download.opensuse.org/repositories/security:/logging/openSUSE_Leap_15.3/security:logging.repo
 
 zypper ref
@@ -137,13 +138,13 @@ Do you want to reject the key, trust temporarily, or trust always? [r/t/a/?] (r)
 
 Trust the gpg key for the repo by entering "a" and then install loki:
 
-```bash
+```shell
 zypper in loki promtail -y
 ```
 
 Once installed, we can start and enable the loki and promtail service:
 
-```bash
+```shell
 systemctl enable --now loki
 systemctl enable --now promtail
 ```
@@ -154,7 +155,7 @@ Now loki should be accessible on port 3100
 
 Here is an ansible playbook to perform the previous steps. Check out a [previous post][5] if you are not familiar with ansible. The lxc container needs to have an ssh server and a non-root user with sudo access.
 
-```bash
+```shell
 zypper in openssh-server
 
 systemctl enable --now sshd
@@ -192,7 +193,7 @@ Simple playbook for opensuse leap 15.3
 
 Run this with the command
 
-```bash
+```shell
 ansible-playbook playbook.yml -i 'loki.server,'
 ```
 
@@ -204,14 +205,14 @@ Any system that you want to collect logs will need the promtail agent. I prefer 
 
 There should be one promtail agent already on the lxc system where loki was installed. Before proceeding, verify that loki is operational. Log into another system that you would like to forward logs and see if loki is ready:
 
-```bash
+```shell
 curl http://loki.server:3100/ready
 ready
 ```
 
 Now we will prepare a configuration file for the promtail agent on the remote server.
 
-```bash
+```shell
 mkdir -p /etc/loki
 
 vim /etc/loki/promtail-config.yaml
@@ -246,7 +247,7 @@ This will collect all .log files in `/var/log`.
 
 Now if you want to collect logs from docker containers, I found how to reconfigure the promtail agent and docker daemon to format the container logs. Loki includes a docker plugin to send logs but I run docker on raspberry pi systems which have arm64 cpu architecture. The loki docker plugin does not have an arm64 image but the promtail agent does.
 
-We will prepare the promtail config and then configure the docker daemon to alter the format of the container logs to make it easier for us to look at in grafana. Repace the loki url with your system.
+We will prepare the promtail config and then configure the docker daemon to alter the format of the container logs to make it easier for us to look at in grafana. Replace the loki url with your system.
 
 
 ```yaml
@@ -319,8 +320,8 @@ services:
 
 Start this container with the command:
 
-```bash
-docker-compose up -d
+```shell
+docker compose up -d
 ```
 
 ## Visualize logs in grafana
@@ -335,7 +336,7 @@ The only section that needs to be filled out is *HTTP* > *URL*
 
 In the URL text box, enter the full URL to your loki instance ex: `http://loki.url:3100`
 
-Once the URL is filled out, select "Save & Test" at the bottom. Barring any error messages, Loki should now be browseable with grafana.
+Once the URL is filled out, select "Save & Test" at the bottom. Barring any error messages, Loki should now be viewable with grafana.
 
 Select "Explore" in the navigation menu and then Select "Loki" to browse logs.
 
@@ -351,7 +352,7 @@ Now, you can search for "error" in your logs with the following query:
 {job="containerlogs"} |~ "(?i)error"
 ```
 
-The `(?i)` will ignore case of the string so it should pick up "error", "Error", "ERROR", or whatever the app devs decided to use.
+The `(?i)` will ignore case of the string so it should pick up "error", "Error", "ERROR", or whatever the app developers decided to use.
 
 Now if you have set up prometheus as well, grafana should be all set up to look at your system metrics and logs all from one interface.
 
@@ -359,7 +360,7 @@ Now if you have set up prometheus as well, grafana should be all set up to look 
 
 You can save log queries as dashboard panels on grafana, so metrics and logs can be configured on the same dashboard.
 
-Loki is able to import logs from more sources than I covered here. If you use rsyslogd on linux for example, loki can be configured to receive those logs.
+Loki is able to import logs from more sources than I covered here. If you use `rsyslogd` on linux for example, loki can be configured to receive those logs.
 
 I also recommend looking into configuring a firewall for your loki server so that only authorized systems can connect to the loki server. You can also set up a reverse proxy server to encrypt traffic to and from the loki server by serving loki over HTTPS. Check out a [previous post][7] to see how to set up a proxy server with docker.
 

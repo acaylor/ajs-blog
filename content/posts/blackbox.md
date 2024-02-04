@@ -58,12 +58,12 @@ services:
     restart: unless-stopped
 ```
 
-The important note here is the `volumes:` key. First is the location of the blackbox config file on the host machine delimted with a `:` and inside the container, the config will be mounted in the container filesystem as `/config/blackbox.yml`.
+The important note here is the `volumes:` key. First is the location of the blackbox config file on the host machine delimited with a `:` and inside the container, the config will be mounted in the container filesystem as `/config/blackbox.yml`.
 
 Start the new container after updating `docker-compose.yml`. The tool will detect the new container and bring it up without disrupting other running containers:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 ## Configure prometheus server
@@ -92,7 +92,7 @@ Once blackbox exporter is running, the prometheus server needs to be configured 
 
 ## Visualize new metrics with premade grafana dashboard
 
-The [aformentioned post][2] included deploying grafana. Check it out for help getting grafana running. There are free dashboards available online:
+The [aforementioned post][2] included deploying grafana. Check it out for help getting grafana running. There are free dashboards available online:
 
 https://grafana.com/grafana/dashboards/
 
@@ -100,7 +100,7 @@ There is a dashboard for blackbox exporter.
 
 At this time it has the ID `7587`.
 
-1. Navigate to the lefthand menu and Select "+" > "Import" > "Import via grafana.com"
+1. Navigate to the left-hand menu and Select "+" > "Import" > "Import via grafana.com"
 
 2. Enter the ID of the dashboard you would like to import and then select "Load"
 

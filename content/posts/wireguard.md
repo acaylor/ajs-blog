@@ -2,6 +2,7 @@
 title: Homelab VPN with Wireguard
 author: aj
 date: 2021-10-19
+updated: 2024-02-03
 categories:
   - Homelab
   - Containers
@@ -14,17 +15,19 @@ tags:
   - virtual machine
 ---
 
+_updated: 2024-02-03_
+
 A [VPN][1] is a way to create a secure tunnel from a remote network onto your own network. When I am not at home I can still trust my DNS requests and access resources from my personal networks. There are different VPN softwares out there and today I will be setting up [WireGuard][2].
 
 ![wireguard](/images/wireguard.png)
 
 ## Installing and configuring WireGuard with Docker
 
-In order to run the WireGuard server, I will be using a docker container inside of a virtual machine. In order to keep this post concise, please check out [my previous post][3] on docker if you are not familiar with the technology. I also have [a post][4] on setting up virtual machines and [yet another post][5] onsetting up a dedicated system to run virtual machines with proxmox.
+In order to run the WireGuard server, I will be using a docker container inside of a virtual machine. In order to keep this post concise, please check out [my previous post][3] on docker if you are not familiar with the technology. I also have [a post][4] on setting up virtual machines and [yet another post][5] on setting up a dedicated system to run virtual machines with proxmox.
 
 #### Requirements
 
-In order to proceed, you must have a suitable Linux System with docker and docker-compose installed. See above for posts that will help you meet these requirements.
+In order to proceed, you must have a suitable Linux System with docker installed. See above for posts that will help you meet these requirements.
 
 The container image that will be used here is created by the [LinuxServer.io][6] team who keep up with regular security updates and publish images that are not affected by the rate limits of the public Docker Hub.
 
@@ -64,17 +67,17 @@ services:
 
 Once this template has been saved, the WireGuard server can be started with the following command:
 
-```bash
-docker-compose up -d
+```shell
+docker compose up -d
 ```
 
 ### Upgrading to new versions
 
 Run these commands in the directory with the `docker-compose.yml` template:
 
-```bash
-docker-compose pull
-docker-compose up -d
+```shell
+docker compose pull
+docker compose up -d
 ```
 
 ### Port forwarding
@@ -85,10 +88,10 @@ In the example above, the server was configured to use port **51820/udp**
 
 ## Configuring a WireGuard client
 
-Now that the WireGuard server is running, note the IP address and/or DNS hostname of the system. Wait a few minutes for the container to intialize and then run the following command to output the container logs:
+Now that the WireGuard server is running, note the IP address and/or DNS hostname of the system. Wait a few minutes for the container to initialize and then run the following command to output the container logs:
 
-```bash
-docker-compose logs wireguard
+```shell
+docker compose logs wireguard
 ```
 
 Within this output should be a QR code. We can use this to configure a client to connect to the server.
@@ -97,7 +100,7 @@ Within this output should be a QR code. We can use this to configure a client to
 
 To connect an iOS client, download the official client [from the Apple App store][8]. Once the application is downloaded, press the + in the upper right to add a new server. In the following menu, select "Create from QR code". If you lost the QR code, enter the following command in the container shell:
 
-```bash
+```shell
 qrencode -t ansiutf8 < tunnel.conf
 ```
 

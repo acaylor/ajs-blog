@@ -2,7 +2,7 @@
 title: Setting up Network UPS tools
 author: aj
 date: 2022-05-29
-
+updated: 2024-02-03
 categories:
   - Rasperry Pi
   - Homelab
@@ -24,7 +24,7 @@ Initially I planned to create some automation to install and configure NUT but s
 
 My physical servers are debian based. If on debian or ubuntu linux, install the following packages to support Network UPS tools:
 
-```bash
+```shell
 sudo apt update && sudo apt install nut nut-client nut-server
 ```
 
@@ -38,7 +38,7 @@ The rest of the post has instructions for linux servers with consumer UPS connec
 
 Ensure that one or more UPS is connected to a usb port on the linux system. Run the following command to view NUT supported devices:
 
-```bash
+```shell
 nut-scanner -U
 ```
 
@@ -113,7 +113,7 @@ In the `upsmon.conf` the `admin` user was specified. This needs to be created in
 
 Now services must be restarted to reload configurations:
 
-```bash
+```shell
 systemctl restart nut-server
 systemctl restart nut-client
 systemctl restart nut-monitor
@@ -121,7 +121,7 @@ systemctl restart nut-monitor
 
 Check if the configuration works with the `upsc` command:
 
-```bash
+```shell
 upsc <device_name>@localhost
 ```
 
@@ -182,7 +182,7 @@ Add a user for remote clients to use in `/etc/nut/upsd.users`
 
 If the system doesn't have the ups connected, you only need to install the nut client.
 
-```bash
+```shell
 sudo apt install nut-client
 ```
 
@@ -200,13 +200,13 @@ MONITOR <device_name>@nut-server 1 upsmon <new_password> slave
 
 Restart nut-client and nut-monitor to load the configuration.
 
-```bash
+```shell
 systemctl restart nut-client nut-monitor
 ```
 
 Verify the client can contact the server that has the UPS connected:
 
-```bash
+```shell
 upsc myups@nut-server
 ```
 
@@ -232,7 +232,7 @@ AT NOCOMM * EXECUTE commbad
 
 I created the script `upssched-cmd`. This goes in `/sbin/` with other administrative binaries. Make sure the permissions are `751` and the file is owned by root.
 
-```bash
+```shell
 #!/bin/sh
 case $1 in
        onbatt)
@@ -290,8 +290,8 @@ services:
 
 Start the new container after updating `docker-compose.yml`. The tool will detect the new container and bring it up without disrupting other running containers:
 
-```bash
-docker-compose up -d
+```shell
+docker compose up -d
 ```
 
 ### Running exporter on raspberry pi
@@ -300,13 +300,13 @@ If you are using a raspberry pi or another system with the arm64 CPU architectur
 
 First, clone the repository:
 
-```bash
+```shell
 git clone https://github.com/HON95/prometheus-nut-exporter.git
 ```
 
 Now create a `docker-compose.yml` file in the present directory, not inside the new directory with the repository:
 
-```bash
+```shell
 ls
 prometheus-nut-exporter
 ```
@@ -330,7 +330,7 @@ services:
 
 Before starting the container, one edit is required inside the repository `Dockerfile`:
 
-```bash
+```shell
 ls
 docker-compose.yml  prometheus-nut-exporter
 
@@ -350,8 +350,8 @@ RUN chmod +x /tini
 
 Now the container can be built and run with `docker-compose`.
 
-```bash
-docker-compose up -d
+```shell
+docker compose up -d
 ```
 
 ## Configure prometheus server
@@ -378,17 +378,17 @@ Once NUT exporter is running, the prometheus server needs to be configured to mo
 
 Multiple NUT servers can be monitored, just add more `targets`.
 
-## Visualize new metrics with premade grafana dashboard
+## Visualize new metrics with pre-made grafana dashboard
 
 The [aforementioned post][2] included deploying grafana. Check it out for help getting grafana running. There are free dashboards available online:
 
-https://grafana.com/grafana/dashboards/
+<https://grafana.com/grafana/dashboards/>
 
 There is a dashboard for NUT exporter.
 
 At this time it has the ID `14371`
 
-1. Navigate to the lefthand menu and Select "+" > "Import" > "Import via grafana.com"
+1. Navigate to the left-hand menu and Select "+" > "Import" > "Import via grafana.com"
 
 2. Enter the ID of the dashboard you would like to import and then select "Load"
 

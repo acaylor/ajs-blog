@@ -2,6 +2,7 @@
 title: Homelab dashboard
 author: aj
 date: 2022-06-25
+updated: 2024-02-03
 image: /images/heimdall_logo.png
 categories:
   - Utilities
@@ -12,26 +13,25 @@ tags:
 
 ---
 
-Having a dashboard webpage that links to your web applications makes navigating homelab and cloud services easier. It is certainly possible to create a custom web app or web page but there is a great open-source project called [Heimdall][1] that not only serves as a homepage/dashboard but has API integrations to many applications used in a homelab. More web applications are added over time so if an app you use does not have an API integration currently, submit a request to the
-maintainers.
+Having a dashboard webpage that links to your web applications makes navigating homelab and cloud services easier. It is certainly possible to create a custom web app or web page but there is a great open-source project called [Heimdall][1] that not only serves as a homepage/dashboard but has API integrations to many applications used in a homelab. More web applications are added over time so if an app you use does not have an API integration currently, submit a request to the maintainers.
 
  ## Installing and configuring heimdall with Docker
  
- In order to run the heimdall server, I will be using a docker container inside of a virtual machine. In order to keep this post concise, please check out [my previous post][3] on docker if  you are not familiar with the technology. I also have [a post][4] on setting up virtual machines and [yet another post][5] onsetting up a dedicated system to run virtual machines with proxmox.
+ In order to run the heimdall server, I will be using a docker container inside of a virtual machine. In order to keep this post concise, please check out [my previous post][3] on docker if you are not familiar with the technology. I also have [a post][4] on setting up virtual machines and [yet another post][5] on setting up a dedicated system to run virtual machines with proxmox.
  
  #### Requirements
  
- In order to proceed, you must have a suitable Linux System with docker and docker-compose installed. See above for posts that will help you meet these requirements.
+ In order to proceed, you must have a suitable Linux System with docker installed. See above for posts that will help you meet these requirements.
  
  The container image that will be used here is created by the [LinuxServer.io][6] team who keep up with regular security updates and publish images that are not affected by the rate limits of the public Docker Hub.
  
  ### heimdall template
  
- In order to preserve the configuration of the heimdall server that is running in a docker container, we can use a `docker-compose` template. Save the following as a `docker-compose.yml`    file in a location that you will remember and that is not readable by any user.
+ In order to preserve the configuration of the heimdall server that is running in a docker container, we can use a `docker compose` template. Save the following as a `docker-compose.yml` file in a location that you will remember and that is not readable by any user.
 
  What I mean by that is on Linux, change the file permissions of the compose file: 
 
- ```bash
+ ```shell
  chmod 0600 docker-compose.yml
  ```
  
@@ -58,17 +58,17 @@ maintainers.
  
  Once this template has been saved, the heimdall server can be started with the following command:
  
- ```bash
- docker-compose up -d
+ ```shell
+ docker compose up -d
  ```
  
  ### Upgrading to new versions
  
  Run these commands in the directory with the `docker-compose.yml` template:
  
- ```bash
- docker-compose pull
- docker-compose up -d
+ ```shell
+ docker compose pull
+ docker compose up -d
  ```
 
   ### Proxy

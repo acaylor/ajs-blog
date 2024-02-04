@@ -2,6 +2,7 @@
 title: Dokuwiki homelab wiki
 author: aj
 date: 2021-12-04
+updated: 2024-02-03
 categories:
   - Utilities
 tags:
@@ -17,7 +18,7 @@ tags:
 
 ## Installing and configuring Dokuwiki with Docker
 
-In order to run the Dokuwiki server, I will be using a docker container inside of a virtual machine. In order to keep this post concise, please check out [my previous post][3] on docker if you are not familiar with the technology. I also have [a post][4] on setting up virtual machines and [yet another post][5] onsetting up a dedicated system to run virtual machines with proxmox.
+In order to run the Dokuwiki server, I will be using a docker container inside of a virtual machine. In order to keep this post concise, please check out [my previous post][3] on docker if you are not familiar with the technology. I also have [a post][4] on setting up virtual machines and [yet another post][5] on setting up a dedicated system to run virtual machines with proxmox.
 
 #### Requirements
 
@@ -53,7 +54,7 @@ volumes:
 Once this template has been saved, the Dokuwiki server can be started with the following command:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 ### Upgrading to new versions
@@ -61,8 +62,8 @@ docker-compose up -d
 Run these commands in the directory with the `docker-compose.yml` template:
 
 ```bash
-docker-compose pull
-docker-compose up -d
+docker compose pull
+docker compose up -d
 ```
 
 ### Port forwarding
@@ -93,7 +94,7 @@ http://$IP:$PORT/install.php
 #### First, restart the container
 
 ```bash
-docker-compose restart
+docker compose restart
 ```
 
 #### Next, log in as an superuser and configure nice URLs

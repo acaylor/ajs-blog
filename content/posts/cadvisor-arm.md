@@ -27,7 +27,7 @@ tags:
 
 The existing official image for cadvisor does not have a image published for the arm cpu architecture. This is what is found in a Raspberry Pi CPU and in Apple's M series CPUs.
 
-The same source code can be used to bulid a compatible image and run it alongside other containers on an arm system. The following code was found on a [github issue][3] for the cadvisor github repository.
+The same source code can be used to build a compatible image and run it alongside other containers on an arm system. The following code was found on a [github issue][3] for the cadvisor github repository.
 
 First prepare the container image with a Dockerfile:
 
@@ -114,7 +114,7 @@ services:
 Start the new container after updating `docker-compose.yml`. The tool will detect the new container and bring it up without disrupting other running containers:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 ## Configure prometheus server
@@ -136,7 +136,7 @@ Restart the prometheus container to start scraping the new target.
 
 ## Visualize new metrics with premade grafana dashboard
 
-The [aformentioned post][2] included deploying grafana. Check it out for help getting grafana running. There are free dashboards available online:
+The [aforementioned post][2] included deploying grafana. Check it out for help getting grafana running. There are free dashboards available online:
 
 https://grafana.com/grafana/dashboards/
 
@@ -144,7 +144,7 @@ There is a dashboard for cadvisor.
 
 At this time it has the ID `11600`.
 
-1. Navigate to the lefthand menu and Select "+" > "Import" > "Import via grafana.com"
+1. Navigate to the left-hand menu and Select "+" > "Import" > "Import via grafana.com"
 
 2. Enter the ID of the dashboard you would like to import and then select "Load"
 

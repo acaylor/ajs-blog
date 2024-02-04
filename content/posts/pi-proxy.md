@@ -2,7 +2,7 @@
 title: Using a Raspberry Pi as a reverse proxy
 author: aj
 date: 2021-10-10
-updated: 2024-01-14
+updated: 2024-02-03
 categories:
   - Homelab
   - Containers
@@ -78,8 +78,8 @@ volumes:
 
 Now the application can be launched with:
 
-```bash
-docker-compose up -d
+```shell
+docker compose up -d
 ```
 
 When your docker container is running, connect to it on port `81` for the admin interface. Enter the hostname / IP address of the Pi in your browser and the port number:
@@ -99,9 +99,9 @@ Immediately after logging in with this default user you will need to change the 
 
 Run these commands in the directory with the `docker-compose.yml` template:
 
-```bash
-docker-compose pull
-docker-compose up -d
+```shell
+docker compose pull
+docker compose up -d
 ```
 
 ## Install and configure Nginx Proxy manager with Ansible
@@ -155,7 +155,7 @@ You can create an inventory file to limit the scope of execution `proxyhosts.ini
 examplehost.example.org
 ```
 
-```bash
+```shell
 # Install role from requirements file
 ansible-galaxy install -r requirements.yml
 # Run the new playbook, use inventory of desired hosts, -K is to ask for become password
