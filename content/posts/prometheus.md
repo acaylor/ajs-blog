@@ -178,7 +178,7 @@ Grafana needs to be configured to utilize prometheus as a data source.
 
 *For Grafana versions < 10*
 
-1. Navigate to the lefthand menu and find the Gear icon, then select "Data Sources".
+1. Navigate to the left-hand menu and find the Gear icon, then select "Data Sources".
 
 2. Select "Add data source" and then find Prometheus.
 
@@ -201,7 +201,7 @@ I will add Node Exporter Full to utilize the metrics from the node_exporter cont
 
 At this time it has the ID `1860`.
 
-1. Navigate to the lefthand menu and Select "+" > "Import" > "Import via grafana.com"
+1. Navigate to the left-hand menu and Select "+" > "Import" > "Import via grafana.com"
 
 2. Enter the ID of the dashboard you would like to import and then select "Load"
 
@@ -217,7 +217,7 @@ In order to add a dashboard for proxmox, we need to create an exporter to scrape
 
 #### Added NOTE after Proxmox 8 release
 
-While you can still install the pve exporter on the proxmox node itself, in Proxmox versions 8 and greater, the system pacakge manager highly suggests not insalling python packages via pip system-wide. I recommend to deploy similar to other prometheus exporters as a separate container.
+While you can still install the pve exporter on the proxmox node itself, in Proxmox versions 8 and greater, the system package manager highly suggests not installing python packages via pip system-wide. I recommend to deploy similar to other prometheus exporters as a separate container.
 
 I attempted to install the exporter on a proxmox 8 node and was faced with an error:
 
@@ -236,7 +236,7 @@ For this reason, I recommend  to set up the proxmox prometheus exporter as a con
 
 #### Create a user on proxmox node
 
-_This step is neccessary no matter where you install the exporter. This user is used to access the metrics from the proxmox API and export them for prometheus._
+_This step is necessary no matter where you install the exporter. This user is used to access the metrics from the proxmox API and export them for prometheus._
 
 Create a non-root user to run the prometheus exporter program:
 
@@ -482,7 +482,7 @@ Create a playbook:
 Run this against your hosts:
 
 ```bash
-ansible-playbok node_exporter.yml -i your_inventory.ini -K
+ansible-playbook node_exporter.yml -i your_inventory.ini -K
 ```
 
 `-K` prompts for sudo password, this is optional if you have sudo configured to escalate without password prompt.
