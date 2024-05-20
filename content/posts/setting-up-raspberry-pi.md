@@ -11,7 +11,7 @@ tags:
   - linux
   - raspberry pi
   - pi
-
+  - ubuntu
 ---
 
 A Raspberry Pi (not pie) is a single-board computer developed in the UK by the Raspberry Pi foundation and Broadcom. The Pi was designed to promote basic computer science education around the world with a low cost computer that is accessible to developing nations. The Pi has been very popular world wide far beyond the original scope of the first product released. The newest single-board unit as of this post is the Raspberry Pi 4 Model B which contains a 64 bit processor, 1,2,4,or 8 GB of memory, 1 Gigabit Ethernet network interface, 2x USB 2 type A ports, 2x USB 3 type A ports, 2x micro HDMI ports, USB type C for power, 3.5mm A/V analog input, Wi-Fi and GPIO pins to connect non-standard devices.

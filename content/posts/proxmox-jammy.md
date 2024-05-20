@@ -8,7 +8,8 @@ categories:
   - Linux
 tags:
   - proxmox
-  - homelab
+  - linux
+  - ubuntu
   - virtual machine
 ---
 
