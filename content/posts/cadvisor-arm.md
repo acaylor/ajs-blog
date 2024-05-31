@@ -2,7 +2,7 @@
 title: cadvisor for arm64
 author: aj
 date: 2022-05-15
-updated: 2024-01-14
+updated: 2024-05-30
 image: /images/cadvisor_logo.png
 categories:
   - Homelab
@@ -20,12 +20,48 @@ tags:
 
 ---
 
+_update 2024: the official cadvisor image now supports arm which means it will work on Pis_
+
 ![cadvisor_logo](/images/cadvisor_logo.png)
 [cadvisor exporter][1] is used by Prometheus to monitor container metrics. If you are not familiar with prometheus, check out [a previous post][2]. The cadvisor program will collect metrics and make them available on a http server. Prometheus needs to be configured to collect metrics from the cadvisor exporter and then grafana can be used to visualize those metrics.
 
-## Build docker image
+## Run container image
 
-The existing official image for cadvisor does not have a image published for the arm cpu architecture. This is what is found in a Raspberry Pi CPU and in Apple's M series CPUs.
+The container can be deployed with `docker-compose`. Some metrics are disabled, notably the memory metrics on arm cpus. Make sure that the `cadvisor` container is on the same docker network as prometheus server.
+
+`docker-compose.yml`
+
+```yaml
+services:
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor
+    container_name: cadvisor
+    ports:
+       - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg
+    restart: unless-stopped
+```
+
+Start the new container after updating `docker-compose.yml`. The tool will detect the new container and bring it up without disrupting other running containers:
+
+```bash
+docker compose up -d
+```
+
+Once the container is running, skip the next section about building the image from source code.
+
+## Build container image
+
+_note: as of 2024 you do not need to build the image from source code. This section can be skippped_
+
+The existing official image for cadvisor used to not have a image published for the arm cpu architecture. This is what is found in a Raspberry Pi CPU and in Apple's M series CPUs.
 
 The same source code can be used to build a compatible image and run it alongside other containers on an arm system. The following code was found on a [github issue][3] for the cadvisor github repository.
 
@@ -117,6 +153,8 @@ Start the new container after updating `docker-compose.yml`. The tool will detec
 docker compose up -d
 ```
 
+---
+
 ## Configure prometheus server
 
 Once cadvisor is running, the prometheus server needs to be configured to monitor the new exporter. When cadvisor and prometheus are on the same container network, you can configure the target for cadvisor with just the name of the container. Update the prometheus server config:
@@ -134,7 +172,7 @@ Restart the prometheus container to start scraping the new target.
 
 `docker restart prometheus`
 
-## Visualize new metrics with premade grafana dashboard
+## Visualize new metrics with pre-made grafana dashboard
 
 The [aforementioned post][2] included deploying grafana. Check it out for help getting grafana running. There are free dashboards available online:
 
