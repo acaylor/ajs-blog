@@ -2,7 +2,7 @@
 title: Colima
 author: aj
 date: 2024-01-20
-
+updated: 2024-12-19
 categories:
   - Containers
 tags:
@@ -12,6 +12,8 @@ tags:
   - linux
 
 ---
+
+*updated: 2024-12-19*
 
 [Colima](https://github.com/abiosoft/colima) is a tool that allows you to run container runtimes on macOS (and Linux) with minimal setup. If you are not familiar with containers and software such as Docker, check out [a previous post](/posts/containers/) to learn more.
 
@@ -77,12 +79,15 @@ colima nerdctl pull docker.io/hello-world
 colima nerdctl run docker.io/hello-world
 ```
 
+### containerd
+
 Note that for `nerdctl` which is the containerd CLI, you need to specify `docker.io/` as the domain for the container registry. This step can be skipped when using the `docker` CLI.
+
+### compose
 
 You can also use Docker Compose to run multi-container applications. For example, you can create a `docker-compose.yml` file with the following content:
 
 ```yaml
-version: 3.9
 services:
   web:
     image: docker.io/nginx
@@ -96,15 +101,38 @@ services:
 
 Then, you can run the following commands to start the services:
 
+#### docker runtime
+
+You need both docker and docker-compose on your system:
+
+```shell
+brew install docker docker-compose
+```
+
+I recommend linking the docker-compose binary to the docker plugins directory so we can just use it by entering `docker compose up`.
+
+```json
+/*For Docker to find the plugin, add "cliPluginsExtraDirs" to ~/.docker/config.json:*/
+  "cliPluginsExtraDirs": [
+      "/opt/homebrew/lib/docker/cli-plugins"
+  ]
+```
+
+Now when you have a compose file, you can bring it up using colima and docker commands: 
+
 ```shell
 # For Docker runtime
 docker compose up -d
+```
 
+#### containerd runtime
+
+```shell
 # For Containerd runtime
 colima nerdctl compose up -d
 ```
 
-You can access the web service by visiting <http://localhost:8080> in your browser.
+You can access the web service by visiting `http://localhost:8080` in your browser.
 
 ### Kubernetes
 
