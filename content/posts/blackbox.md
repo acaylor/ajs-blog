@@ -1,18 +1,20 @@
 ---
 title: Monitor IP services with prometheus blackbox exporter
 author: aj
-type: post
+#type: post
 date: 2022-03-26
-updated: 2024-01-14
+updated: 2025-02-09
 categories:
   - Observability
 tags:
   - blackbox
   - prometheus
-  - containers
+  - metrics
   - grafana
 
 ---
+
+*updated: 2025-02-09*
 
 [Blackbox exporter][1] is used by Prometheus to monitor HTTP(S), TCP, DNS, and ICMP endpoints. If you are not familiar with prometheus, check out [a previous post][2]. The blackbox program will collect metrics and make them available on a http server. Prometheus needs to be configured to collect metrics from the blackbox exporter and then grafana can be used to visualize those metrics.
 
@@ -48,7 +50,6 @@ There is an existing container image to run the blackbox exporter. This needs to
 `docker-compose.yml`
 
 ```yaml
-version: '3'
 services:
   blackbox:
     image: prom/blackbox-exporter:master
