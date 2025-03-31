@@ -2,7 +2,7 @@
 title: Image generation in open-webui
 author: aj
 date: 2024-11-24
-
+updated: 2025-03-09
 categories:
   - AI
   - Homelab
@@ -12,6 +12,8 @@ tags:
   - open-webui
   - comfyui
 ---
+
+_updated: 2025-03-09_
 
 After running LLMs locally using Ollama and open-webui, I realized that the project has experimental support for image generation. If you are not familiar with those, check out [a previous post][1] to learn more and get started.
 
@@ -25,9 +27,17 @@ I run Ollama and open-webui on Linux with a NVIDIA GPU. There are other ways to 
 
 I will be setting up ComfyUI and that tool requires Python and an assortment of Python libraries. Please refer to the [official documentation][4] in case the steps I followed have changed. I believe that there is a bundled installer for ComfyUI if you are on Windows. I believe it is possible to use a container, but I am still learning how to use pytorch tools and they require access to a GPU and the CUDA toolkit from NVIDIA. There are other libraries available for AMD and Intel GPUs. I gave up on AMD years ago.
 
-To keep the system clean, we can use Conda to manage a Python environment for usage only with ComfyUI.
+To keep the system clean, we can use a virtual environment to manage a Python environment for usage only with ComfyUI.
 
-On Fedora Linux I already had this package installed and it is available via `sudo dnf install conda`. There are other ways to install conda, check out the [official documentation][5].
+On Fedora Linux I can install specific versions of python and have multiple versions available. To install a certain version, for example python3.12 for ComfyUI:
+
+```bash
+sudo dnf install python3.12 python3.12-devel
+```
+
+That will install python and the development headers on Fedora.
+
+I highly recommend using `uv` to manage python dependencies instead of the built in `venv` module in python. On Fedora I can install the `uv` package. For more details for the platform you use, check out the [project documentation][5].
 
 You will also need `git` installed to download ComfyUI. [https://git-scm.com/book/en/v2/Getting-Started-Installing-Git][6]
 
@@ -39,33 +49,43 @@ First you need to clone the git repo for ComfyUI.
 git clone git@github.com:comfyanonymous/ComfyUI.git
 ```
 
-Create an environment with Conda. Alternatively, you can create a python virtual environment.
+Create an environment with `uv`. Alternatively, you can create a python virtual environment.
 
 ```bash
-conda create -n comfyui
-conda activate comfyui
+uv venv --python 3.12
 ```
 
 Or to create a virtual environment:
 
 ```bash
 python -m venv .venv
+```
+
+No matter how you create a virtual environment, you can activate it in the shell:
+
+```bash
 source .venv/bin/activate
 ```
 
 For Nvidia, install the proper dependencies:
 
 ```bash
-conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
+uv pip install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
 ```
 
-If you are using a virtual environment, replace `conda` with `pip`.
+**NOTE: If you have a NVIDIA blackwell GPU, try the experimental builds of pytorch**
 
-Then open ComfyUI repo and install the Python dependencies for ComfyUI into the conda environment:
+```bash
+uv pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu128
+```
+
+If you are using a basic python virtual environment, omit `uv` before `pip` in the previous and subsequent commands I list.
+
+Then open ComfyUI repo and install the Python dependencies for ComfyUI into the virtual environment:
 
 ```bash
 cd ComfyUI
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 ```
 
 Once those are installed, ComfyUI can be started by executing the `main.py` file:
@@ -184,7 +204,7 @@ Create this file on your system: `service.sh` and create it near the ComfyUI mai
 
 ```bash
 #!/usr/bin/env bash
-conda activate comfyui
+source /path/to/venv/bin/activate
 python main.py --listen 0.0.0.0
 ```
 
@@ -225,7 +245,7 @@ sudo systemctl status comfy.service
  [2]: https://github.com/automatic1111
  [3]: https://www.comfy.org/
  [4]: https://docs.comfy.org/get_started/manual_install
- [5]: https://docs.anaconda.com/miniconda/index.html#latest-miniconda-installer-links
+ [5]: https://docs.astral.sh/uv/pip/environments/
  [6]: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
  [7]: https://huggingface.co/stabilityai/stable-diffusion-3.5-large
  [8]: https://docs.openwebui.com/features/images/
