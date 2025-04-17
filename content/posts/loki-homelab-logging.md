@@ -18,6 +18,10 @@ tags:
 
 ---
 
+_updated 2025-04-17: This version of Loki and Promtail is now deprecated._
+
+See a [newer post][8] about how to upgrade/install v3 of Grafana Loki as of 2025.
+
 ![loki_logo](/images/loki_logo.png)
 
 Once there is more than one computer to worry about, having logs in one location to search for errors and troubleshoot applications becomes critical. In [a previous post][1] I set up prometheus to collect metrics and grafana to visualize the metrics. Today I am going to look at another tool from grafana called [loki][2]. Loki will provide a server to collect logs and we will install an agent on systems to send their logs to the loki server.
@@ -371,3 +375,4 @@ I also recommend looking into configuring a firewall for your loki server so tha
  [5]: /posts/ansible/
  [6]: /posts/containers/
  [7]: /posts/pi-proxy/
+ [8]: /posts/loki-3-upgrade/

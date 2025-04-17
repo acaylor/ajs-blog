@@ -2,7 +2,7 @@
 title: Grafana Loki v2 to v3 upgrade
 author: aj
 date: 2025-02-01
-
+updated: 2025-04-17
 image: /images/loki_logo.png
 
 categories:
@@ -16,7 +16,7 @@ tags:
 
 ---
 
-Just a quick post to upgrade Grafana Loki to v3. If you are not familiar with this project, it is an open-source system for aggregating application, system, and other log files for querying and potentially configuring alert notifications when something goes wrong. Check out a [previous post][] where I set up Loki in my homelab.
+Just a quick post to upgrade Grafana Loki to v3. If you are not familiar with this project, it is an open-source system for aggregating application, system, and other log files for querying and potentially configuring alert notifications when something goes wrong. Check out a [previous post][1] where I set up Loki in my homelab.
 
 ## step 1: update to latest minor release of 2.x
 
