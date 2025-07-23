@@ -18,7 +18,8 @@ languageName = "English"
 hasCJKLanguage = false
 
 # default amount of posts in each pages
-paginate = 6
+[pagination]
+  pagerSize = 6
 # google analytics code [UA-XXXXXXXX-X]
 #googleAnalytics = ""
 # copyright description used only for seo schema
@@ -51,14 +52,14 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
 # Permalinks config (https://gohugo.io/content-management/urls/#permalinks)
 [Permalinks]
   # posts = ":year/:month/:filename"
-    posts = "/posts/:filename"
+    posts = "/posts/:contentbasename"
 
 # Privacy config (https://gohugo.io/about/hugo-and-gdpr/)
 [privacy]
   # privacy of the Google Analytics (replaced by params.analytics.google)
     [privacy.googleAnalytics]
         # ...
-          [privacy.twitter]
+          [privacy.x]
               enableDNT = true
                 [privacy.youtube]
                     privacyEnhanced = true
@@ -80,7 +81,6 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
     page = ["HTML", "MarkDown"]
       section = ["HTML", "RSS"]
         taxonomy = ["HTML", "RSS"]
-          taxonomyTerm = ["HTML"]
 
 [services]
   [services.disqus]
@@ -92,10 +92,10 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
   [markup.highlight]
     codeFences = true
     guessSyntax = true
-    lineNos = true
-    lineNumbersInTable = true
-    # false is a necessary configuration (https://github.com/dillonzq/LoveIt/issues/158)
-    noClasses = false
+    lineNos = false
+    lineNumbersInTable = false
+    noClasses = true
+    style = "github-dark"
   # Goldmark is from Hugo 0.60 the default library used for Markdown
   [markup.goldmark]
     [markup.goldmark.extensions]
