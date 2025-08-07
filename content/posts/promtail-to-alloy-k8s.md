@@ -2,7 +2,7 @@
 title: Grafana Alloy migration on k8s
 author: aj
 date: 2025-05-02
-
+updated: 2025-07-19
 image: /images/loki_logo.png
 
 categories:
@@ -14,6 +14,8 @@ tags:
   - grafana alloy
 
 ---
+
+_Updated: 2025-07-19_
 
 In [a previous post][1], I started using Grafana Alloy to collect logs from my systems. You can also use this project in Kubernetes with a Helm chart. If you are not familiar with Kubernetes, check out [a previous post][2] that provides a high level overview.
 
@@ -59,6 +61,10 @@ In my case, I uninstalled the promtail helm chart from my cluster and then insta
 
 Here is the full values that I used based on the official documentation.
 
+#### Note: I discovered that this configuration will cause every alloy container to attempt to scrape pod logs causing errors from too many open file descriptors.
+
+Under the discovery.kubernetes "pod" section, ensure there is a `selector` in place so alloy pods will only scrape logs from the pods running on the same node.
+
 ```yaml
 alloy:
   configMap:
@@ -74,6 +80,10 @@ alloy:
       }
       discovery.kubernetes "pod" {
         role = "pod"
+        selectors {
+          role = "pod"
+          field = "spec.nodeName=" + coalesce(env("HOSTNAME"), constants.hostname)
+        }
       }
       discovery.relabel "pod_logs" {
         targets = discovery.kubernetes.pod.targets
