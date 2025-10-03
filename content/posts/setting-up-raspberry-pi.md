@@ -5,7 +5,7 @@ date: 2022-02-18
 
 image: /images/raspberry_pi.png
 categories:
-  - Rasperry Pi
+  - Raspberry Pi
   - Linux
 tags:
   - linux

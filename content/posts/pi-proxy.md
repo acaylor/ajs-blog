@@ -6,7 +6,7 @@ updated: 2024-02-03
 categories:
   - Homelab
   - Containers
-  - Rasperry Pi
+  - Raspberry Pi
   - Linux
   - ansible
 tags:
