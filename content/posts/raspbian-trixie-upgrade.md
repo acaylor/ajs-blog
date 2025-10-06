@@ -2,7 +2,7 @@
 title: Raspbian Trixie upgrade
 author: aj
 date: 2025-10-03
-
+updated: 2025-10-06
 image: /images/raspberry_pi.png
 categories:
   - Raspberry Pi
@@ -130,5 +130,84 @@ iface eth0 inet static
 ```
 
 Restart networking service: `sudo systemctl restart networking.service`.
+
+### Second issue
+
+_This post was updated 2025-10-06 after I saw apt failed to update_
+
+A number of days after doing the upgrade I tried to update the packages using `apt update` but this failed:
+
+`Warning: An error occurred during the signature verification. The repository is not updated and the previous index files will be used. OpenPGP signature verification failed: http://archive.raspberrypi.org/debian trixie InRelease: Sub-process /usr/bin/sqv returned an error code (1), error message is: Missing key [removed] which is needed to verify signature`
+
+This error occurs because Debian 13 (Trixie) uses a new signature verification system (sqv from Sequoia-PGP) instead of the old apt-key method, and the Raspberry Pi repository key isn't recognized by the new system.
+
+The fix should be to install the Raspberry Pi archive key and reference it with `signed-by`. First check for `/etc/apt/keyrings` directory on the system. This is where we will add the key for the apt repo.
+
+Now we need to download and install the appropriate key from the apt repo:
+
+```bash
+curl -fsSL https://archive.raspberrypi.org/debian/raspberrypi.gpg.key \
+ | sudo gpg --dearmor -o /etc/apt/keyrings/raspberrypi-archive-keyring.gpg
+
+# Update the file permissions once downloaded
+sudo chmod 0644 /etc/apt/keyrings/raspberrypi-archive-keyring.gpg
+```
+
+Point your source list at the keyring (adjust cpu arch if needed):
+
+```bash
+# File is usually /etc/apt/sources.list.d/raspi.list
+# Example:
+deb [arch=arm64 signed-by=/etc/apt/keyrings/raspberrypi-archive-keyring.gpg] http://archive.raspberrypi.org/debian trixie main
+
+```
+
+This will enable updates but now apt produces a warning. This however is on the package maintainers to address, not us end users:
+
+```txt
+Warning: http://archive.raspberrypi.org/debian/dists/trixie/InRelease: Policy will reject signature within a year, see --audit for details
+Audit: http://archive.raspberrypi.org/debian/dists/trixie/InRelease: Sub-process /usr/bin/sqv returned an error code (1), error message is:
+   Signing key on CF8A1AF502A2AA2D763BAE7E82B129927FA3303E is not bound:
+              No binding signature at time 2025-10-06T13:33:19Z
+     because: Policy rejected non-revocation signature (PositiveCertification) requiring second pre-image resistance
+     because: SHA1 is not considered secure since 2026-02-01T00:00:00Z
+```
+
+Running `sudo apt update --audit` produced the additional output that reveals that while the signature is valid, it is using a legacy algorithm that will be considered deprecated staring February 2026.
+
+Afterwards I saw another message that we can run a command to update the existing sources to a new format with `modernize-sources`. This lists what it will do:
+
+```bash
+sudo apt modernize-sources
+The following files need modernizing:
+  - /etc/apt/sources.list
+  - /etc/apt/sources.list.d/100-ubnt-unifi.list
+  - /etc/apt/sources.list.d/docker.list
+  - /etc/apt/sources.list.d/raspi.list
+
+Modernizing will replace .list files with the new .sources format,
+add Signed-By values where they can be determined automatically,
+and save the old files into .list.bak files.
+
+This command supports the 'signed-by' and 'trusted' options. If you
+have specified other options inside [] brackets, please transfer them
+manually to the output files; see sources.list(5) for a mapping.
+
+For a simulation, respond N in the following prompt.
+Rewrite 4 sources? [Y/n]
+```
+
+Here is an example of what happened to `/etc/apt/sources.list`. It became a new file `/etc/apt/sources.list.d/raspbian.sources`:
+
+```sources
+# Modernized from /etc/apt/sources.list
+Types: deb
+URIs: http://raspbian.raspberrypi.org/raspbian/
+Suites: trixie
+Components: main contrib non-free rpi
+Signed-By: /usr/share/keyrings/raspbian-archive-keyring.gpg
+```
+
+Now when you run apt it will use this file to update that repo.
 
  [1]: https://www.debian.org/releases/trixie/
