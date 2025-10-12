@@ -2,7 +2,7 @@
 title: apcupsd Grafana Dashboard
 author: aj
 date: 2024-11-06
-
+updated: 2025-10-12
 categories:
   - Homelab
 tags:
@@ -22,5 +22,7 @@ I made some additions at the bottom to estimate total power usage for all UPS sy
 
 This dashboard along with others I maintain are available on [GitHub][2].
 
+_Link updated: 2025-10-12_
+
  [1]: /posts/apcupsd/
- [2]: https://github.com/acaylor/grafana/blob/main/dashboards/prometheus-ups-metrics.json
+ [2]: https://raw.githubusercontent.com/acaylor/grafana/refs/heads/main/grafana/provisioning/dashboards/prometheus-ups-metrics.json

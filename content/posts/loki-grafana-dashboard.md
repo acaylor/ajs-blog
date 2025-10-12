@@ -101,4 +101,4 @@ Here is how the dashboard should look, if you have multiple servers sending logs
  [4]: https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html
  [5]: https://github.com/acaylor/promtail_config
  [6]: /posts/prometheus/
- [7]: https://raw.githubusercontent.com/acaylor/grafana/main/dashboards/loki-dashboard.json
+ [7]: https://raw.githubusercontent.com/acaylor/grafana/refs/heads/main/grafana/provisioning/dashboards/loki-dashboard.json
