@@ -2,17 +2,20 @@
 title: GitLab CI/CD and building containers
 author: aj
 date: 2022-01-02
+updated: 2025-10-15
 categories:
-  - Containers
+  - Software Development
 tags:
   - Hugo
-  - git
+  - gitlab
   - markdown
   - blog
   - containers
   - docker
 
 ---
+
+**Update 2025-10-15: This method of building containers should be considered deprecated. The kaniko project is not maintained**
 
 [GitLab CI/CD][1] is a feature of the [GitLab][2] platform that is used in software development for [Continuous Integration][3], [Delivery][4], and [Deployment][5] of software. The idea is that software source code will grow and evolve over time but you do not want to have to manually compile your code each time a change is made. This is especially true when you develop software as a team and multiple changes might be made in a single day.
 

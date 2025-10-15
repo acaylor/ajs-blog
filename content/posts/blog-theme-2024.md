@@ -3,7 +3,7 @@ title: 2024 New Blog Theme
 author: aj
 date: 2024-01-14
 categories:
-  - Utilities
+  - blog_meta
 tags:
   - Hugo
   - git

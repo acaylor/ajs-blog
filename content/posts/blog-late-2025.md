@@ -4,7 +4,7 @@ author: aj
 date: 2025-10-05
 
 categories:
-  - Utilities
+  - blog_meta 
 tags:
   - Hugo
   - git

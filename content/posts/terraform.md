@@ -2,7 +2,7 @@
 title: Terraform for homelab
 author: aj
 date: 2022-05-22
-updated: 2024-01-14
+updated: 2025-10-15
 image: /images/terraform_logo.png
 categories:
   - Proxmox
@@ -45,11 +45,18 @@ On any platform, you can download the terraform binary and run it in a terminal.
 
 ### macOS
 
-On macOS, I use [homebrew][2] to install and update software. Terraform can be installed by adding a `tap`.
+On macOS, I use [homebrew][2] to install and update software. Terraform was removed due to licensing changes. 
 
-```shell
-brew install terraform 
+_This post was updated 2025-10-15_
+
+You can install the tool `tfenv` to manage terraform versions on your machine. For example to install and use a certain version:
+
+```bash
+tfenv install 1.13.3
+tfenv use 1.13.3
 ```
+
+Check for the latest version before installing.
 
 ### Windows
 

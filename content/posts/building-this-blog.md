@@ -3,7 +3,7 @@ title: Building this blog with Hugo
 author: aj
 date: 2021-06-21
 categories:
-  - Utilities
+  - blog_meta
 tags:
   - Hugo
   - git
