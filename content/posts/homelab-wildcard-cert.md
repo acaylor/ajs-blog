@@ -2,13 +2,14 @@
 title: Create a wildcard certificate
 author: aj
 date: 2023-06-17
-
+updated: 2025-10-16
 categories:
   - Homelab
   - Networking
 tags:
   - certificate
   - homelab
+  - acme.sh
 
 ---
 
@@ -71,6 +72,8 @@ This will typically be your home directory: `~/.acme.sh/`
 ## Next steps
 
 Now you have a SSL/TLS certificate that you can use with web servers like Apache and nginx. For some basic examples with nginx proxies, check out a [previous post][5].
+
+_Update 2025-10-16: This has been running on my system for over two years since the original post._
 
  [1]: https://www.cloudflare.com/learning/dns/what-is-dns/
  [2]: https://www.cloudflare.com/learning/ssl/what-is-https/
