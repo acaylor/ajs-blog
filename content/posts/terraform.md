@@ -2,7 +2,7 @@
 title: Terraform for homelab
 author: aj
 date: 2022-05-22
-updated: 2025-10-15
+updated: 2025-10-17
 image: /images/terraform_logo.png
 categories:
   - Proxmox
@@ -16,6 +16,8 @@ tags:
   - terraform
   - infrastructure as code
 ---
+
+>_**Note:** This post was updated 2025-10-15_
 
 Terraform is a tool for orchestrating infrastructure as code with human-readable configuration files. It can be used to create objects in the cloud and in the homelab. Similar to [ansible][1], terraform abstracts various other APIs used to provision virtual machines, containers, or an entire public cloud ecosystem.
 
@@ -260,17 +262,23 @@ After you apply the terraform configuration, a new file is generated in the work
 terraform show
 ```
 
+---
+
 ### Proxmox
 
-Now for what excited me most, the proxmox provider. The proxmox provider can be used to create and manage virtual machines and lxc containers on proxmox systems. If you have a cluster of proxmox nodes, terraform can deploy to any of the nodes. If you are not familiar with proxmox and virtual machines, check out [a previous post][7] on how to set it up.
+_This post was updated 2025-10-15_
 
-Since I already have resources deployed to proxmox, the `terraform import` function can be used to allow terraform to manage existing resources.
+Now for what excited me most, the proxmox provider. The proxmox provider can be used to create and manage virtual machines and lxc containers on proxmox systems. If you have a cluster of proxmox nodes, terraform can deploy to any of the nodes. If you are not familiar with proxmox and virtual machines, check out [a previous post][7] on how to set it up.
 
 Unlike the docker provider, the proxmox provider needs credentials to access the proxmox API. I recommend using an API token and avoid putting passwords in terraform templates.
 
 In order to better protect credentials, terraform variables can be used to keep credentials out of template files.
 
+The provider that I use is: [https://registry.terraform.io/providers/Telmate/proxmox/latest/docs][8]
+
 #### Create service account for terraform
+
+The configuration of the permissions has changed over the past several years. Check the proxmox [provider docs][8] to see if the process has changed.
 
 Log into the proxmox host terminal or GUI and then:
 
@@ -280,127 +288,85 @@ Log into the proxmox host terminal or GUI and then:
 - Create an API key and associate it with the new user
 
 ```shell
-pveum role add TerraformRole -privs "VM.Allocate VM.Clone VM.Config.CDROM VM.Config.CPU VM.Config.Cloudinit VM.Config.Disk VM.Config.HWType VM.Config.Memory VM.Config.Network VM.Config.Options VM.Monitor VM.Audit VM.PowerMgmt Datastore.AllocateSpace Datastore.Audit"
-pveum user add tf@pam --password <password>
-pveum aclmod / -user tf@pam -role TerraformRole
-pveum user token add tf@pam tftoken
+pveum role add TerraformProv -privs "Datastore.AllocateSpace Datastore.AllocateTemplate Datastore.Audit Pool.Allocate Sys.Audit Sys.Console Sys.Modify VM.Allocate VM.Audit VM.Clone VM.Config.CDROM VM.Config.Cloudinit VM.Config.CPU VM.Config.Disk VM.Config.HWType VM.Config.Memory VM.Config.Network VM.Config.Options VM.Migrate VM.PowerMgmt SDN.Use"
+pveum user add terraform-prov@pve --password <password>
+pveum aclmod / -user terraform-prov@pve -role TerraformProv
+pveum user token add terraform-prov@pve tftoken
+pveum user token modify 'terraform-prov@pve' 'tftoken' --privsep 0
 ```
 
-Here is a terraform file to manage an existing proxmox lxc container.
+The secret value of the token should be output and you need to save this value in an environment variable or the example Terraform below.
 
-```hcl
-terraform {
-  required_providers {
-    proxmox = {
-      source = "telmate/proxmox"
-      version = "2.9.6"
-    }
-  }
-}
+Check the token is still valid with this command: `pveum user token list 'terraform-prov@pve'`
 
-provider "proxmox" {
-  # URL of proxmox API
-  pm_api_url = var.proxmox_api_var
-  # API token id
-  pm_api_token_id = var.proxmox_api_token_var
-  # This is the secret value of the api token
-  pm_api_token_secret = var.proxmox_api_token_secret_var
-}
+#### Using the provider
 
-variable "proxmox_api_var" {
-  type = string
-  default = "https://proxmox.url:8006"
-}
-variable "proxmox_api_token_var" {
-  type = string
-  default = "token"
-}
-variable "proxmox_api_token_secret_var" {
-  type = string
-  default = "secret"
-}
-
-resource "proxmox_lxc" "foo_lxc" {
-  target_node = "pve"
-  hostname = "foo"
-  cores = 2
-  memory = 2048
-  onboot = true
-  unprivileged = true
-
-  rootfs {
-    storage = ""
-    size = "32G"
-  }
-
-  vmid = 999
-
-}
-```
-
-Once the variables have been declared, you can reference them during execution or in a separate file. For example in a separate file:
+Once a role has been created you can reference during Terraform execution or in a tfvars file. For example in a separate file:
 
 `vars.tfvars`
 
 ```hcl
-proxmox_api_var = "https://pve.url:8006/api2/json"
-proxmox_api_token_var = "token@pam!tokenid"
+proxmox_api_token_var = 'terraform-prov@pve!mytoken'
 proxmox_api_token_secret_var = "secret"
 ```
 
 Environment variables can also be used instead of storing the credentials in a file:
 
 ```shell
-export PM_API_TOKEN_ID="token@pam!tokenid"
-export PM_API_TOKEN_SECRET="secret"
+# use single quotes for the API token ID because of the exclamation mark
+export PM_API_TOKEN_ID='terraform-prov@pve!mytoken'
+export PM_API_TOKEN_SECRET="afcd8f45-acc1-4d0f-bb12-a70b0777ec11"
 ```
 
-Once the terraform template and variables file is ready, initialize the provider:
+Configure the provider in your Terraform code with this block:
 
-```shell
-terraform init
+```hcl
+terraform {
+  required_providers {
+    proxmox = {
+     source = "telmate/proxmox"
+      version = "3.0.2-rc04"
+    }
+  }
+}
+provider "proxmox" {
+  # URL of proxmox API where terraform commands should be executed. Append /api2/json to the hostname of your proxmox web client
+  pm_api_url = var.proxmox_api_var
+  # API token id
+  pm_api_token_id = var.proxmox_api_token_var
+  # This is the secret value of the api token
+  pm_api_token_secret = var.proxmox_api_token_secret_var
+}
 ```
 
-```
-Initializing the backend...
+I am using variables which you do not have to do, the values can be placed directly in the .tf files but I prefer keeping those values out of my git repo. Instead create both a `variables.tf` file and a `vars.tfvars` file.
 
-Initializing provider plugins...
-- Finding telmate/proxmox versions matching "2.9.6"...
-- - Installing telmate/proxmox v2.9.6...
-- - Installed telmate/proxmox v2.9.6 (self-signed, key ID A9EBBE091B35AFCE)
--
-- Partner and community providers are signed by their developers.
-- If you'd like to know more about provider signing, you can read about it here:
-- https://www.terraform.io/docs/cli/plugins/signing.html
--
-- Terraform has created a lock file .terraform.lock.hcl to record the provider
-- selections it made above. Include this file in your version control repository
-- so that Terraform can guarantee to make the same selections by default when
-- you run "terraform init" in the future.
--
-- Terraform has been successfully initialized!
-```
+`variables.tf`
 
-#### Import existing lxc container
-
-The example terraform template above was for an existing lxc container. To import it to be managed by terraform, run the following:
-
-```shell
-terraform import proxmox_lxc.foo_lxc node/lxc/id
-```
-
-Replace `node` with the name of the proxmox server and replace `id` with the ID number given to the lxc container by the proxmox server.
+```hcl
+variable "proxmox_api_var" {
+  type    = string
+  default = "api"
+}
+variable "proxmox_api_token_var" {
+  type    = string
+  default = "token"
+}
+variable "proxmox_api_token_secret_var" {
+  type    = string
+  default = "secret"
+}
 
 ```
-proxmox_lxc.foo_lxc: Importing from ID "node/lxc/id"...
-proxmox_lxc.foo_lxc: Import prepared!
-  Prepared proxmox_lxc for import
-  proxmox_lxc.foo_lxc: Refreshing state... [id=node/lxc/id]
 
-  Import successful!
+`vars.tfvars`
 
-  The resources that were imported are shown above. These resources are now in
-  your Terraform state and will henceforth be managed by Terraform.
+Example vars file but you need to use your own values from previous setup steps.
+
+```tfvars
+proxmox_api_var              = "https://proxmox.example.com/api2/json"
+proxmox_api_token_var        = "terraform-prov@pve!tftoken"
+proxmox_api_token_secret_var = "foo-bar-baz"
 ```
 
 #### Create a new virtual machine with cloud-init
@@ -417,187 +383,128 @@ Proxmox out of the box can configure the following options with cloud-init:
 
 When using cloud init, the virtual machine will have a hostname that matches the name given to proxmox as well.
 
-Previously I have used [packer][7] to create virtual machine templates but debian and ubuntu linux publish ready to use vm templates that are already set up with cloud-init. Let's download an ubuntu template and make a small tweak to enable the qemu-guest-agent which will allow terraform to identify networking information when using DHCP to assign an IP address.
-
-##### Download ubuntu cloud image
-
-Log into the proxmox host. If you have a cluster of proxmox nodes, I recommend using shared storage so they can all utilize the template easily. If you have a shared directory mounted, head there, otherwise going to `/tmp` is a good option.
-
-```shell
-cd /tmp
-wget https://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64.img
-```
-
-This will download the latest image for ubuntu 20.04 (focal) into the current directory.
-
-Now install a package on the proxmox host to tweak this image to support the qemu guest agent:
-
-```shell
-apt-get install libguestfs-tools
-
-virt-customize -a focal-server-cloudimg-amd64.img --install qemu-guest-agent
-```
-
-Now we can import this image into proxmox as a vm template:
-
-Create a vm template using id 999 or another unique number to your proxmox:
-
-```shell
-#qm create <UNIQUE_ID> --name <TEMPLATE_NAME> --memory <MEMORY_IN_MB> --net0 <NETWORK_ADAPTER_TYPE,bridge=<PROXMOX_NETWORK_BRIDGE>
-qm create 999 --name focal-template --memory 2048 --net0 virtio,bridge=vmbr0
-```
-
-Import the cloud-init image as the new template's boot disk. Make sure to replace `local-lvm` with your proxmox storage if you are not using the default storage.
-
-```shell
-qm importdisk 999 focal-server-cloudimg-amd64.img local-lvm
-
-qm set 999 --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-999-disk-0
-
-qm set 999 --ide local-lvm:cloudinit
-
-qm set 999 --boot c --bootdisk scsi0
-
-qm set 999 --serial0 socket --vga serial0
-
-qm template 999
-```
-
-Now this template is ready to be used by terraform.
+>Ubuntu publishes new releases over time. [Here is my latest post][9] to set up an Ubuntu VM template in Proxmox that is compatible with cloud-init.
 
 ##### Deploy a virtual machine with terraform
 
-Use the same terraform template as earlier in this post but replace `proxmox_lxc` block with a new block:
+The Proxmox provider has a resource to create and manage VMs: `proxmox_vm_qemu`. 
+
+To follow along with me, create a new .tf file with this resource and the provider config to create a new virtual machine in Proxmox:
+
+`vm.tf`
 
 ```hcl
-variable "proxmox_host" {
-  type = string
-  default = "pve"
-}
-variable "template_name" {
-  type = string
-  default = "focal-template"
-}
-variable "ssh_key" {
-  type = string
-  default = "ssh-rsa-pub-key-here"
-}
-
-output "vm_ip" {
-  value = proxmox_vm_qemu.tf_tests.*.default_ipv4_address
-}
-
-resource "proxmox_vm_qemu" "tf_tests" {
-    count = 1
-    name = "tf-${count.index + 1}"
-    target_node = var.proxmox_host
-    clone = var.template_name
-    agent = 1
-    os_type = "cloud-init"
-    cores = 2
-    sockets = 1
-    cpu = "host"
-    memory = 4096
-    scsihw = "virtio-scsi-pci"
-    bootdisk = "scsi0"
-
-    disk {
-        slot = 0
-        size = "16G"
-        type = "scsi"
-        storage = "local-lvm"
-        iothread = 1
+resource "proxmox_vm_qemu" "example" {
+  name        = "example"
+  target_node = "your-proxmox-hostname-here"
+  onboot      = true
+  clone       = "noble-template"
+  agent       = 1
+  os_type     = "cloud-init"
+  qemu_os     = "l26"
+  cores       = 2
+  sockets     = 1
+  cpu_type    = "host"
+  memory      = 8192
+  boot        = "order=scsi0"
+  scsihw      = "virtio-scsi-pci"
+  disks {
+    ide {
+      ide3 {
+        cloudinit {
+          storage = "local-lvm"
+        }
+      }
     }
-
-    network {
-        model = "virtio"
-        bridge = "vmbr0"
+    scsi {
+      scsi0 {
+        disk {
+          size    = 100
+          storage = "local-lvm"
+        }
+      }
     }
-
-    lifecycle {
-        ignore_changes = [
-            network,
-        ]
-    }
-
-    ipconfig0 = "ip=192.168.1.21${count.index + 1}/24,gw=192.168.1.1"
-
-    sshkeys = <<EOF
+  }
+  network {
+    id     = 0
+    model  = "virtio"
+    bridge = "vmbr0"
+  }
+  lifecycle {
+    ignore_changes = [
+      network,
+    ]
+  }
+  ipconfig0 = "ip=10.0.0.2/24,gw=10.0.0.1"
+  sshkeys   = <<EOF
     ${var.ssh_key}
     EOF
+  serial {
+    id   = 0
+    type = "socket"
+  }
+  vga {
+    type = "serial0"
+  }
 }
+
 ```
 
-A couple things to note:
+>Note: you can update the `ipconfig0` to either use Terraform vars for the IPs or replace them with valid values for your environment. You can also use DHCP but for servers I prefer static IPs. My example is also assuming you followed my previous post linked above to create a "noble-template" cloud-init VM template that we can use here.
 
-- `count` makes it possible to deploy multiple vms in parallel. With the `count.index`, we can add a suffix to the vm hostname and give each vm a static IP address.
-- Make sure to define a public ssh key for the variable `ssh_key` or there will be no way to access the new virtual machine(s). Alternatively, define a password for the default user, `ubuntu`, if using the focal template: `cipassword = "password"`.
-- `ipconfig0` in this example will set a static IP address and make sure the `gw=` matches the IP of your router/gateway. To use dhcp, replace the string with:
+A couple notes here from my example, you need to have a valid ssh public key in the Terraform var `ssh_key`. Add this to `variables.tf` You also need to ensure the value of `target-node` matches the name of your Proxmox host.
 
-`ipconfig=dhcp`
+Once the Terraform files are ready, there are a few commands like above with the Docker example to apply our code:
 
-##### Deploy the template
+```shell
+terraform init
+```
 
-Initialize the provider with `terraform init`.
+You should see output like this:
 
-Deploy the template with `terraform apply`:
+```txt
+Initializing the backend...
+Initializing provider plugins...
+- Finding telmate/proxmox versions matching "3.0.2-rc04"...
+- Installing telmate/proxmox v3.0.2-rc04...
+- Installed telmate/proxmox v3.0.2-rc04 (self-signed, key ID A9EBBE091B35AFCE)
+Partner and community providers are signed by their developers.
+If you'd like to know more about provider signing, you can read about it here:
+https://developer.hashicorp.com/terraform/cli/plugins/signing
+Terraform has created a lock file .terraform.lock.hcl to record the provider
+selections it made above. Include this file in your version control repository
+so that Terraform can guarantee to make the same selections by default when
+you run "terraform init" in the future.
+
+Terraform has been successfully initialized!
+```
+
+This command will create resources or verify that they are already running as configured.
 
 ```shell
 terraform apply
-
-Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-  + create
-
-Terraform will perform the following actions:
-
-  # proxmox_vm_qemu.tf_tests[0] will be created
-  + resource "proxmox_vm_qemu" "tf_tests" {
-...
-...
-
-Plan: 1 to add, 0 to change, 0 to destroy.
-
-Do you want to perform these actions?
-  Terraform will perform the actions described above.
-  Only 'yes' will be accepted to approve.
-
-  Enter a value: yes
 ```
 
-Once you enter 'yes', terraform will create the vm. When it completes you should see:
+Enter "yes" when prompted to apply the terraform plan. You should see output similar to this:
 
-```
-proxmox_vm_qemu.tf_tests[0]: Creating...
-
-proxmox_vm_qemu.tf_tests[0]: Still creating... [10s elapsed]
-
-proxmox_vm_qemu.tf_tests[0]: Still creating... [20s elapsed]
-
-proxmox_vm_qemu.tf_tests[0]: Still creating... [30s elapsed]
-
-proxmox_vm_qemu.tf_tests[0]: Still creating... [40s elapsed]
-
-proxmox_vm_qemu.tf_tests[0]: Still creating... [50s elapsed]
-...
-...
+```txt
+proxmox_vm_qemu.example: Creating...
+proxmox_vm_qemu.example: Still creating... [00m10s elapsed]
+proxmox_vm_qemu.example: Still creating... [00m20s elapsed]
+proxmox_vm_qemu.example: Still creating... [00m30s elapsed]
+proxmox_vm_qemu.example: Still creating... [00m40s elapsed]
+proxmox_vm_qemu.example: Still creating... [00m50s elapsed]
+proxmox_vm_qemu.example: Creation complete after 53s [id=proxmox/qemu/101]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
-
-Outputs:
-
-vm_ip = [
-  "192.168.1.211",
-]
 ```
-
-Now the virtual machine should be remotely accesible and if you cannot login with the hostname, use the IP in the output.
 
 ## Next steps
 
 Additional configuration options are included with the providers, check out the documentation:
 
-- <https://registry.terraform.io/providers/kreuzwerker/docker/latest/docs>
-- <https://registry.terraform.io/providers/Telmate/proxmox/latest/docs>
+- [Docker Provider][10]
+- [Proxmox Provider][8]
 
 Terraform has made it easier for me to create vms to test new software and also makes it easy to clean up after testing is complete.
 
@@ -617,3 +524,6 @@ terraform destroy
  [6]: /posts/portainer/
  [6]: /posts/proxmox-installation/
  [7]: /posts/packer/
+ [8]: https://registry.terraform.io/providers/Telmate/proxmox/latest/docs
+ [9]: /posts/proxmox-noble/
+ [10]: https://registry.terraform.io/providers/kreuzwerker/docker/latest/docs
