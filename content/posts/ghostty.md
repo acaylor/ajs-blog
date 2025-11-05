@@ -1,5 +1,5 @@
 ---
-title: Ghostty Terminal Emulator: A Fast, Native Alternative for macOS and Linux
+title: Ghostty Terminal Emulator
 author: aj
 date: 2025-11-03
 
