@@ -2,7 +2,7 @@
 title: apcupsd and metrics
 author: aj
 date: 2024-10-13
-
+updated: 2025-11-12
 categories:
   - Homelab
 tags:
@@ -11,6 +11,8 @@ tags:
   - prometheus
 
 ---
+
+_Note: this post was updated: 2025-11-12. The project for apcupsd_exporter was updated in August 2025 with a new metric for battery amps output and another minor change for a dependency_
 
 APCUPSd, short for APC UPS daemon, is an open-source software suite designed to monitor APC (American Power Conversion) brand uninterruptible power supplies (UPS). APCUPSd allows continuous monitoring of APC UPS devices. It retrieves information such as battery status, load levels, input/output voltage, and other critical parameters from the UPS.
 
@@ -34,6 +36,19 @@ sudo systemctl status apcupsd.service
 
 The service should be running.
 
+## Check config
+
+I noticed that there was no data coming from the new service. There appears to be a `DEVICE` id coded in the default config file at `/etc/apcupsd/apcupsd.conf`
+
+This appears to point to a serial device by default but if you are using a USB cable like I am, the easiest thing to do is remove the device id or remove the entire line.
+
+Once you remove that line, restart the service:
+
+```bash
+sudo systemctl restart apcupsd.service
+```
+
+
 ## apcupsd exporter
 
 apcupsd_exporter provides a Prometheus exporter for the apcupsd process running on a system. This is an open source project [on github][3] that I found in the Prometheus [official documentation][4].
@@ -46,9 +61,11 @@ First the project must be built for your system. You will need git and golang in
 
 _Note this was on a Raspberry Pi 5 system which uses an arm64 architecture. This would also work for macOS. If you have an intel or amd CPU, you probably want `amd64` instead._
 
+> _The version of go to download may change from what I have in this example. Visit the official download site for go to grab the latest version before building: [https://go.dev/dl/][5]_
+
 ```bash
-wget https://go.dev/dl/go1.22.5.linux-arm64.tar.gz
-sudo tar -C /usr/local -xzf go1.22.5.linux-arm64.tar.gz
+wget https://go.dev/dl/go1.25.4.linux-arm64.tar.gz
+sudo tar -C /usr/local -xzf go1.25.4.linux-arm64.tar.gz
 export PATH=$PATH:/usr/local/go/bin
 go version
 ```
@@ -56,6 +73,7 @@ go version
 That last command will make sure that go is working on your system.
 
 Clone the project and build an executable binary on your system:
+> This requires `git` to be installed on your system. You can alternatively download the latest version of the repo: `wget https://github.com/mdlayher/apcupsd_exporter/archive/refs/heads/main.zip && unzip main.zip`
 
 ```bash
 git clone https://github.com/mdlayher/apcupsd_exporter.git
@@ -80,9 +98,27 @@ This process will run until you exit with <key>Ctrl</key> + <key>C</key> or the 
 
 Create a systemd service to manage running the prometheus exporter binary. Then the system journal will also log events from the exporter.
 
-Create this file on your system: `/lib/systemd/system/apcupsd_exporter.service`
+### Copy the binary to a system directory
 
-Replace the `WorkingDirectory` and `ExecStart` values with the location of the exporter on your system.
+First, copy the compiled binary to a standard system location:
+
+```bash
+sudo mkdir -p /opt/apcupsd_exporter
+sudo cp apcupsd_exporter /opt/apcupsd_exporter/
+sudo chmod 755 /opt/apcupsd_exporter/apcupsd_exporter
+```
+
+### Create a dedicated service user
+
+Create a dedicated non-root user to run the service with no login shell:
+
+```bash
+sudo useradd --system --no-create-home --shell /bin/false apcupsd_exporter
+```
+
+### Create the systemd service file
+
+Create this file on your system: `/lib/systemd/system/apcupsd_exporter.service`
 
 ```ini
 [Unit]
@@ -90,15 +126,14 @@ Description=Prometheus exporter for apcupsd
 After=network.target
 [Service]
 Type=simple
-User=ubuntu
-WorkingDirectory=/home/ubuntu/apcupsd_exporter/cmd/apcupsd_exporter/
-ExecStart=/home/ubuntu/apcupsd_exporter/cmd/apcupsd_exporter/apcupsd_exporter
+User=apcupsd_exporter
+ExecStart=/opt/apcupsd_exporter/apcupsd_exporter
 Restart=on-failure
 [Install]
 WantedBy=multi-user.target
 ```
 
-Create this service:
+Enable and start the service:
 
 ```bash
 sudo systemctl daemon-reload
@@ -113,6 +148,12 @@ sudo systemctl status apcupsd_exporter.service
 ```
 
 With luck now your system is exporting metrics from the UPS that Prometheus can scrape on port `9162`
+
+You can check if the metrics are working if you have access to the local shell:
+
+```bash
+curl localhost:9162/metrics |grep -i apc
+```
 
 I added this job to my Prometheus configuration to scrape the metrics:
 
@@ -130,3 +171,4 @@ Now I will spend some time working on a new Grafana dashboard that uses these me
  [2]: /posts/
  [3]: https://github.com/mdlayher/apcupsd_exporter
  [4]: https://prometheus.io/docs/instrumenting/exporters/
+ [5]: https://go.dev/dl/
