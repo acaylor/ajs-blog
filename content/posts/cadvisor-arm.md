@@ -2,7 +2,7 @@
 title: cadvisor for arm64
 author: aj
 date: 2022-05-15
-updated: 2024-05-30
+updated: 2025-12-26
 image: /images/cadvisor_logo.png
 categories:
   - Homelab
@@ -20,10 +20,12 @@ tags:
 
 ---
 
+_update 2025: added some notes for using different cpu architectures_
+
 _update 2024: the official cadvisor image now supports arm which means it will work on Pis_
 
 ![cadvisor_logo](/images/cadvisor_logo.png)
-[cadvisor exporter][1] is used by Prometheus to monitor container metrics. If you are not familiar with prometheus, check out [a previous post][2]. The cadvisor program will collect metrics and make them available on a http server. Prometheus needs to be configured to collect metrics from the cadvisor exporter and then grafana can be used to visualize those metrics.
+[cadvisor exporter][1], maintained by Google, is used by Prometheus to monitor container metrics. If you are not familiar with Prometheus, check out [a previous post][2]. The cadvisor golang program will collect metrics and make them available on a http server. Prometheus needs to be configured to collect metrics from the cadvisor exporter and then Grafana can be used to visualize those metrics.
 
 ## Run container image
 
@@ -49,7 +51,13 @@ services:
     restart: unless-stopped
 ```
 
-Start the new container after updating `docker-compose.yml`. The tool will detect the new container and bring it up without disrupting other running containers:
+> **Note: the main image is multi-arch but you can add a specific tag if you know you need an arm or arm64 image.**
+
+You can specify your desired CPU architecture in the image tag. That is a way you ensure you get the image for an arm CPU on the Raspberry Pi.
+
+For example use the image tag: `gcr.io/cadvisor/cadvisor-arm:${VERSION}` or `gcr.io/cadvisor/cadvisor-arm64:${VERSION}`
+
+Start the new container after updating `docker-compose.yml`.
 
 ```bash
 docker compose up -d
@@ -59,7 +67,7 @@ Once the container is running, skip the next section about building the image fr
 
 ## Build container image
 
-_note: as of 2024 you do not need to build the image from source code. This section can be skippped_
+_note: as of 2024 you do not need to build the image from source code. This section can be skipped. check the official repo for updates to the Dockerfile_
 
 The existing official image for cadvisor used to not have a image published for the arm cpu architecture. This is what is found in a Raspberry Pi CPU and in Apple's M series CPUs.
 

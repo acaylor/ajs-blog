@@ -2,7 +2,7 @@
 title: Create a wildcard certificate
 author: aj
 date: 2023-06-17
-updated: 2025-10-16
+updated: 2025-12-15
 categories:
   - Homelab
   - Networking
@@ -10,6 +10,7 @@ tags:
   - certificate
   - homelab
   - acme.sh
+  - terraform
 
 ---
 
@@ -53,8 +54,8 @@ Check the project's [wiki][4] to see if your DNS provider supports the API comma
 If you are using AWS route53 service to provide DNS, provide valid AWS credentials as environment variables and run the `acme.sh` script.
 
 ```sh
-export  AWS_ACCESS_KEY_ID="<key id>"
-export  AWS_SECRET_ACCESS_KEY="<secret>"
+export AWS_ACCESS_KEY_ID="<key id>"
+export AWS_SECRET_ACCESS_KEY="<secret>"
 ```
 
 Run the script:
@@ -75,8 +76,95 @@ Now you have a SSL/TLS certificate that you can use with web servers like Apache
 
 _Update 2025-10-16: This has been running on my system for over two years since the original post._
 
+
+## Example Terraform user
+
+_Update 2025-12-15: here is example Terraform code to create an AWS IAM user limited to a single hosted zone for completing the DNS challenge for adding a record to route53_
+
+If you are not familiar with Terraform, check out a [previous post][6] to get started with a more simple example.
+
+Use an existing hosted zone resource (replace `aws_route53_zone.target` with your zone) and the IAM wiring below:
+
+```hcl
+data "aws_route53_zones" "all" {}
+
+resource "aws_iam_policy" "route53_dns_verification" {
+  name        = "route53_dns_verification"
+  description = "DNS verification access limited to a single zone"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "dnsZone"
+        Effect = "Allow"
+        Action = [
+          "route53:GetHostedZone",
+          "route53:ChangeResourceRecordSets",
+          "route53:ListResourceRecordSets",
+        ]
+        Resource = "arn:aws:route53:::hostedzone/${aws_route53_zone.target.zone_id}"
+      },
+      {
+        Sid      = "listZones"
+        Effect   = "Allow"
+        Action   = "route53:ListHostedZones"
+        Resource = "*"
+      },
+    ]
+  })
+}
+
+resource "aws_iam_role" "route53_dns_role" {
+  name = "route53_dns_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect    = "Allow"
+        Principal = { AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root" }
+        Action    = "sts:AssumeRole"
+      },
+    ]
+  })
+}
+
+resource "aws_iam_user" "route53_dns_user" {
+  name = "route53_dns_user"
+}
+
+resource "aws_iam_role_policy_attachment" "route53_dns_role_policy" {
+  role       = aws_iam_role.route53_dns_role.name
+  policy_arn = aws_iam_policy.route53_dns_verification.arn
+}
+
+resource "aws_iam_user_policy_attachment" "route53_dns_user_policy" {
+  user       = aws_iam_user.route53_dns_user.name
+  policy_arn = aws_iam_policy.route53_dns_verification.arn
+}
+
+resource "aws_iam_access_key" "route53_dns_user" {
+  user = aws_iam_user.route53_dns_user.name
+}
+```
+
+Key outputs to expose (names optional):
+- Hosted zone IDs: `data.aws_route53_zones.all.ids`
+- Access key ID/secret: `aws_iam_access_key.route53_dns_user.id` and `.secret` (mark secret as `sensitive = true`)
+- You can view sensitive output: `terraform output -raw route53_dns_user_secret_access_key`
+
+### Usage notes
+
+- Run `terraform init` before validate/plan to ensure the AWS provider is installed.
+- Keep the access key secret out of logs and version control. You should rotate them over time.
+- Swap in your own hosted zone resource and, if desired, tighten the assume-role principal to specific AWS accounts or services.
+- Once you create new credentials, use those for the environment variables for `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
+
+
  [1]: https://www.cloudflare.com/learning/dns/what-is-dns/
  [2]: https://www.cloudflare.com/learning/ssl/what-is-https/
  [3]: https://www.git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F
  [4]: https://github.com/acmesh-official/acme.sh/wiki/dnsapi
  [5]: /posts/nginx/
+ [6]: /posts/terraform/
