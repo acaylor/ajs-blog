@@ -1,132 +1,78 @@
-# Blog powered by hugo
+# Blog powered by Hugo
 
-This repo is used to build my personal blog. 
+This repository builds a static Hugo site using the `ajsTheme` theme and ships a Dockerfile that compiles the site and serves it with NGINX.
 
-Posts are created in [markdown][2] format and a program called [Hugo][3] takes those files and generates a set of HTML and CSS files necessary to run a website on a web server.
+## Prerequisites
 
-## Example blog
+- Hugo Extended (matching the Dockerfile version or newer): https://gohugo.io/getting-started/installing/
+- Git: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 
-I have uploaded an example hugo blog on [my personal gitlab profile][4]. I will be outlining the process to create that example blog below.
+## Theme
 
-### 1. Prerequisites: Hugo and git
-
-* Hugo: https://gohugo.io/getting-started/installing/
-* Git: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
-
-### 2. Create a new site
-
-Once hugo is installed, create a new site by typing the following command into your shell:
+The site uses the `ajsTheme` theme as a git submodule:
 
 ```bash
-hugo new site example_blog
+git submodule update --init --recursive
 ```
 
-This will create some new directories for use with hugo.
-
-### 3. Add a theme to the site
-
-Now that the skeleton structure of the site has been created, here is how to add the same theme that is used by this blog:
-
-```bash
-cd example_blog
-git init
-git submodule add https://github.com/zzossig/hugo-theme-zzo.git themes/zzo
-```
-
-### 4. Configure the site
-
-The default config file `config.toml` can be deleted. Next create a directory called `config` and then `_default` within.
-
-```bash
-rm config.toml
-mkdir -p config/_default
-```
-
-Within this new directory, create four files to configure the hugo theme:
-
-* `config.toml` : This is the main hugo configuration.
-* `languages.toml` : This theme supports using multiple languages at the same time.
-* `menus.en.toml` : This is the config for english toolbar menu on the site.
-* `params.toml` : This is specific configuration for the hugo theme.
-
-#### config.toml
-
-```toml
-
-```
-
-#### languages.toml
-
-```toml
-
-```
-
-#### menus.en.toml
-
-```toml
-
-```
-
-#### menus.ko.toml
-
-```toml
-
-```
-
-#### params.toml
-
-```toml
-
-```
-
-### 5. Add content
-
-In this example, new pages in English are added to the directory `content/en`. The first file added should be `_index.md`.
-
-```content/en/posts/_index.md
----
-title: "Posts"
-date: 2020-10-20
-description: All posts
----
-```
-
-Create a new post:
-
-```content/en/posts/hello-world.md
----
-title: Hello world!
-author: aj
-date: 2021-04-10T22:43:20+00:00
-categories:
-  - Homelab
-
----
-This is my first post. This blog will be focused on hybrid cloud technologies. Stay tuned for more.
-```
-
-### Updating theme
-
-The theme uses a [git submodule][5] that is updated with the following command:
+To update the theme:
 
 ```bash
 git submodule update --remote --merge
 ```
 
-## Test the site
+## Theme repository
 
-Run the following command to test the site on your local machine. The web server will be available at `localhost` port `1313`.
+The theme is maintained in a separate repo that I also maintain:
+
+- https://github.com/acaylor/ajsTheme
+
+If you need to change theme templates, assets, or styling, update the theme repo and then bump the submodule here.
+
+## Configuration
+
+Site configuration lives under `config/_default/`:
+
+- `config/_default/hugo.toml`: main Hugo settings (base URL, theme, pagination, markup, etc.).
+- `config/_default/menus.en.toml`: navigation menu items.
+
+If you need to change site-level settings (title, base URL, theme name), update `config/_default/hugo.toml`. Menu changes go in `config/_default/menus.en.toml`.
+
+## Content
+
+Add content in `content/`. For posts, create a new markdown file:
+
+```bash
+hugo new posts/my-post.md
+```
+
+## Local development
+
+Run the Hugo dev server (drafts enabled):
 
 ```bash
 hugo server -D
 ```
 
-You can view the site in your browser:
+The site will be available at `http://localhost:1313`.
 
-![hugo](images/hugo.png)
+## Docker build and run
 
- [1]: https://www.git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F
- [2]: https://www.markdownguide.org/
- [3]: https://gohugo.io/
- [4]: https://gitlab.com/acaylor/example_blog
- [5]: https://git-scm.com/book/en/v2/Git-Tools-Submodules
+Build the image:
+
+```bash
+docker build -t ajs-blog .
+```
+
+Run it locally:
+
+```bash
+docker run --rm -p 8080:80 ajs-blog
+```
+
+Then visit `http://localhost:8080`.
+
+## Helpful links
+
+- Hugo: https://gohugo.io/
+- Markdown guide: https://www.markdownguide.org/

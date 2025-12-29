@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.4
 
 # Use Debian slim image with Go and necessary tools
-FROM debian:bullseye-slim AS hugo
+FROM debian:bookworm-slim AS hugo
 
 # Install Hugo extended dependencies
 RUN apt-get update && apt-get install -y \
