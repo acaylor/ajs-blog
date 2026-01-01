@@ -7,7 +7,7 @@ categories:
   - Containers
 tags:
   - containers
-  - docker
+  - colima
   - macos
   - linux
 

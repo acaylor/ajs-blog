@@ -83,7 +83,7 @@ Before Prometheus can collect any metrics, we need to enable SNMP on the NAS its
 2. Navigate to **Control Panel** -> **Terminal & SNMP** -> **SNMP** tab
 3. Check **Enable SNMP service**
 
-![synology_snmp](synology_snmp.png)
+![synology_snmp](/images/synology_snmp.png)
 
 ### Choosing Your SNMP Version
 
@@ -114,7 +114,7 @@ If the built in firewall is active, you'll need to allow SNMP traffic:
    - **Source IP:** Specify the IP of your monitoring server
    - **Action:** Allow
 
-![synology_firewall_rule](synology_firewall_rule.png)
+![synology_firewall_rule](/images/synology_firewall_rule.png)
 
 ## Step 2: Prepare the SNMP Exporter Configuration
 
@@ -406,7 +406,7 @@ The Dashboard file is on my GitHub repo along with other Grafana dashboards I ha
 ### What You'll See
 
 
-![synology_dashboard](synology_dashboard.png)
+![synology_dashboard](/images/synology_dashboard.png)
 
 ---
 

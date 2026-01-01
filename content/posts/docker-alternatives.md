@@ -3,7 +3,7 @@ title: Docker Alternatives
 author: aj
 image: /images/docker_logo.png
 date: 2022-11-06
-
+updated: 2025-12-27
 categories:
   - Containers
 tags:
@@ -12,18 +12,19 @@ tags:
   - podman
   - containerd
   - nerdctl
+  - javascript
 
 ---
 
-When it comes to running containers, `docker` is the most widely used tool with millions of container images available on the [public docker hub][1]. If you are not familiar with docker, check out [a previous post][2] to get an introduction. I am looking at Alternatives since docker is no longer used as a container runtime in the kubernetes platform. I use kubernetes in my homelab to orchestrate container based services accross multiple computers. If you are not familiar with kubernetes, check out [a previous post][3] for an introduction.
+When it comes to running containers, `docker` is the most widely used tool with millions of container images available on the [public docker hub][1]. If you are not familiar with docker, check out [a previous post][2] to get an introduction. I am looking at Alternatives since docker is no longer used as a container runtime in the kubernetes platform. I use kubernetes in my homelab to orchestrate container based services across multiple computers. If you are not familiar with kubernetes, check out [a previous post][3] for an introduction.
 
 ## Alternatives
 
-When exploring alternives to docker, I will be looking at options you can install on Linux systems.
+When exploring alternatives to docker, I will be looking at options you can install on Linux systems.
 
 ### Podman
 
-[Podman][4] is a open-source container engine developed by the folks who release Red Hat Enterprise Linux (RHEL) and develop Fedora Linux with the community. The biggest difference between podman and docker is that podman does not need a system daemon running like docker. Another difference is that podman by default will run in userspace instead of as root. Podman can also run collections of multiple containers together similar to a deployment in kubernetes.
+[Podman][4] is a open-source container engine developed by the folks who release Red Hat Enterprise Linux (RHEL) and develop Fedora Linux with the community. The biggest difference between podman and docker is that podman does not need a system daemon running like docker. Another difference is that podman by default will run in userspace instead of as root. Podman can also run collections of multiple containers together similar to a pod in kubernetes.
 
 
 #### Installing podman on macOS
@@ -226,7 +227,7 @@ CMD ["npm", "start"]
 
 ### Build the container
 
-Now build the image with any of the aformentioned tools:
+Now build the image with any of the aforementioned tools:
 
 ```sh
 podman build --tag example .
@@ -240,7 +241,7 @@ Now run the image that you built:
 podman run -d -p 8080:8080 example
 ```
 
-Now connect to the web server in a browser or terminal and yo ushould see the message configured in `index.js`
+Now connect to the web server in a browser or terminal and you should see the message configured in `index.js`
 
 ```sh
 curl localhost:8080
