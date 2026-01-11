@@ -5,7 +5,7 @@ date: 2024-02-10
 categories:
   - Observability
 tags:
-  - macos
+  - macOS
   - prometheus
   - metrics
 
