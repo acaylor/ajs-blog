@@ -4,10 +4,11 @@ author: aj
 date: 2024-12-22
 
 categories:
-  - Utilities
+  - macOS
 tags:
   - macos
   - tools
+  - macOS setup
 ---
 
 I picked up a mac mini with the m4 CPU, 24 GB shared memory, and 512 GB of storage. Even with solar power, especially in the winter, my lab is using too much power. My new goal is to use less power than my plant grow lights. Fortunately, I can measure all of that power usage now and store it in prometheus to query. I run two NAS systems 24/7 and one of them is off the shelf from Synology and it uses between 15-30 watt hours. My "backup" NAS which is a backup but also stores my "warm" backup archives uses between 50 and 75 watt hours. This adds up. The mac mini provides 10 CPU cores that use less power than the AMD 64 bit CPUs in my other systems. The mac mini is using less than 10 watt hours with several services running in memory including Home Assistant. The mac mini will likely replace my "AI Server" which is an old gaming PC. That system uses over 500 watts when the GPU is active which drives up power usage for the whole house. That system also runs containers which I am migrating to the mac mini.

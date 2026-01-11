@@ -4,26 +4,40 @@ stages:
 buildTesting:
   stage: build
   image:
-    name: gcr.io/kaniko-project/executor:debug
+    name: moby/buildkit:rootless
     entrypoint: [""]
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
+    BUILDKITD_FLAGS: --oci-worker-no-process-sandbox
+  before_script:
+    - mkdir -p ~/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > ~/.docker/config.json
   script:
-    - mkdir -p /kaniko/.docker
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-  only:
-    - testing
+    - |
+      buildctl-daemonless.sh build \
+        --frontend dockerfile.v0 \
+        --local context="$CI_PROJECT_DIR" \
+        --local dockerfile="$CI_PROJECT_DIR" \
+        --output type=image,name=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA,push=true
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "testing"'
 buildProduction:
   stage: build
   image:
-    name: gcr.io/kaniko-project/executor:debug
+    name: moby/buildkit:rootless
     entrypoint: [""]
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
+    BUILDKITD_FLAGS: --oci-worker-no-process-sandbox
+  before_script:
+    - mkdir -p ~/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > ~/.docker/config.json
   script:
-    - mkdir -p /kaniko/.docker
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:latest
-  only:
-    - main
+    - |
+      buildctl-daemonless.sh build \
+        --frontend dockerfile.v0 \
+        --local context="$CI_PROJECT_DIR" \
+        --local dockerfile="$CI_PROJECT_DIR" \
+        --output type=image,name=$CI_REGISTRY_IMAGE:latest,push=true
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'

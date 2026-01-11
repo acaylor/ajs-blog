@@ -4,11 +4,11 @@ author: aj
 date: 2024-01-20
 updated: 2024-12-19
 categories:
-  - Containers
+  - macOS
 tags:
   - containers
   - colima
-  - macos
+  - macOS
   - linux
 
 ---
