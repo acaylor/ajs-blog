@@ -72,7 +72,64 @@ docker run --rm -p 8080:80 ajs-blog
 
 Then visit `http://localhost:8080`.
 
+## CI/CD Pipeline
+
+This project uses GitLab CI/CD to automatically build and deploy Docker images. The pipeline is configured in `.gitlab-ci.yml` and consists of the following:
+
+### Pipeline Structure
+
+The CI pipeline has one stage:
+- **build**: Creates Docker images using BuildKit
+
+### Jobs
+
+#### buildTesting
+- **Trigger**: Runs on commits to the `testing` branch
+- **Purpose**: Builds and pushes a Docker image tagged with the commit SHA
+- **Image tag**: `$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA`
+
+#### buildProduction  
+- **Trigger**: Runs on commits to the `main` branch
+- **Purpose**: Builds and pushes a Docker image tagged as latest
+- **Image tag**: `$CI_REGISTRY_IMAGE:latest`
+
+### Build Process
+
+Both jobs use the same build process:
+
+1. **Image**: Uses `moby/buildkit:rootless` for secure, daemonless Docker builds
+2. **Submodules**: Recursively clones git submodules (required for the Hugo theme)
+3. **Authentication**: Configures Docker registry credentials using GitLab CI variables
+4. **Build**: Uses BuildKit's `buildctl-daemonless.sh` to build the Dockerfile
+5. **Push**: Automatically pushes the built image to the GitLab Container Registry
+
+### Environment Variables
+
+The pipeline uses these GitLab CI built-in variables:
+- `CI_REGISTRY`: GitLab Container Registry URL
+- `CI_REGISTRY_USER`: Registry username (automatically provided)
+- `CI_REGISTRY_PASSWORD`: Registry password (automatically provided)
+- `CI_REGISTRY_IMAGE`: Full image name including registry path
+- `CI_COMMIT_SHA`: Git commit hash for tagging testing builds
+- `CI_PROJECT_DIR`: Project directory path
+
+### Docker Build
+
+The Dockerfile creates a multi-stage build:
+1. **Hugo stage**: Downloads Hugo Extended, builds the static site
+2. **NGINX stage**: Serves the built site using NGINX Alpine
+
+### Deployment
+
+After the pipeline completes:
+- **Testing builds**: Available as `$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA`
+- **Production builds**: Available as `$CI_REGISTRY_IMAGE:latest`
+
+You can pull and run these images from the GitLab Container Registry.
+
 ## Helpful links
 
 - Hugo: https://gohugo.io/
 - Markdown guide: https://www.markdownguide.org/
+- GitLab CI/CD: https://docs.gitlab.com/ee/ci/
+- BuildKit: https://github.com/moby/buildkit
