@@ -8,7 +8,8 @@ tags:
   - excalidraw
   - documentation
   - diagrams
-  - tools
+  - software
+  - developer tools
 ---
 
 If you’ve ever wished diagramming tools felt less like enterprise software and more like grabbing a marker and sketching on a whiteboard, you will like Excalidraw. It’s fast, intuitive, works offline, supports collaboration, and keeps things simple without getting in your way.

@@ -6,7 +6,7 @@ categories:
   - Utilities
 tags:
   - renovate
-  - tools
+  - software
 
 ---
 

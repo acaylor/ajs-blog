@@ -7,7 +7,7 @@ categories:
   - Utilities
 tags:
   - zen
-  - tools
+  - software
   - browser
 
 ---

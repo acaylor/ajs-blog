@@ -9,7 +9,7 @@ categories:
 tags:
   - heimdall
   - dashboard
-  - tools
+  - software
 
 ---
 

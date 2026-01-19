@@ -11,6 +11,8 @@ tags:
   - llm
   - ollama
   - opencode
+  - software
+  - developer tools
 ---
 
 Running AI-powered coding assistants locally doesn't have to break the bank or compromise your privacy. With OpenCode and Ollama, you can create a local development environment that compares to commercial tools like Claude Code and Gemini CLI. All will run on your network instead of some cloud platform.

@@ -7,7 +7,7 @@ categories:
   - macOS
 tags:
   - macos
-  - tools
+  - software
   - macOS setup
 ---
 

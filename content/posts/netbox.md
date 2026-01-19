@@ -7,7 +7,7 @@ categories:
   - Utilities
 tags:
   - netbox
-  - tools
+  - software
   - networking
   - IPAM
 

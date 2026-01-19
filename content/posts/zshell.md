@@ -1,18 +1,20 @@
 ---
-title: ZShell
+title: ZShell in 2021
 author: aj
 date: 2021-12-19
 categories:
-  - Linux
+  - Command Line
 tags:
   - zsh
-  - linux
+  - cli
   - shell
+  - terminal
+  - developer tools
 ---
 
 ## What is a shell?
 
-The [shell][1] is a program that translates human readable words (commands) and converts them into binary data that the Operating System [kernel][2] can interpret. The shell can interpret commands entered from the keyboard or a file commonly refered to as a script.
+The [shell][1] is a program that translates human readable words (commands) and converts them into binary data that the Operating System [kernel][2] can interpret. The shell can interpret commands entered from the keyboard or a file commonly referred to as a script.
 
 You can access the shell through a [terminal][3] program on the local computer or remotely using [SSH][4].
 

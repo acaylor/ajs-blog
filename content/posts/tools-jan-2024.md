@@ -8,7 +8,7 @@ categories:
 tags:
   - linux
   - macos
-  - tools
+  - software
 ---
 
 Mostly I have written blog posts to show how to get started with certain tools to use in a Homelab. Once I created a post showing off tools to install on a fresh Windows 10 workstation but I have not used Windows as a workstation since changing jobs in 2022.

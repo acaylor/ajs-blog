@@ -7,7 +7,7 @@ categories:
   - Utilities
 tags:
   - monica
-  - tools
+  - software
 
 ---
 

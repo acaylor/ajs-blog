@@ -7,7 +7,8 @@ categories:
   - Software Development
 tags:
   - Hugo
-  - gitlab
+  - Gitlab
+  - Gitlab CI
   - markdown
   - blog
   - containers

@@ -8,7 +8,7 @@ categories:
 tags:
   - netboot.xyz
   - pxe
-  - tools
+  - software
 
 ---
 

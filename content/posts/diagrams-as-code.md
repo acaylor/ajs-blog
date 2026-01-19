@@ -7,7 +7,8 @@ categories:
   - Utilities
 tags:
   - diagrams
-  - tools
+  - software
+  - developer tools
 
 ---
 

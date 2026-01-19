@@ -7,7 +7,7 @@ categories:
 tags:
   - dokuwiki
   - wiki
-  - tools
+  - software
   - containers
   - kubernetes
 

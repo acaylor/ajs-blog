@@ -7,7 +7,7 @@ categories:
   - Utilities
 tags:
   - lynis
-  - tools
+  - software
   - security
 
 ---
@@ -388,7 +388,7 @@ git pull
 It’s important to understand Lynis’s limitations:
 
 - **Lynis doesn’t fix issues automatically** - It reports problems but leaves remediation to you
-- **It’s not a vulnerability scanner** - Tools like OpenVAS or Nessus are better for that
+- **It’s not a vulnerability scanner** - software like OpenVAS or Nessus are better for that
 - **It won’t protect against zero-day exploits** - No tool can do that
 - **It doesn’t replace proper security practices** - Strong passwords, regular updates, and good judgment remain essential
 

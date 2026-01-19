@@ -7,7 +7,7 @@ categories:
   - Utilities
 tags:
   - Kanboard
-  - tools
+  - software
   - containers
 
 ---

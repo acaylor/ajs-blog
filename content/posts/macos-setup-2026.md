@@ -7,8 +7,9 @@ categories:
   - macOS
 tags:
   - macOS
-  - tools
+  - software
   - macOS setup
+  - developer tools
 ---
 
 After several years I received a new MacBook Pro from my employer. This post is a walk-through of how I set up a new macOS device right at the start of 2026.

@@ -7,7 +7,7 @@ categories:
   - Linux
 tags:
   - cockpit
-  - tools
+  - software
   - linux
 
 ---

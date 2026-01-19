@@ -8,8 +8,9 @@ tags:
   - containers
   - orbstack
   - macos
-  - tools
+  - software
   - javascript
+  - developer tools
 ---
 
 This is a quick weekend post looking at a tool (just for macOS unfortunately).

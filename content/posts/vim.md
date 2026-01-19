@@ -7,6 +7,8 @@ categories:
   - Utilities 
 tags:
   - vim
+  - software
+  - developer tools
 ---
 
 My preferred text editor is `vim` because it is portable and highly customizable. Text editors can be used to edit configuration files on a system and write source files for scripts and programs. While you can run vim in a separate window in your operating system, it can also be run within a terminal emulator. You can even find the original version `vi` on most *nix systems that do not have any graphical interface. Learning vim will help make debugging systems that only have a terminal easier.

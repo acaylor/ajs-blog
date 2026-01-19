@@ -7,8 +7,10 @@ categories:
   - Utilities
 tags:
   - ghostty
-  - linux
+  - cli
   - terminal
+  - software
+  - developer tools
 ---
 
 ## Why I Finally Switched Terminal Emulators After a Decade

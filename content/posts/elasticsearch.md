@@ -9,6 +9,7 @@ categories:
 tags:
   - elasticsearch
   - database
+  - software
 ---
 
 

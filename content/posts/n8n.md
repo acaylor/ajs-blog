@@ -7,7 +7,7 @@ categories:
   - Utilities
 tags:
   - n8n
-  - tools
+  - software
 ---
 
 _New disclaimer I am adding: I used an LLM to help create this post but afterwards I spent more than an hour editing it to the final form._
