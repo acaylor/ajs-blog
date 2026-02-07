@@ -3,7 +3,7 @@ title: Getting Started with Excalidraw
 
 date: 2025-12-11
 categories:
-  - Utilities
+  - Software
 tags:
   - excalidraw
   - documentation

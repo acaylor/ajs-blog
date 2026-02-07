@@ -5,7 +5,7 @@ date: 2022-06-25
 updated: 2024-02-03
 image: /images/heimdall_logo.png
 categories:
-  - Utilities
+  - Software
 tags:
   - heimdall
   - dashboard

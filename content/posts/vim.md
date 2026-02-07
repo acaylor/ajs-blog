@@ -4,7 +4,7 @@ author: aj
 date: 2023-09-08
 updated: 2024-01-14
 categories:
-  - Utilities 
+  - Software 
 tags:
   - vim
   - software

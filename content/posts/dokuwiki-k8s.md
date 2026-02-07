@@ -3,7 +3,7 @@ title: Dokuwiki in Kubernetes
 author: aj
 date: 2023-08-12
 categories:
-  - Utilities
+  - Software
 tags:
   - dokuwiki
   - wiki

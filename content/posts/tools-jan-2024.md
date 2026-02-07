@@ -4,7 +4,7 @@ author: aj
 date: 2024-01-08
 
 categories:
-  - Utilities
+  - Software
 tags:
   - linux
   - macos

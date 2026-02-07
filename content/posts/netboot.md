@@ -4,7 +4,7 @@ author: aj
 date: 2021-12-31
 
 categories:
-  - Utilities
+  - Software
 tags:
   - netboot.xyz
   - pxe

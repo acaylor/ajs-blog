@@ -3,7 +3,7 @@ title: cockpit
 author: aj
 date: 2022-02-05
 categories:
-  - Utilities
+  - Software
   - Linux
 tags:
   - cockpit

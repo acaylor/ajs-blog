@@ -4,7 +4,7 @@ author: aj
 date: 2025-10-01
 
 categories:
-  - Utilities
+  - Software
 tags:
   - n8n
   - software
