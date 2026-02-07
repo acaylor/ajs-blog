@@ -4,7 +4,7 @@ author: aj
 date: 2025-10-27
 
 categories:
-  - Utilities
+  - Software
 tags:
   - lynis
   - software

@@ -4,7 +4,7 @@ author: aj
 date: 2024-02-04
 
 categories:
-  - Utilities
+  - Software
 tags:
   - diagrams
   - software

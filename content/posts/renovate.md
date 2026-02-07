@@ -3,7 +3,7 @@ title: renovate
 author: aj
 date: 2024-06-21
 categories:
-  - Utilities
+  - Software
 tags:
   - renovate
   - software

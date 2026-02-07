@@ -3,7 +3,7 @@ title: "Orbstack"
 date: 2026-01-17
 
 categories:
-  - Utilities
+  - Software
 tags:
   - containers
   - orbstack

@@ -4,7 +4,7 @@ author: aj
 date: 2021-12-04
 updated: 2024-02-03
 categories:
-  - Utilities
+  - Software
 tags:
   - dokuwiki
   - wiki

@@ -3,7 +3,7 @@ title: Pandoc converter
 author: aj
 date: 2021-09-05
 categories:
-  - Utilities
+  - Software
 tags:
   - pandoc
   - file conversion
@@ -34,4 +34,3 @@ If pandoc is successful, you will now have a new file called `converted_file.htm
  [3]: https://www.w3.org/html/
  [4]: https://en.wikipedia.org/wiki/Office_Open_XML
  [5]: https://pandoc.org/
- 

@@ -4,7 +4,7 @@ author: aj
 date: 2025-10-29
 
 categories:
-  - Utilities
+  - Software
 tags:
   - zen
   - software

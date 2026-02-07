@@ -3,7 +3,7 @@ title: Renovate with docker containers
 author: aj
 date: 2024-09-13
 categories:
-  - Utilities
+  - Software
 tags:
   - renovate
   - software

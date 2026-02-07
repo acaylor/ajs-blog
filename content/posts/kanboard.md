@@ -4,7 +4,7 @@ author: aj
 date: 2023-10-14
 
 categories:
-  - Utilities
+  - Software
 tags:
   - Kanboard
   - software
