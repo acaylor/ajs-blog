@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.4
+# syntax=docker/dockerfile:1.20
 
 # Use Debian slim image with Go and necessary tools
 FROM debian:bookworm-slim AS hugo
