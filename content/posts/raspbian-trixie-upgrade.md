@@ -2,7 +2,7 @@
 title: Raspbian Trixie upgrade
 author: aj
 date: 2025-10-03
-updated: 2025-10-06
+updated: 2026-03-14
 image: /images/raspberry_pi.png
 categories:
   - Raspberry Pi
@@ -141,41 +141,13 @@ A number of days after doing the upgrade I tried to update the packages using `a
 
 This error occurs because Debian 13 (Trixie) uses a new signature verification system (sqv from Sequoia-PGP) instead of the old apt-key method, and the Raspberry Pi repository key isn't recognized by the new system.
 
-The fix should be to install the Raspberry Pi archive key and reference it with `signed-by`. First check for `/etc/apt/keyrings` directory on the system. This is where we will add the key for the apt repo.
-
-Now we need to download and install the appropriate key from the apt repo:
+If you are upgrading a Pi that has been running a very long time, reinstall the apt key to get a working version:
 
 ```bash
-curl -fsSL https://archive.raspberrypi.org/debian/raspberrypi.gpg.key \
- | sudo gpg --dearmor -o /etc/apt/keyrings/raspberrypi-archive-keyring.gpg
-
-# Update the file permissions once downloaded
-sudo chmod 0644 /etc/apt/keyrings/raspberrypi-archive-keyring.gpg
+sudo apt install --reinstall raspberrypi-archive-keyring
 ```
 
-Point your source list at the keyring (adjust cpu arch if needed):
-
-```bash
-# File is usually /etc/apt/sources.list.d/raspi.list
-# Example:
-deb [arch=arm64 signed-by=/etc/apt/keyrings/raspberrypi-archive-keyring.gpg] http://archive.raspberrypi.org/debian trixie main
-
-```
-
-This will enable updates but now apt produces a warning. This however is on the package maintainers to address, not us end users:
-
-```txt
-Warning: http://archive.raspberrypi.org/debian/dists/trixie/InRelease: Policy will reject signature within a year, see --audit for details
-Audit: http://archive.raspberrypi.org/debian/dists/trixie/InRelease: Sub-process /usr/bin/sqv returned an error code (1), error message is:
-   Signing key on CF8A1AF502A2AA2D763BAE7E82B129927FA3303E is not bound:
-              No binding signature at time 2025-10-06T13:33:19Z
-     because: Policy rejected non-revocation signature (PositiveCertification) requiring second pre-image resistance
-     because: SHA1 is not considered secure since 2026-02-01T00:00:00Z
-```
-
-Running `sudo apt update --audit` produced the additional output that reveals that while the signature is valid, it is using a legacy algorithm that will be considered deprecated staring February 2026.
-
-Afterwards I saw another message that we can run a command to update the existing sources to a new format with `modernize-sources`. This lists what it will do:
+I saw another message that we can run a command to update the existing sources to a new format with `modernize-sources`. This lists what it will do:
 
 ```bash
 sudo apt modernize-sources
@@ -199,7 +171,7 @@ Rewrite 4 sources? [Y/n]
 
 Here is an example of what happened to `/etc/apt/sources.list`. It became a new file `/etc/apt/sources.list.d/raspbian.sources`:
 
-```sources
+```yaml
 # Modernized from /etc/apt/sources.list
 Types: deb
 URIs: http://raspbian.raspberrypi.org/raspbian/
@@ -208,6 +180,41 @@ Components: main contrib non-free rpi
 Signed-By: /usr/share/keyrings/raspbian-archive-keyring.gpg
 ```
 
-Now when you run apt it will use this file to update that repo.
+In order to fix the error about the insecure key I had to change `/etc/apt/sources.list.d/raspi.sources` to use the same keyring as the one that I reinstalled:
+
+```yaml
+Types: deb
+URIs: http://archive.raspberrypi.com/debian/
+Suites: trixie
+Components: main
+Signed-By: /usr/share/keyrings/raspberrypi-archive-keyring.gpg
+```
+
+
+Now when you run apt it will use the correct keyring. These problems should not show up on a fresh install of Raspberry Pi OS.
+
+
+_This post was updated 2026-03-14_
+
+## Docker repo
+
+If you are using Docker and already had the apt repo on a Raspbian system, I recommend changing the sources URI to `debian` + Suites `trixie` and using the "normal" Debian repo for installing and updating Docker.
+
+`docker.sources`
+
+```yaml
+Types: deb
+URIs: https://download.docker.com/linux/debian/
+Suites: trixie
+Components: stable
+Signed-By: /etc/apt/keyrings/docker.asc
+```
+
+From the Docker [documentation][2]:
+
+> Docker Engine v28 will be the last major version to support Raspberry Pi OS 32-bit (armhf). Starting with Docker Engine v29, new major versions will no longer provide packages for Raspberry Pi OS 32-bit (armhf).
+
+If you are on an older 32-bit only Raspberry Pi, Docker publishes Debian armhf packages for ARMv7 CPUs.
 
  [1]: https://www.debian.org/releases/trixie/
+ [2]: https://docs.docker.com/engine/install/raspberry-pi-os/
