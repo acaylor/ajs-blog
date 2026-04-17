@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog', ({ data }) => !data.draft);
+const categoryCounts = new Map<string, number>();
+
+posts.forEach((post) => {
+  post.data.categories?.forEach((category) => {
+    categoryCounts.set(category, (categoryCounts.get(category) || 0) + 1);
+  });
+});
+
+const categories = [...categoryCounts.entries()].sort((a, b) => b[1] - a[1]);
+---
+
+<BaseLayout title="Categories">
+  <div class="container page-section">
+    <h1 class="page-title">Categories</h1>
+    <p class="page-subtitle">{categories.length} categories</p>
+    <div class="chip-grid">
+      {
+        categories.map(([category, count]) => (
+          <a href={`/categories/${category}`} class="chip">
+            <span>{category}</span>
+            <span class="chip-count">{count}</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>

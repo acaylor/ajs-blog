@@ -1,0 +1,48 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import Pagination from '../../components/Pagination.astro';
+import { getCollection } from 'astro:content';
+import { getReadingTime } from '../../utils/reading-time';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  );
+  return paginate(posts, { pageSize: 12 });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+const totalPosts = page.total;
+---
+
+<BaseLayout title={page.currentPage > 1 ? `Posts - Page ${page.currentPage}` : 'Posts'}>
+  <div class="container page-section">
+    <h1 class="page-title">All Posts</h1>
+    <p class="page-subtitle">{totalPosts} articles</p>
+
+    <div class="post-grid">
+      {
+        page.data.map((post) => (
+          <PostCard
+            title={post.data.title}
+            date={post.data.date}
+            description={post.data.description}
+            tags={post.data.tags}
+            readingTime={getReadingTime(post.body || '')}
+            href={`/posts/${post.id}`}
+            image={post.data.image}
+          />
+        ))
+      }
+    </div>
+
+    <Pagination
+      prevUrl={page.url.prev}
+      nextUrl={page.url.next}
+      currentPage={page.currentPage}
+      lastPage={page.lastPage}
+    />
+  </div>
+</BaseLayout>
