@@ -1,0 +1,88 @@
+---
+interface Props {
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const { headings } = Astro.props;
+const filteredHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 4);
+---
+
+{
+  filteredHeadings.length > 0 && (
+    <aside class="toc">
+      <div class="toc-inner">
+        <h4 class="toc-title">On this page</h4>
+        <nav>
+          <ul>
+            {filteredHeadings.map((heading) => (
+              <li class={`depth-${heading.depth}`}>
+                <a href={`#${heading.slug}`}>{heading.text}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </aside>
+  )
+}
+
+<style>
+  .toc {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .toc {
+      display: block;
+      position: sticky;
+      top: 6rem;
+      align-self: start;
+      max-height: calc(100vh - 8rem);
+      overflow-y: auto;
+    }
+  }
+
+  .toc-inner {
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--color-border-light);
+  }
+
+  .toc-title {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-tertiary);
+    margin-bottom: 0.75rem;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  li {
+    margin-bottom: 0.25rem;
+  }
+
+  li a {
+    font-size: 0.8125rem;
+    color: var(--color-text-tertiary);
+    display: block;
+    padding: 0.15rem 0;
+    transition: color var(--transition);
+    line-height: 1.4;
+  }
+
+  li a:hover {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .depth-3 {
+    padding-left: 0.75rem;
+  }
+
+  .depth-4 {
+    padding-left: 1.5rem;
+  }
+</style>

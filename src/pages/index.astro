@@ -1,0 +1,126 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+import { getReadingTime } from '../utils/reading-time';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<BaseLayout title="Home">
+  <section class="hero">
+    <div class="container">
+      <p class="hero-eyebrow">Welcome to</p>
+      <h1>AJ's Blog</h1>
+      <p class="hero-subtitle">
+        A personal blog focused on software, technology, and the cloud. Sharing what I'm working
+        with at home.
+      </p>
+      <a href="/posts" class="hero-cta">Browse all posts &rarr;</a>
+    </div>
+  </section>
+
+  <section class="recent container">
+    <h2>Recent Posts</h2>
+    <div class="post-grid">
+      {
+        posts
+          .slice(0, 6)
+          .map((post) => (
+            <PostCard
+              title={post.data.title}
+              date={post.data.date}
+              description={post.data.description}
+              tags={post.data.tags}
+              readingTime={getReadingTime(post.body || '')}
+              href={`/posts/${post.id}`}
+              image={post.data.image}
+            />
+          ))
+      }
+    </div>
+    {
+      posts.length > 6 && (
+        <div class="view-all">
+          <a href="/posts">View all posts &rarr;</a>
+        </div>
+      )
+    }
+  </section>
+
+  <style>
+    .hero {
+      padding: 5rem 0 4rem;
+      border-bottom: 1px solid var(--color-border-light);
+      margin-bottom: 3rem;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: var(--color-text-secondary);
+      max-width: 36rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--color-accent);
+    }
+
+    .hero-cta:hover {
+      text-decoration: none;
+      color: var(--color-accent-hover);
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding: 3rem 0 2.5rem;
+      }
+      .hero h1 {
+        font-size: 2.25rem;
+      }
+      .hero-subtitle {
+        font-size: 1.0625rem;
+      }
+    }
+
+    .recent h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.5rem;
+    }
+
+    .view-all {
+      margin-top: 2rem;
+      text-align: center;
+    }
+
+    .view-all a {
+      font-size: 0.9375rem;
+      font-weight: 500;
+    }
+  </style>
+</BaseLayout>

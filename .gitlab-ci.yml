@@ -1,13 +1,44 @@
 ---
 stages:
+  - test
   - build
+
+variables:
+  TARGET_PLATFORMS: linux/amd64
+
+lint:
+  stage: test
+  image: node:24-alpine
+  cache:
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+      - node_modules/
+  script:
+    - npm ci
+    - npm run lint
+    - npm run format:check
+
+build:
+  stage: test
+  image: node:24-alpine
+  cache:
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+      - node_modules/
+  script:
+    - npm ci
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week
+
 buildTesting:
   stage: build
   image:
     name: moby/buildkit:rootless
-    entrypoint: [""]
+    entrypoint: ['']
   variables:
-    GIT_SUBMODULE_STRATEGY: recursive
     BUILDKITD_FLAGS: --oci-worker-no-process-sandbox
   before_script:
     - mkdir -p ~/.docker
@@ -18,16 +49,17 @@ buildTesting:
         --frontend dockerfile.v0 \
         --local context="$CI_PROJECT_DIR" \
         --local dockerfile="$CI_PROJECT_DIR" \
+        --opt platform="$TARGET_PLATFORMS" \
         --output type=image,name=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA,push=true
   rules:
     - if: '$CI_COMMIT_BRANCH == "testing"'
+
 buildProduction:
   stage: build
   image:
     name: moby/buildkit:rootless
-    entrypoint: [""]
+    entrypoint: ['']
   variables:
-    GIT_SUBMODULE_STRATEGY: recursive
     BUILDKITD_FLAGS: --oci-worker-no-process-sandbox
   before_script:
     - mkdir -p ~/.docker
@@ -38,6 +70,7 @@ buildProduction:
         --frontend dockerfile.v0 \
         --local context="$CI_PROJECT_DIR" \
         --local dockerfile="$CI_PROJECT_DIR" \
+        --opt platform="$TARGET_PLATFORMS" \
         --output type=image,name=$CI_REGISTRY_IMAGE:latest,push=true
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
