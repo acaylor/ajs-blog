@@ -3,6 +3,8 @@ frontend:
   phases:
     preBuild:
       commands:
+        - git lfs install
+        - git lfs pull
         - npm ci
     build:
       commands:
