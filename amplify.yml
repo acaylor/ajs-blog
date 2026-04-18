@@ -3,7 +3,7 @@ frontend:
   phases:
     preBuild:
       commands:
-        - yum install -y git-lfs
+        - sudo dnf install -y git-lfs
         - git lfs install
         - git lfs pull
         - npm ci
