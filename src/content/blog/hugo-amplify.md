@@ -2,7 +2,8 @@
 title: Building websites with containers, hugo and AWS Amplify
 author: aj
 date: 2022-01-08
-updated: 2025-10-12
+updated: 2026-04-26
+description: 'This post describes how to create websites like this blog using Hugo and AWS Amplify.'
 categories:
   - blog_meta
 tags:
@@ -15,9 +16,7 @@ tags:
   - docker
 ---
 
-_Note (2025-10-12): This blog has been running on the same Amplify setup since this post. In 2025 the hugo build image was updated along with the site theme. The AWS Console has changed so look for a newer post about AWS Amplify_
-
-_[Deploying static sites to AWS Amplify](/posts/static-amplify) is the updated post_
+_Note (2026-04-18): This blog has been [migrated to Astro](/posts/astro-migration-2026) but still uses the same Amplify setup described here. See [Deploying an Astro site to AWS Amplify](/posts/static-amplify) for the current configuration._
 
 [AWS Amplify][1] is a set of tools and services that can be used together or on their own, to help front-end web and mobile developers build scalable full stack applications, powered by [AWS][2] (Amazon Web Services). With Amplify, you can configure app backends and connect your app in minutes, deploy static web apps in a few clicks, and easily manage app content outside of AWS.
 
