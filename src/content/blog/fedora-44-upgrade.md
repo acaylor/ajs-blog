@@ -140,7 +140,6 @@ Packages that are not needed can be removed with `sudo dnf autoremove` but this 
 
 Reboot to ensure everything is configured properly. If you see your login screen and can log in, the upgrade likely succeeded.
 
-
 [1]: https://docs.fedoraproject.org/en-US/quick-docs/upgrading-fedora-offline/
 [2]: https://getfedora.org/security
 [3]: /posts/fedora-43-upgrade
