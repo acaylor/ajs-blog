@@ -1,8 +1,9 @@
 ---
-title: Fedora 43 upgrade
+title: Fedora 44 upgrade
 author: aj
-date: 2025-10-31
-description: 'This post walks through upgrading an existing Fedora installation to version 43.'
+date: 2026-04-29
+draft: true
+description: 'This post walks through upgrading an existing Fedora installation to version 44.'
 image: /images/fedora.png
 categories:
   - Linux
@@ -11,13 +12,29 @@ tags:
   - linux
 ---
 
-Today is a spooky day and Fedora 43 has been released as of October 29, 2025. This release is a bit spooky with the default desktop environment only supporting Wayland. Typically there are 2 Fedora releases per year. I upgraded to 42 earlier this year [in a previous post][3] and this process is going to be the same.
+Typically there are 2 Fedora releases per year. I upgraded to 43 earlier last year [in a previous post][3] and this process is going to be the same.
 
-There are a few notable user visible changes in this release. When installing from the ISO installation image there is a new Anaconda WebUI. This was the default installer interface for Fedora Workstation 42, and now it’s the default installer UI for the Spins as well. If you are a GNOME desktop user, you’ll also notice that the GNOME is now Wayland-only in Fedora Linux 43. GNOME upstream has deprecated X11 support, and has disabled it as a compile time default in GNOME 49. Upstream GNOME plans to fully remove X11 support in GNOME 50.
+I have been upgrading my current system for a few years now:
 
-This is the first release with `rpm` version 6, this should not change much for end users but that program handles packaging on all Red Hat distros.
+```txt
+2024:   Fedora 40 (install)
+        |
+        v
+        f41
+        |
+        v
+2025:   f42
+        |
+        v
+        f43
+        |
+        v
+2026: Fedora 44 (today)
+```
 
-I upgraded a Fedora 42 system using the `dnf` plugin.
+Fedora Linux 44 brings a solid mix of desktop polish and under-the-hood modernization: Workstation moves to GNOME 50 with improvements to accessibility, color management, remote desktop, and updated core apps, while Fedora KDE ships Plasma 6.6 with a more unified first-boot setup experience. Now you can use the Plasma login manager instead of the default GNOME login interface. On the system side, Fedora continues its tooling refresh with the PackageKit move to DNF5, updated core developer stacks like LLVM 22, PHP 8.5, Ruby 4.0, Boost 1.90, Golang 1.26, CMake 4.0, and more. Fedora 44 also improves compatibility and hardware support, including NTSYNC enablement for better Wine/Steam behavior and improved aarch64 live-image support for more ARM laptop scenarios.
+
+I upgraded a Fedora 43 system using the `dnf` plugin.
 
 ## Upgrade
 
@@ -55,6 +72,8 @@ sudo btrfs subvol snapshot root fedora-upgrade.snapshot
 
 You should see that a snapshot was created in this directory. This can be used to boot from if the upgrade fails. Press `e` when you see the GRUB boot loader and change the `subvol` of the root partition from `root` to `fedora-upgrade.snapshot` or whatever you call the snapshot.
 
+### Start the upgrade
+
 These instructions should work as the `dnf-plugin-system-upgrade` has been around for a while but in any case for a system upgrade you should always check the [official documentation][1] for any up to date instructions.
 
 #### Update all packages
@@ -78,7 +97,7 @@ After this reboot your system to ensure everything is stable.
 Once you have the system upgrade plugin, download the new release:
 
 ```sh
-sudo dnf system-upgrade download --releasever=43
+sudo dnf system-upgrade download --releasever=44
 ```
 
 During this process, a new GPG key is imported, you are asked to verify the key’s fingerprint. Refer to [here][2] to do so.
@@ -88,7 +107,7 @@ During this process, a new GPG key is imported, you are asked to verify the key�
 Once the new release is downloaded, enter the following command to reboot and install the updates:
 
 ```sh
-sudo dnf system-upgrade reboot
+sudo dnf offline reboot
 ```
 
 Once the system upgrade completes you should be able to log into your system to verify everything works.
@@ -106,10 +125,10 @@ sudo dnf install remove-retired-packages
 Then run:
 
 ```sh
-sudo remove-retired-packages 42
+sudo remove-retired-packages 43
 ```
 
-Replace `42` here with the version of Fedora you previously installed. You will be prompted if there are packages to remove.
+Replace `43` here with the version of Fedora you previously installed. You will be prompted if there are packages to remove.
 
 Check for duplicate packages using DNF:
 
@@ -119,16 +138,9 @@ sudo dnf repoquery --duplicates
 
 Packages that are not needed can be removed with `sudo dnf autoremove` but this may remove an application that you installed yourself.
 
-I had to rebuild the nvidia kernel module. You can rebuild all kernel modules for your current release with this command:
-
-```bash
-sudo akmods --kernels $(uname -r) --rebuild
-```
-
-> Note: this is probably only needed if you use the nvidia proprietary kernel modules. If you use another GPU or the open source drivers you can probably skip the rebuild.
-
 Reboot to ensure everything is configured properly. If you see your login screen and can log in, the upgrade likely succeeded.
+
 
 [1]: https://docs.fedoraproject.org/en-US/quick-docs/upgrading-fedora-offline/
 [2]: https://getfedora.org/security
-[3]: /posts/fedora-42-upgrade
+[3]: /posts/fedora-43-upgrade
