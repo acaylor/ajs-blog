@@ -1,8 +1,7 @@
 ---
 title: Fedora 44 upgrade
 author: aj
-date: 2026-04-29
-draft: true
+date: 2026-04-30
 description: 'This post walks through upgrading an existing Fedora installation to version 44.'
 image: /images/fedora.png
 categories:
