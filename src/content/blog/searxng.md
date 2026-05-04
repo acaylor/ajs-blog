@@ -1,9 +1,9 @@
 ---
 title: Running SearXNG as an alternative search engine
 author: aj
-date: 2026-04-28
-draft: true
-description: 'A guide to setting up a metasearch engine called SearXNG.'
+date: 2026-05-04
+image: /images/searxng_logo.png
+description: 'A guide to setting up a metasearch engine called SearXNG. No sponsored results.'
 categories:
   - Software
   - Containers
@@ -241,6 +241,8 @@ I like using it as my normal first search stop. For general web searches, docs, 
 It also works well as a shared household or homelab search page. Put the friendly URL somewhere easy to remember, such as `https://search.home.arpa/`, and any device on the network can use the same private search instance without each browser needing much setup.
 
 This may seem like just another self-hosted app but I am really getting a lot of use out of this one, I mean Google has been my top used site for decades.
+
+![searxng_example](/images/searxng_example.png)
 
 [1]: https://docs.searxng.org/user/about.html
 [2]: https://docs.searxng.org/own-instance.html
