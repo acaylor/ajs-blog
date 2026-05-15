@@ -1,8 +1,8 @@
 ---
 title: Polling Home Assistant to store data long term
 author: aj
-draft: true
-date: 2026-03-02
+description: 'I created a Go app to poll Home assistant and store sensor data in a database.'
+date: 2026-05-15
 categories:
   - AI
   - Software Development
@@ -18,195 +18,110 @@ tags:
   - grafana
 ---
 
-I've been running Home Assistant for a few years now. It's great at automating my house, but its built-in history is not great for long-term analysis. I wanted my sensor data in a database where I could query it properly and store data for a long time.
+I have been running [Home Assistant][1] for a few years now. It is great at automating my house, but the built-in history is not really meant for long term analytics. I wanted sensor data in a database where I could query it properly, keep useful history, and build Grafana dashboards without depending on Home Assistant's recorder database.
 
-The project itself is not groundbreaking: poll an API, filter some data, write it to a database. But it's exactly the kind of thing that used to eat an entire weekend: designing the schema, wiring up config, getting Docker right, in this case, remembering how TimescaleDB continuous aggregates work, and writing tests.
+I recently released the project on GitHub: [acaylor/hass-poller][2].
 
-With a somewhat clear goal in mind, I used two coding "AI" agents to plan and implement my project:
+This is a Go service that polls Home Assistant, filters the entities I care about, and writes numeric state changes to PostgreSQL with [TimescaleDB][3] enabled. It is not a groundbreaking idea, but it is exactly the sort of private homelab utility I would probably not have time to build without AI tools. I had been running it privately at home, and I finally cleaned it up enough that someone else could clone it and run it without first deleting all of my house-specific settings.
 
-- **Codex** for plan review plus Phase 1 MVP implementation
-- **Claude Code** for iterative expansion through production hardening
+## Why I built it
 
-## Start with a plan, not with code
+Home Assistant already stores history, but I wanted something a little more purpose built for long term metrics:
 
-I started with a draft plan (`code-plan.md`) from a ChatGPT conversation: architecture, schema, filtering strategy, and phased rollout. Then I handed that plan to Codex to review and implement Phase 1.
+- Raw sensor readings for recent troubleshooting
+- Hourly rollups for medium term dashboards
+- Daily rollups that can be kept indefinitely
+- A schema I can query directly from Grafana
+- A small service that is easy to run with containers
 
-A single Go service that:
+The service polls Home Assistant API `/api/states` on a schedule, applies allowlist and blocklist patterns, skips non-numeric values, and writes a new row only when a value changes enough to matter. That last part keeps noisy sensors from generating rows forever just because a temperature value moved from `21.00` to `21.01`.
 
-- Polls Home Assistant every minute
-  - **Home Assistant**: an open-source home automation platform that exposes your smart home devices and sensors over an HTTP API.
-  - **Polling every minute**: the service hits that API once per minute to grab the latest sensor readings, rather than waiting for devices to push data.
-- Filters entities with glob-based allowlist/blocklist
-  - **Entities**: individual things in Home Assistant (for example `sensor.living_room_temperature` or `binary_sensor.front_door`).
-  - **Allowlist/blocklist**: patterns that say "only include these" (allowlist) and "always exclude these" (blocklist) so you don't flood the database with noisy or unimportant sensors.
-  - **Glob patterns**: simple wildcard strings like `sensor.*` or `sensor.energy_*` that match many entities without writing each one out by hand.
-- Writes only on meaningful change (epsilon configurable)
-  - **Meaningful change**: the service skips tiny fluctuations (like 21.00C to 21.01C) so you don't waste storage on noise.
-  - **Epsilon**: a small threshold value you can tune that defines how big a change must be before it is written to the database.
-- Stores data in TimescaleDB with compression, retention, and hourly rollups
-  - **TimescaleDB**: a PostgreSQL extension designed for time-series data (data with timestamps), perfect for sensor readings.
-  - **Compression**: automatically squeezes older data so it uses less disk space.
-  - **Retention**: old raw data is deleted after some time so the database doesn’t grow forever.
-  - **Hourly rollups**: precomputed summaries (like min/avg/max per hour) that make dashboard queries fast even over months of history.
-- Exposes Prometheus metrics and health checks
-  - **Prometheus metrics**: numeric counters and gauges (like "rows written" or "failed polls") that monitoring systems like Prometheus/Grafana can scrape and visualize.
-  - **Health checks**: simple HTTP endpoints that say "this service is healthy" so you can alert if it stops working or loses DB/API access.
-- Deploys with `docker compose up`
-  - **Docker**: a way to package the app and its dependencies into a portable container image.
-  - **Docker Compose**: a small YAML file that describes the app plus its database, so you can bring everything up locally or on a server with a single command.
+The current storage model is:
 
-Codex's review surfaced two concrete issues before coding:
+- Raw measurements retained for 90 days
+- Hourly aggregate retained for 1 year
+- Daily aggregate retained indefinitely
 
-- Add `CREATE EXTENSION IF NOT EXISTS timescaledb;` so hypertable setup works on a fresh database.
-- Make startup migrations fully idempotent (the continuous aggregate policy in the draft needed an `if_not_exists` guard).
+That gives me detailed data when I am troubleshooting something recent and still preserves the long term trend data I actually want to keep.
 
-After that review, Codex implemented the Phase 1 MVP directly in the repo.
+## The project
 
-## Decisions, not blind acceptance
+The repo includes the poller, database schema, Dockerfile, `docker-compose.yml`, and an example `.env` file. The quick start is meant to be normal Docker Compose:
 
-I did not accept every suggestion. Here are some things that were in the original plan:
-
-- **Heartbeat removed**: Grafana's fill behavior was good enough for my use case, and heartbeat logic added complexity I did not need.
-- **Allowlist and blocklist together**: I kept broad include globs (like `sensor.*`) plus targeted excludes (`sensor.energy_*`).
-- **No Redis cache**: restarting and writing one new baseline row per entity is cheap; introducing Redis just to avoid that is unnecessary.
-
-The process worked because the model gave options, and I made the trade-off decisions.
-
-## Phase-by-phase implementation with real verification
-
-The plan had four phases. For Phase 1, Codex implemented the MVP and I validated it end-to-end in Docker with a deterministic mock Home Assistant API.
-
-### Phase 1: MVP (reviewed and implemented with Codex)
-
-Codex scaffolded and wired the full baseline service:
-
-- `cmd/ha-timescale-poller/main.go` entrypoint
-- `internal/config` for env loading/validation
-- `internal/ha` client for `GET /api/states` with bearer token
-- `internal/filter` allowlist/blocklist glob filtering (`path.Match`)
-- `internal/engine` polling loop (fetch -> filter -> numeric parse -> insert)
-- `internal/store` pgx pool + `CopyFrom` inserts + schema execution
-- `schema.sql` embedded via `go:embed`
-- `Dockerfile` and `docker-compose.yml`
-
-Validation setup:
-
-- TimescaleDB container
-- Poller container
-- Mock HA container serving `/api/states`
-- Poll interval set to `5s` for fast validation cycles
-
-Mock payload included:
-
-- numeric + allowed sensors
-- blocked sensor
-- `unknown` and `unavailable` states
-- a `binary_sensor.*` entity
-
-Observed poller logs:
-
-```text
-seen=6 matched=4 numeric=2 inserted=2
+```bash
+cp .env.example .env
+docker compose up
 ```
 
-Database verification:
+The important settings live in `.env`, including the Home Assistant URL and token, PostgreSQL credentials, poll interval, allowed entities, blocked entities, and per-entity epsilon overrides.
 
-```text
-total_rows = 22
-distinct entity_id:
-  - sensor.allowed_float
-  - sensor.allowed_int
-blocked_rows = 0
-unknown_rows = 0
-unavailable_rows = 0
-binary_sensor_rows = 0
+A simple allowlist might look like this:
 
+```env
+HA_ALLOWLIST=sensor.*,binary_sensor.*
+HA_BLOCKLIST=sensor.energy_*,sensor.uptime
 ```
 
-That satisfied all Phase 1 acceptance criteria: rows were written, allowlist/blocklist behavior was correct, and non-numeric states were excluded.
+The broad include keeps the config short, and the blocklist cuts out the sensors that are too noisy or not useful for my dashboards.
 
-### Phase 2: Change detection (implemented with Claude Code)
+The project also has a short architecture document in the repo that covers the components, data flow, filtering behavior, storage tiers, and failure modes: [docs/ARCHITECTURE.md][4].
 
-With the MVP in place, Claude Code handled change-detection logic and tests. The core function is small:
+## Running at home
 
-```go
-func ShouldWrite(current, last float64, epsilon float64, firstObservation bool) bool {
-    if firstObservation {
-        return true
-    }
-    return math.Abs(current-last) > epsilon
-}
-```
+I do not have a frontend for this project. The database is the interface. Grafana already supports PostgreSQL, so I can point Grafana at TimescaleDB and write queries against the raw table or the aggregate views. If you are not familiar with Grafana, check out [a previous post][5] for a comprehensive example of how to visualize live data.
 
-A subtle but important fix was using `>` instead of `>=`. With `epsilon=0`, `>=` would write unchanged values forever and defeat the feature.
+Here is an example of viewing recent sensor data in Grafana:
 
-Claude also generated table-driven tests for change detection and glob filtering, including floating-point boundary cases and malformed patterns.
+![hass_poller_grafana](/images/hass_poller_grafana.png)
 
-Live verification:
+## Making it public
 
-```text
-Poll 1: numeric=183 skipped=0   inserted=183
-Poll 2: numeric=183 skipped=138 inserted=45
-```
+The project was private while I was still iterating. Before publishing it, I wanted a few things cleaned up:
 
-About 75% fewer writes on the second cycle.
+- A compose file that did not contain my personal entity names
+- A documented `.env.example` to give an example of how to set up the app
+- CI that runs formatting checks, `go vet`, `govulncheck`, tests with the race detector, and a Docker build
+- A release workflow that can publish a container image
+- Enough tests that I could refactor without guessing
 
-### Phase 3: Operational hardening (implemented with Claude Code)
+The engine originally depended directly on concrete Home Assistant and storage types. I changed that to use small interfaces so the polling logic could be tested with fakes. That made it much easier to cover filtering, numeric parsing, epsilon behavior, insert failures, fetch failures, concurrent poll protection, and context cancellation.
 
-Phase 3 added production behavior:
+There were also some practical release fixes. The Dockerfile needed to respect BuildKit's target platform variables so the multi-arch image would actually contain the right binary for `linux/amd64` and `linux/arm64`. I also learned that the Go version in `go.mod` matters for CI security checks when `actions/setup-go` installs exactly that toolchain version. A tiny version bump fixed a failing `govulncheck` run.
 
-- `/healthz` endpoint (fresh poll + DB reachable)
-- Prometheus metrics at `/metrics`
-- Minute-aligned polling (`:00` boundaries)
-- Backpressure with `sync.Mutex.TryLock()`
-- Graceful shutdown on `SIGTERM`
+## How AI helped
 
-Minute alignment especially improved query consistency for time-bucketed analytics.
+I used AI coding tools on this project, but I did not treat them as autopilot.
 
-### Phase 4: Storage optimization (implemented with Claude Code)
+I started with a plan from a ChatGPT conversation, then used Codex to review the plan and build the first working version. Claude Code helped with later iterations: change detection, tests, health checks, Prometheus metrics, storage policies, CI, and release workflow cleanup.
 
-Final phase was SQL-level optimization:
+Going back and forth with Codex and Claude Code is not the most efficient workflow but I can keep working when I run out of tokens on one of my subscriptions. I'm just one person but if you rely on these tools for work, I recommend picking one and sticking to it.
 
-- Compression policy for chunks older than 7 days
-- Retention policy dropping raw data after 90 days
-- Continuous aggregate `ha_numeric_1h` with 15-minute refresh policy
+The most useful pattern was keeping the work in phases:
 
-We triggered a refresh and validated rollups:
+1. Build a small poller that writes numeric Home Assistant states to TimescaleDB.
+2. Add change detection so unchanged values are skipped.
+3. Add production behavior like health checks, metrics, graceful shutdown, and minute-aligned polling.
+4. Add retention, compression, and continuous aggregates.
+5. Clean up the repo for public use.
 
-```sql
-SELECT bucket, entity_id, avg, min, max, n FROM ha_numeric_1h LIMIT 5;
-```
+I still made the architecture calls. I had to walk back some things that the models added:
 
-Real data, real aggregates, working output.
+- I removed heartbeat rows because Grafana's fill behavior was good enough. 
+- I skipped Redis because writing one fresh baseline row after a restart is cheap. 
+- I kept allowlist and blocklist support together because that fits how Home Assistant entities tend to be named.
 
-## The project itself
+That is the part I think is easy to miss with AI tools. The model can write a lot of code quickly, but the owner of the project still needs to decide what is worth building and what is just extra machinery.
 
-The result of this plan is a new GitHub project: [acaylor/hass-poller][]
+## Conclusion
 
-The project includes a `docker-compose.yml` to run the poller and a Postgresql server with TimescaleDB enabled.
+If you use Home Assistant and want long term sensor history in a database, the repo is here:
 
-## What I learned about AI-assisted engineering
-
-### Bring a plan
-
-A structured plan with goals, non-goals, and phases gives the agent something concrete to critique and implement. Phases give milestones where you can make adjustments without having an agent try and complete the whole project in "one shot".
-
-### Make architecture calls explicitly
-
-Saying things as simple as "drop heartbeat" or "use allowlist plus blocklist" narrows ambiguity and prevents wasted iteration by the models.
-
-I highly recommend researching the tech stack that you want to use for a project. I know some people in 2026 advocate to not read the code at all but I want to at least understand my projects to know how they flow and know how to iterate on them. I went through several iterations of this project that included using Python, Typescript, and multiple Go services. Ultimately I went with this approach that is simple enough for me to understand and hopefully easy to maintain.
-
-### Verify with real systems, not just tests
-
-Unit tests mattered, but testing against real Home Assistant data and making real TimescaleDB queries were what built confidence. Documenting these "manual" tests that the models run such as SQL queries can help you learn more about the underlying system.
-
-### Use agents as collaborators
-
-Codex was strongest for shaping and delivering the MVP foundation quickly. Claude Code was effective at extending that foundation with tests, operational controls, and storage policies. The combined workflow was faster and better than either tool used in isolation.
-
-For a solo user, having multiple agents is also a way you can continue working without having very expensive AI subscriptions or large bills for using a model directly via API.
-
-Ultimately though I hope to settle on as few similar tools as possible but right now the AI tools are changing so frequently I have a desire to evaluate multiple options especially since Anthropic's Claude Code is closed source.
+[https://github.com/acaylor/hass-poller][2]
 
 _Disclaimer: I used an LLM to help create this post. Opinions expressed are likely from me and not the LLM._
+
+[1]: https://www.home-assistant.io/
+[2]: https://github.com/acaylor/hass-poller
+[3]: https://www.timescale.com/
+[4]: https://github.com/acaylor/hass-poller/blob/main/docs/ARCHITECTURE.md
+[5]: posts/prometheus-homelab
