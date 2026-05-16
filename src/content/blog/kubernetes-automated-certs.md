@@ -1,8 +1,9 @@
 ---
 title: Automating wildcard TLS certificates in Kubernetes
-date: 2026-05-01
+date: 2026-05-16
 description: 'Use cert-manager, Route 53 DNS-01 validation, and Reflector to renew and distribute wildcard TLS certificates across Kubernetes namespaces.'
-draft: true
+author: aj
+image: /images/k8s_logo.png
 categories:
   - Homelab
   - Kubernetes
@@ -11,25 +12,27 @@ tags:
   - kubernetes
   - cert-manager
   - letsencrypt
-  - route53
-  - tls
+  - AWS
+  - certificate
   - homelab
 ---
 
-In a [previous post][1], I used `acme.sh` to request a wildcard TLS certificate with DNS validation. That approach works, but it still leaves a manual follow-up step: copy the certificate material into every Kubernetes namespace that needs it.
+In a [previous post][1], I used `acme.sh` to request a wildcard TLS certificate with DNS validation. That approach works, but it still leaves a manual follow-up step: copy the TLS secret into every Kubernetes namespace or other place that needs it.
 
-This post walks through a more automated version: [cert-manager][2] requests and renews a wildcard certificate with the [Let's Encrypt][3] ACME API, [Amazon Route 53][4] handles the DNS-01 challenge, and [Reflector][5] mirrors the generated TLS secret into the namespaces that consume it.
+This post walks through a more automated version: [cert-manager][2] requests and renews a wildcard certificate with the [Let's Encrypt][3] ACME API, [Amazon Route 53][4] handles the DNS-01 challenge, and [Reflector][5] optionally mirrors the generated TLS secret into the namespaces that consume it.
 
-The end state is a wildcard certificate for a private subdomain like `*.home.example.com`, renewed automatically and distributed as `Secret/tls-home` anywhere an Ingress needs it.
+The end state is a wildcard certificate for a private subdomain like `*.home.example.com`, renewed automatically and stored as `Secret/tls-home`. With a wildcard cert I can give applications easy to remember DNS names and use HTTPS to encrypt traffic between the browser and the web server.
+
+You do not need Argo CD to use the examples. I show my Argo CD layout because that is how I run the homelab, but the important Kubernetes objects are just a `Secret`, a `ClusterIssuer`, and a `Certificate`. You can apply those directly with `kubectl`.
 
 ## The shape of the solution
 
 Two controllers cooperate:
 
-- **cert-manager** issues and renews the certificate. It solves the ACME `dns-01` challenge by writing a TXT record into Route 53, then writes the certificate material into `Secret/tls-home` in the `cert-manager` namespace.
-- **Reflector** watches the source secret and mirrors it into consuming namespaces such as `argocd`, `apps`, and `monitoring`, keeping the copies in sync as cert-manager renews.
+- **cert-manager** issues and renews the certificate. It solves the ACME `dns-01` challenge by writing a TXT record into Route 53, then writes the certificate and private key into `Secret/tls-home` in the `cert-manager` namespace.
+- **Reflector** is optional. It watches the source secret and mirrors it into consuming namespaces such as `argocd`, `apps`, and `monitoring`, keeping the copies in sync as cert-manager renews.
 
-The user-facing contract: drop a `tls: [{ secretName: tls-home }]` block into any Ingress in a consuming namespace, and the cert is there. To onboard a new namespace, append it to the Reflector annotation lists on the certificate secret template.
+If you only need the cert in one namespace, skip Reflector and create the `Certificate` in the same namespace as the Ingress. If several namespaces need the same wildcard cert, create it once in `cert-manager` and mirror the generated secret.
 
 ```text
 Let's Encrypt (ACME prod)
@@ -52,15 +55,22 @@ Reflector mirrors the secret
 
 ## Why DNS-01 (not HTTP-01)
 
-The cluster lives behind NAT on a private network. A name like `*.home.example.com` can be split-horizon: internally it resolves to private addresses, while externally it has no usable A record. HTTP-01 requires Let's Encrypt's validation servers to reach `http://<name>/.well-known/acme-challenge/...`, which they cannot do for a private service.
+I use a k3s cluster that lives behind NAT on a private network. A name like `*.home.example.com` can be split-horizon: internally it resolves to private addresses, while externally it has no usable A record. HTTP-01 requires Let's Encrypt's validation servers to reach `http://<name>/.well-known/acme-challenge/...`, which they cannot do for a private service.
 
 DNS-01 sidesteps the network path by proving control of the domain through a TXT record in the public Route 53 hosted zone. The TXT record exists briefly during validation and gets cleaned up after the challenge completes.
 
-A useful side effect: a single DNS-01 challenge can issue a wildcard. HTTP-01 cannot.
+Since I want a wildcard cert, a single DNS-01 challenge can issue a wildcard. HTTP-01 cannot.
 
-## AWS prerequisites
+## prerequisites
 
-cert-manager talks to Route 53 with an IAM user. The policy is small: change and read TXT records in the one hosted zone you care about, and poll for change propagation. This version assumes you specify `hostedZoneID` in the solver configuration.
+Before starting, you need:
+
+- A working Kubernetes cluster and a local `kubectl` context that can create cluster-wide resources.
+- [Helm][14] if you want to use the install commands below.
+- A domain or subdomain hosted in Route 53.
+- An ingress controller if you want to use the resulting certificate with `Ingress` resources.
+
+cert-manager talks to Route 53 with an IAM user in this example. You need to create an IAM policy to change and read TXT records in the one hosted zone you care about, and poll for change propagation. This version assumes you specify `hostedZoneID` in the solver configuration.
 
 ```json
 {
@@ -91,7 +101,7 @@ If you omit `hostedZoneID`, add `route53:ListHostedZonesByName` with `Resource: 
 
 A note if you are migrating from `acme.sh`: that tool polls public DNS resolvers with `dig` to confirm the TXT record propagated, so it does not need `route53:GetChange`. cert-manager polls AWS instead and can hang without it. This is easy to miss when reusing an existing IAM user.
 
-Create an access key for the user and load it into the cluster as a one-shot bootstrap step. It is not in Git.
+> Create an access key for the user and load it into the cluster as a one-shot bootstrap step. It is not in Git.
 
 ```bash
 kubectl create namespace cert-manager
@@ -104,7 +114,40 @@ Eventually this can move to [External Secrets Operator][6], [Sealed Secrets][7],
 
 For production workloads on AWS, prefer role-based authentication instead of a long-lived IAM user access key. On EKS, that usually means [EKS Pod Identity][12] or [IAM Roles for Service Accounts][13] mapped to the cert-manager service account. Static access keys are convenient for a homelab or cluster outside AWS, but temporary credentials remove the key-rotation chore and reduce the blast radius if a Kubernetes secret is exposed.
 
-## The cert-manager Argo app
+## Install cert-manager
+
+For a cluster without Argo CD or Flux, install cert-manager directly with Helm. Check the cert-manager install page for the current version, then pin that version in your command.
+
+```bash
+helm install \
+  cert-manager oci://quay.io/jetstack/charts/cert-manager \
+  --version v1.20.2 \
+  --namespace cert-manager \
+  --create-namespace \
+  --set crds.enabled=true \
+  --set 'extraArgs[0]=--dns01-recursive-nameservers-only' \
+  --set 'extraArgs[1]=--dns01-recursive-nameservers=1.1.1.1:53,8.8.8.8:53'
+```
+
+The two `extraArgs` are useful for private or split-horizon DNS zones. cert-manager runs a self-check before asking Let's Encrypt to validate, looking up the challenge TXT record itself. If it queries an internal DNS resolver that rewrites the private zone, it may not see the public TXT record. Forcing the self-check through `1.1.1.1` and `8.8.8.8` matches what Let's Encrypt's validators see.
+
+Wait until the controller, webhook, and cainjector are ready:
+
+```bash
+kubectl -n cert-manager rollout status deploy/cert-manager
+kubectl -n cert-manager rollout status deploy/cert-manager-webhook
+kubectl -n cert-manager rollout status deploy/cert-manager-cainjector
+```
+
+If you do use Argo CD, the same settings belong in the cert-manager chart values file:
+
+```yaml
+extraArgs:
+  - --dns01-recursive-nameservers-only
+  - --dns01-recursive-nameservers=1.1.1.1:53,8.8.8.8:53
+```
+
+## My cert-manager Argo app
 
 ```text
 argo-apps/apps/cert-manager/
@@ -118,19 +161,11 @@ argo-apps/apps/cert-manager/
 
 The app is a standard [Argo CD multi-source application][8]: the upstream chart, values from the Git repository, and a `templates/` path with the issuers and wildcard `Certificate`.
 
-The values file is mostly defaults, with one override that matters:
-
-```yaml
-extraArgs:
-  - --dns01-recursive-nameservers-only
-  - --dns01-recursive-nameservers=1.1.1.1:53,8.8.8.8:53
-```
-
-cert-manager runs a self-check before asking Let's Encrypt to validate, looking up the challenge TXT record itself. If it queries an internal DNS resolver that rewrites the private zone, it may not see the public TXT record. Forcing the self-check through `1.1.1.1` and `8.8.8.8` matches what Let's Encrypt's validators see.
-
 ### ClusterIssuers
 
 Two issuers are configured: staging and prod. Staging (`https://acme-staging-v02.api.letsencrypt.org/directory`) issues untrusted certs with much higher limits, which is useful for shaking down a new install before using the production issuer.
+
+The staging issuer is the same shape as the production issuer. Change `metadata.name`, `spec.acme.server`, and `spec.acme.privateKeySecretRef.name`.
 
 ```yaml
 apiVersion: cert-manager.io/v1
@@ -193,13 +228,50 @@ spec:
 
 A few choices worth calling out:
 
-- `secretTemplate` puts the reflector annotations on the **generated** secret. cert-manager re-applies them every reconcile, so they cannot drift.
+- `secretTemplate` puts the reflector annotations on the **generated** secret. cert-manager re-applies them every reconcile, so they cannot drift. Remove this block if you are not using Reflector.
 - Including both the wildcard and apex in `dnsNames` means a single cert covers `home.example.com` and any single-label subdomain. Two-label subdomains such as `a.b.home.example.com` would need a separate cert.
 - `rotationPolicy: Always` regenerates the private key on every renewal. Current cert-manager releases already default to this, but setting it explicitly makes the intent obvious.
 
-Issuance in the staging-then-prod order keeps the rate limit safe. Flip to staging in `issuerRef.name`, sync, watch the Order/Challenge resources reach `Ready=True`, then flip back.
+> I recommend you first test using the staging Issuer to catch any errors. Issuance in the staging-then-prod order keeps the rate limit safe. The production Issuer will block your requests if you keep sending invalid data. Flip to staging in `issuerRef.name`, sync, watch the Order/Challenge resources reach `Ready=True`, then flip back.
 
-## The reflector Argo app
+Apply the issuer and certificate directly if you are not using GitOps:
+
+```bash
+kubectl apply -f cluster-issuer-letsencrypt-staging.yaml
+kubectl apply -f cluster-issuer-letsencrypt-prod.yaml
+kubectl apply -f wildcard-home-certificate.yaml
+```
+
+When the `Certificate` is ready, cert-manager has created `Secret/tls-home` in the same namespace as the `Certificate`. An Ingress can use it like this:
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: example-app
+  namespace: apps
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - app.home.example.com
+      secretName: tls-home
+  rules:
+    - host: app.home.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: example-app
+                port:
+                  number: 80
+```
+
+The `secretName` must exist in the same namespace as the Ingress. In this example, either create the `Certificate` in `apps` or let Reflector copy `cert-manager/tls-home` into `apps/tls-home`.
+
+## Optional: Reflector
 
 ```text
 argo-apps/apps/reflector/
@@ -221,21 +293,34 @@ The annotations on `cert-manager/tls-home` are re-applied by cert-manager from `
 
 Onboarding a new namespace is one Git change: append the namespace to both `*-allowed-namespaces` and `*-auto-namespaces`. Reflector picks it up and creates `<new-ns>/tls-home`.
 
+Without Argo CD, install Reflector with Helm if you want this mirroring behavior:
+
+```bash
+helm repo add emberstack https://emberstack.github.io/helm-charts
+helm repo update
+helm install reflector emberstack/reflector \
+  --namespace reflector \
+  --create-namespace
+```
+
 ## A note for Cilium ingress users
 
 If your ingress controller is Cilium in shared-LB mode, or anything else that copies referenced TLS secrets into its own namespace and preserves source annotations, include that namespace in both Reflector lists too. Otherwise Reflector can see the controller's clones as orphan reflections and enter a delete loop while the controller re-copies the secret. Most other ingress controllers, including NGINX, Traefik, and HAProxy, read TLS secrets in place and do not have this problem.
 
-## Bringing it up
+## Bringing it up with kubectl
 
-End-to-end first-time install, assuming the Argo CD root app already auto-discovers `argo-apps/apps/*/app.yaml`:
+End-to-end first-time install without assuming Argo CD:
 
 1. **Provision the IAM user and policy** in your AWS account (Terraform, console, whatever you prefer) and grab an access key.
-2. **Bootstrap the credential secret.** `kubectl create namespace cert-manager` and create `route53-credentials` from the access key.
-3. **Sync `cert-manager` from Argo CD.** The chart enforces ordering: CRDs, controller/webhook/cainjector, ClusterIssuers, then Certificate.
-4. **Verify against staging.** Edit `wildcard-home-certificate.yaml` to point at `letsencrypt-staging`, push, sync, wait for `Certificate/wildcard-home` to reach `Ready=True`, then revert to `letsencrypt-prod` and re-sync.
-5. **Sync `reflector`.** Reflector picks up the source's annotations on next reconcile and creates copies in the listed namespaces.
-6. **Update Ingresses** to reference `secretName: tls-home` in their own namespace.
-7. **Delete the legacy secrets** (the ones predating cert-manager). Reflector recreates them from the source on the next reconcile, with proper ownership annotations.
+2. **Install cert-manager** with Helm and wait for the deployments to roll out.
+3. **Bootstrap the credential secret** by creating `route53-credentials` in the `cert-manager` namespace.
+4. **Apply the staging `ClusterIssuer` and `Certificate`.** Set `issuerRef.name: letsencrypt-staging`, then wait for `Certificate/wildcard-home` to reach `Ready=True`.
+5. **Switch to production** by changing `issuerRef.name` to `letsencrypt-prod`, applying the file again, and waiting for a trusted certificate.
+6. **Install Reflector if needed.** Skip this if the certificate lives in the same namespace as the Ingress that uses it.
+7. **Update Ingresses** to reference `secretName: tls-home` in their own namespace.
+8. **Delete any legacy manually copied secrets** after you confirm cert-manager and Reflector are managing the new ones.
+
+In my Argo CD setup, steps 2, 4, 5, and 6 become Git commits plus Argo syncs. The chart still has the same ordering: CRDs, controller/webhook/cainjector, ClusterIssuers, then Certificate.
 
 ## Verification
 
@@ -262,6 +347,8 @@ A healthy steady state shows `Certificate/wildcard-home` as `Ready=True`, the sa
 
 The renewal that used to be a quarterly calendar reminder now happens 30 days before expiration, on a controller's reconcile timer, and propagates to every consumer within seconds. The only ongoing human task is rotating the Route 53 IAM access key on whatever schedule you keep for static credentials.
 
+Now I can easily set up new apps with HTTPS and not worry about rotating the certificates.
+
 ## Sources
 
 - [cert-manager][2]
@@ -276,6 +363,7 @@ The renewal that used to be a quarterly calendar reminder now happens 30 days be
 - [Let's Encrypt rate limits][11]
 - [EKS Pod Identity][12]
 - [IAM Roles for Service Accounts][13]
+- [Helm][14]
 
 [1]: /posts/homelab-wildcard-cert
 [2]: https://cert-manager.io/
@@ -290,3 +378,4 @@ The renewal that used to be a quarterly calendar reminder now happens 30 days be
 [11]: https://letsencrypt.org/docs/rate-limits/
 [12]: https://docs.aws.amazon.com/eks/latest/userguide/pod-identities.html
 [13]: https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html
+[14]: https://helm.sh/

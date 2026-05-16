@@ -106,8 +106,8 @@ The most useful pattern was keeping the work in phases:
 
 I still made the architecture calls. I had to walk back some things that the models added:
 
-- I removed heartbeat rows because Grafana's fill behavior was good enough. 
-- I skipped Redis because writing one fresh baseline row after a restart is cheap. 
+- I removed heartbeat rows because Grafana's fill behavior was good enough.
+- I skipped Redis because writing one fresh baseline row after a restart is cheap.
 - I kept allowlist and blocklist support together because that fits how Home Assistant entities tend to be named.
 
 That is the part I think is easy to miss with AI tools. The model can write a lot of code quickly, but the owner of the project still needs to decide what is worth building and what is just extra machinery.
