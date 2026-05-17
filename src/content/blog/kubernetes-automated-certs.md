@@ -34,24 +34,7 @@ Two controllers cooperate:
 
 If you only need the cert in one namespace, skip Reflector and create the `Certificate` in the same namespace as the Ingress. If several namespaces need the same wildcard cert, create it once in `cert-manager` and mirror the generated secret.
 
-```text
-Let's Encrypt (ACME prod)
-        |
-        | DNS-01
-        v
-Route 53 hosted zone
-        |
-        v
-cert-manager Certificate/wildcard-home
-        |
-        | writes cert-manager/tls-home
-        v
-Reflector mirrors the secret
-        |
-        +--> argocd/tls-home
-        +--> apps/tls-home
-        +--> monitoring/tls-home
-```
+![k8s_automated_certs](/images/k8s_automated_certs.png)
 
 ## Why DNS-01 (not HTTP-01)
 
