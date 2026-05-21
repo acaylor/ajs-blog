@@ -3,7 +3,7 @@ title: Modern Command Line Tools
 description: 'A practical guide to GNU coreutils, why they still matter, and how modern CLI tools extend their philosophy.'
 date: 2026-02-07
 categories:
-  - Software
+  - Command Line
 tags:
   - cli
   - coreutils
