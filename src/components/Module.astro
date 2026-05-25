@@ -1,0 +1,14 @@
+---
+interface Props {
+  name: string;
+  ts?: string;
+  id?: string;
+}
+
+const { name, ts = '0.012', id } = Astro.props;
+---
+
+<div class="module" id={id}>
+  <span class="ts" aria-hidden="true">{ts}</span>
+  <span class="name">{name}</span>
+</div>

@@ -1,0 +1,51 @@
+---
+interface Props {
+  /** Override the `command line: cat /<route>` default. */
+  command?: string;
+  /** Optional `[ OK ]` (or other status) line shown beneath the command. */
+  status?: {
+    tag?: 'ok' | 'info' | 'warn' | 'note' | 'err';
+    label?: string;
+    text: string;
+  };
+  /** Hide the version preamble (used on /404 where it'd feel ironic, not playful). */
+  showPreamble?: boolean;
+}
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const { command = `cat ${path}`, status, showPreamble = true } = Astro.props;
+
+const tagClass = status?.tag ? `tag-${status.tag}` : 'tag-ok';
+const tagLabel = status?.label ?? '[ OK ]';
+---
+
+<div class="banner">
+  {
+    showPreamble && (
+      <div class="row">
+        <span class="ts" aria-hidden="true">
+          0.000000
+        </span>
+        <span>
+          <b>aj's blog</b> v4.2.0-stable (acaylor@build) astro/6 &middot; gitlab-ci
+        </span>
+      </div>
+    )
+  }
+  <div class="row">
+    <span class="ts" aria-hidden="true">0.000142</span>
+    <span>command line: <b>{command}</b></span>
+  </div>
+  {
+    status && (
+      <div class="row">
+        <span class="ts" aria-hidden="true">
+          0.000389
+        </span>
+        <span>
+          <span class={tagClass}>{tagLabel}</span> {status.text}
+        </span>
+      </div>
+    )
+  }
+</div>

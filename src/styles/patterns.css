@@ -605,11 +605,53 @@ table.stat .pct {
 .channel .k {
   color: var(--fg-faint);
 }
+.channel .v {
+  margin: 0;
+}
 .channel .v a {
   text-decoration: none;
 }
 .channel .v a:hover {
   text-decoration: underline;
+}
+
+/* ===== Share row ($ share --x --linkedin ...) ===== */
+.share {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--rule);
+  font-size: 12.5px;
+  color: var(--fg-faint);
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.share::before {
+  content: '$ share';
+  color: var(--ok);
+}
+.share a {
+  color: var(--fg-soft);
+  text-decoration: none;
+  border: 1px solid var(--rule);
+  padding: 0.15rem 0.55rem;
+  background: var(--bg);
+  transition:
+    color 120ms,
+    border-color 120ms,
+    background 120ms;
+}
+.share a:hover {
+  color: var(--amber);
+  border-color: var(--amber);
+  background: var(--amber-soft);
+}
+.share .arg {
+  color: var(--amber);
+}
+.share a:hover .arg {
+  color: var(--amber);
 }
 
 /* ===== Blinking shell prompt ===== */
