@@ -8,8 +8,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "lint": "eslint .",
+    "check": "astro check",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "a11y": "html-validate \"dist/**/*.html\""
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.18",
@@ -17,10 +19,12 @@
     "astro": "^6.1.5"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.9",
     "@typescript-eslint/eslint-plugin": "^8.58.1",
     "@typescript-eslint/parser": "^8.58.1",
     "eslint": "^10.2.0",
     "eslint-plugin-astro": "^1.7.0",
+    "html-validate": "^11.3.0",
     "prettier": "^3.8.2",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^6.0.2"
