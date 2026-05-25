@@ -8,7 +8,7 @@ variables:
 
 lint:
   stage: test
-  image: node:24-alpine
+  image: node:26-alpine
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
@@ -20,7 +20,7 @@ lint:
 
 build:
   stage: test
-  image: node:24-alpine
+  image: node:26-alpine
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
