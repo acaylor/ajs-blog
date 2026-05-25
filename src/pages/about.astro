@@ -1,331 +1,194 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Banner from '../components/Banner.astro';
+import Module from '../components/Module.astro';
+import Prompt from '../components/Prompt.astro';
 
-const projects = [
+interface Project {
+  title: string;
+  description: string;
+  tags: string[];
+  url: string;
+}
+
+const projects: Project[] = [
   {
     title: "AJ's Blog",
     description:
-      'This site — a static blog built with Astro, served by nginx, and deployed via GitLab CI.',
-    tags: ['Astro', 'TypeScript', 'GitLab CI'],
+      'This site — a static blog built with Astro, served by nginx, deployed via GitLab CI.',
+    tags: ['astro', 'typescript', 'gitlab-ci'],
     url: 'https://gitlab.com/acaylor/ajs-blog',
   },
   {
     title: 'Homelab Infrastructure',
     description:
-      'Self-hosted services on Kubernetes across Proxmox servers and Raspberry Pis with automated deployments and monitoring.',
-    tags: ['Kubernetes', 'Proxmox', 'ArgoCD'],
-    url: '/posts/homelab-2025-plans',
+      'Self-hosted services on Kubernetes across Proxmox and Raspberry Pis with automated deployments and monitoring.',
+    tags: ['kubernetes', 'proxmox', 'argocd'],
+    url: '/posts/homelab-2025-plans/',
   },
+];
+
+interface HardwareRow {
+  node: string;
+  device: string;
+}
+
+const hardware: HardwareRow[] = [
+  { node: 'net0', device: 'UniFi UDM Pro · cameras · switches' },
+  { node: 'nas0', device: 'Synology NAS · 12 TB' },
+  { node: 'nas1', device: 'backup NAS · 4 TB' },
+  { node: 'pve0..3', device: 'Proxmox cluster · 4 nodes' },
+  { node: 'pi0..4', device: 'Raspberry Pi fleet · 5 units' },
+  { node: 'gpu0', device: 'Linux server · Nvidia GPU' },
+  { node: 'mac0', device: 'M4 Mac mini' },
 ];
 ---
 
 <BaseLayout title="About">
-  <div class="container about-page">
-    <section class="intro">
-      <div class="avatar-area">
-        <img src="/images/whoami/whoami.png" alt="Profile photo" class="avatar" />
-      </div>
-      <div class="intro-text">
-        <h1>About</h1>
-        <p class="bio">
-          This site is a personal blog focused on software, technology, and the cloud. The main
-          purpose of this blog is to share what technology I am working with at home.
-        </p>
-        <div class="links">
-          <a href="https://github.com/acaylor" target="_blank" rel="noopener noreferrer">GitHub</a>
-          <a href="https://gitlab.com/acaylor" target="_blank" rel="noopener noreferrer">GitLab</a>
-        </div>
-      </div>
-    </section>
+  <Banner
+    command="cat /about"
+    status={{
+      tag: 'ok',
+      label: '[ OK ]',
+      text: 'loading runtime: astro · nginx · static',
+    }}
+  />
 
-    <section class="about-content">
-      <h2>Author</h2>
-      <p>
-        I am currently a Senior Platform Engineer. I enjoy working with the latest technology in my
-        homelab.
-      </p>
-    </section>
+  <h1 class="title">whoami</h1>
+  <p class="title-sub">acaylor &middot; senior platform engineer</p>
 
-    <section id="contact" class="contact">
-      <h2>Contact</h2>
-      <p>
-        Comments are no longer available on posts. I noticed the platform added nasty advertisements
-        and there was no engagement in the comments. If you have a question, feedback, or just want
-        to say hello, feel free to reach out.
-      </p>
-      <div class="contact-methods">
-        <a href="mailto:ayyyj@icloud.com" class="surface-card contact-card">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            ><rect width="20" height="16" x="2" y="4" rx="2"></rect><path
-              d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg
-          >
-          <div>
-            <strong>Email</strong>
-            <span>ayyyj@icloud.com</span>
-          </div>
-        </a>
-        <div class="surface-card contact-card">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            ><circle cx="12" cy="12" r="10"></circle><path d="M8 12h8"></path><path d="M12 8v8"
-            ></path></svg
-          >
-          <div>
-            <strong>Discord</strong>
-            <span>.ayyj</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="about-content">
-      <h2>Homelab History</h2>
-      <p>
-        My "lab" began with the first model Raspberry Pi while I was in school. I made a version of
-        the classic game Snake in Java, compiled it into a jar, and put it on the Pi with an Apache
-        web server so I could download it on other machines. Then I set up a proxy tunnel to my
-        network so I could access it from anywhere.
-      </p>
-      <p>
-        That got me hooked on networking and self-hosting. I set up an Ubuntu NAS with SMB and moved
-        everything off the Pi. In school we used Java until the end when I had a web dev class that
-        was all ASP.NET. My first full-stack app was a meal preparation app with a database of
-        recipes that was my final capstone project at university. That was also one of the first
-        projects where I used
-        <code>git</code> to collaborate with other people.
-      </p>
-      <p>
-        My first job in tech was a mix of Windows AD infrastructure and a large fleet of Linux
-        machines for HPC. I set up a home lab on a Dell PowerEdge R610 with ESXi and Windows VMs for
-        an Active Directory lab. My second job was all Linux, and every one after has been too.
-        Around 2018 I switched to Proxmox hypervisors and TrueNAS (formerly FreeNAS) for storage.
-        Later jobs centered on Kubernetes app deployment, so the lab followed with Ubuntu VMs
-        running k8s clusters.
-      </p>
-      <p>Today the setup includes:</p>
-      <ol>
-        <li>UniFi UDM Pro with cameras and switches</li>
-        <li>Synology NAS (12 TB) + backup NAS (4 TB)</li>
-        <li>4 Proxmox servers</li>
-        <li>5 Raspberry Pis</li>
-        <li>Linux server with Nvidia GPU</li>
-        <li>M4 Mac mini</li>
-      </ol>
-      <p>
-        This uses a lot of power and I would likely not have this many servers without solar to
-        offset the cost. I use Wireguard for remote access and a password manager for credentials.
-      </p>
-    </section>
-
-    <section class="projects">
-      <h2>Projects</h2>
-      <div class="project-grid">
-        {
-          projects.map((project) => {
-            const isExternal = project.url.startsWith('http');
-            return (
-              <a
-                href={project.url}
-                class="surface-card project-card"
-                {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-              >
-                <h3>{project.title}</h3>
-                <p>{project.description}</p>
-                <div class="project-tags">
-                  {project.tags.map((tag) => (
-                    <span class="tag-pill">{tag}</span>
-                  ))}
-                </div>
-              </a>
-            );
-          })
-        }
-      </div>
-    </section>
+  <Module name="intro" ts="0.012" />
+  <p class="log">
+    This site is a personal blog focused on software, technology, and the cloud. The main purpose is
+    to share what I'm running at home and what I learned getting it to stay up.
+  </p>
+  <div class="figure avatar">
+    <img src="/images/whoami/whoami.png" alt="Profile photo" />
+    <div class="figcap">
+      <b>fig. 0 — operator portrait</b>github.com/acaylor &middot; gitlab.com/acaylor
+    </div>
   </div>
 
-  <style>
-    .about-page {
-      padding-top: 3rem;
-      padding-bottom: 3rem;
-      max-width: var(--content-width);
-    }
+  <Module name="author" ts="0.024" />
+  <p class="log">
+    <span class="tag-info">[INFO]</span> Currently a Senior Platform Engineer. I enjoy working with the
+    latest technology in my homelab and writing posts that survive past the first edit.
+  </p>
 
-    .intro {
-      display: flex;
-      gap: 2rem;
-      align-items: flex-start;
-      margin-bottom: 3rem;
-    }
+  <Module name="contact" ts="0.041" id="contact" />
+  <p class="log">
+    <span class="tag-warn">[WARN]</span> comments are disabled — previous platform added ads and there
+    was no engagement. write directly if you have something to say.
+  </p>
+  <dl class="channels">
+    <div class="channel">
+      <dt class="k">email</dt>
+      <dd class="v"><a href="mailto:ayyyj@icloud.com">ayyyj@icloud.com</a></dd>
+    </div>
+    <div class="channel">
+      <dt class="k">discord</dt>
+      <dd class="v">.ayyj</dd>
+    </div>
+    <div class="channel">
+      <dt class="k">github</dt>
+      <dd class="v">
+        <a href="https://github.com/acaylor" target="_blank" rel="noopener noreferrer">acaylor</a>
+      </dd>
+    </div>
+    <div class="channel">
+      <dt class="k">gitlab</dt>
+      <dd class="v">
+        <a href="https://gitlab.com/acaylor" target="_blank" rel="noopener noreferrer">acaylor</a>
+      </dd>
+    </div>
+  </dl>
 
-    .avatar {
-      width: 6rem;
-      min-width: 6rem;
-      height: 6rem;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid var(--color-border-light);
-    }
+  <Module name="history" ts="0.082" />
+  <p class="log">
+    The lab began with the first-model Raspberry Pi while I was in school. I wrote a version of
+    Snake in Java, compiled it to a jar, dropped it on the Pi behind an Apache web server, and
+    tunneled in so I could pull it down from anywhere. That hooked me on networking and
+    self-hosting.
+  </p>
+  <p class="log">
+    I set up an Ubuntu NAS with SMB and moved everything off the Pi. School was Java until a final
+    web-dev class that ran on ASP.NET. My capstone project was a meal-prep app with a recipe
+    database — also the first time I used <code>git</code> seriously to collaborate.
+  </p>
+  <p class="log">
+    First job was Windows AD plus a Linux HPC fleet. I ran a Dell PowerEdge R610 at home with ESXi
+    and Windows VMs for AD lab work. Every job after has been Linux-shaped. Around 2018 I moved the
+    lab to Proxmox and TrueNAS. Later jobs centered on Kubernetes, so the lab followed with Ubuntu
+    VMs running k8s clusters.
+  </p>
 
-    .intro-text h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: -0.025em;
-      margin-bottom: 0.75rem;
-    }
-
-    .bio {
-      font-size: 1.0625rem;
-      color: var(--color-text-secondary);
-      line-height: 1.7;
-      margin-bottom: 1rem;
-    }
-
-    .links {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .links a {
-      font-size: 0.875rem;
-      font-weight: 500;
-    }
-
-    @media (max-width: 640px) {
-      .intro {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
+  <Module name="hardware" ts="0.142" />
+  <p class="log"><span class="tag-info">[INFO]</span> scanning hardware ...</p>
+  <table class="proc" aria-label="Hardware inventory">
+    <thead>
+      <tr>
+        <th scope="col">node</th>
+        <th scope="col">device</th>
+        <th scope="col">status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        hardware.map((row) => (
+          <tr>
+            <td>{row.node}</td>
+            <td>{row.device}</td>
+            <td>
+              <span class="tag-ok">ok</span>
+            </td>
+          </tr>
+        ))
       }
+    </tbody>
+  </table>
+  <p class="log">
+    <span class="tag-note">[NOTE]</span> power draw offset by solar &middot; wireguard for remote &middot;
+    password manager for creds
+  </p>
 
-      .links {
-        justify-content: center;
-      }
-    }
+  <Module name="projects" ts="0.201" />
+  <p class="log">
+    <span class="tag-info">[INFO]</span> active units &middot;
+    <span style="color: var(--fg-faint)">
+      use <a href="/posts/">posts</a> for more
+    </span>
+  </p>
+  {
+    projects.map((project) => {
+      const isExternal = project.url.startsWith('http');
+      return (
+        <div class="unit">
+          <div class="head">
+            <span class="dot" aria-hidden="true">
+              ●
+            </span>
+            <span class="name">
+              <a
+                href={project.url}
+                {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              >
+                {project.title}
+              </a>
+            </span>
+          </div>
+          <div class="desc">{project.description}</div>
+          {project.tags.length > 0 && (
+            <div class="tags">
+              <span class="label">tags</span>
+              {project.tags.map((tag) => (
+                <span class="tag-link">{tag}</span>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    })
+  }
 
-    .about-content {
-      margin-bottom: 3rem;
-    }
-
-    .about-content h2 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      margin-top: 2rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .about-content h2:first-child {
-      margin-top: 0;
-    }
-
-    .about-content p {
-      font-size: 1.0625rem;
-      line-height: 1.7;
-      color: var(--color-text-secondary);
-    }
-
-    .about-content ol {
-      padding-left: 1.5rem;
-      margin-bottom: 1rem;
-      color: var(--color-text-secondary);
-      line-height: 1.7;
-    }
-
-    .contact {
-      margin-bottom: 3rem;
-    }
-
-    .contact h2 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      margin-bottom: 0.75rem;
-    }
-
-    .contact > p {
-      font-size: 1.0625rem;
-      line-height: 1.7;
-      color: var(--color-text-secondary);
-      margin-bottom: 1.25rem;
-    }
-
-    .contact-methods {
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-    }
-
-    .contact-card {
-      display: flex;
-      align-items: center;
-      gap: 0.875rem;
-      padding: 1rem 1.25rem;
-    }
-
-    .contact-card svg {
-      flex-shrink: 0;
-      color: var(--color-text-tertiary);
-    }
-
-    .contact-card strong {
-      display: block;
-      font-size: 0.875rem;
-      font-weight: 600;
-      margin-bottom: 0.125rem;
-    }
-
-    .contact-card span {
-      font-size: 0.8125rem;
-      color: var(--color-text-secondary);
-    }
-
-    .projects h2 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      margin-bottom: 1.25rem;
-    }
-
-    .project-grid {
-      display: grid;
-      gap: 1rem;
-    }
-
-    .project-card h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 0.375rem;
-    }
-
-    .project-card p {
-      font-size: 0.875rem;
-      color: var(--color-text-secondary);
-      line-height: 1.5;
-      margin-bottom: 0.75rem;
-    }
-
-    .project-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.375rem;
-    }
-  </style>
+  <Prompt />
 </BaseLayout>

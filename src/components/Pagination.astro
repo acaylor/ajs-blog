@@ -1,63 +1,82 @@
 ---
 interface Props {
-  prevUrl: string | undefined;
-  nextUrl: string | undefined;
   currentPage: number;
   lastPage: number;
+  /** Path prefix without trailing slash. Page 1 = `${basePath}/`, page N = `${basePath}/${N}/`. */
+  basePath: string;
 }
 
-const { prevUrl, nextUrl, currentPage, lastPage } = Astro.props;
+const { currentPage, lastPage, basePath } = Astro.props;
+
+const pageHref = (n: number): string => (n === 1 ? `${basePath}/` : `${basePath}/${n}/`);
+
+// Desktop window: max 3 consecutive pages centered on currentPage, plus first/last
+// with ellipsis where there's a gap. Pages adjacent to current never collapse.
+type Cell = { kind: 'num'; n: number; current: boolean; hideOnMobile: boolean } | { kind: 'dots' };
+
+function buildCells(current: number, last: number): Cell[] {
+  if (last <= 1) return [];
+
+  const window = new Set<number>([1, last, current - 1, current, current + 1]);
+  const pages = [...window].filter((n) => n >= 1 && n <= last).sort((a, b) => a - b);
+
+  const cells: Cell[] = [];
+  for (let i = 0; i < pages.length; i++) {
+    const n = pages[i];
+    // On mobile we collapse to: prev, current, ellipsis, last, next.
+    // So anything that isn't current or last is hidden on mobile.
+    const hideOnMobile = n !== current && n !== last;
+    cells.push({ kind: 'num', n, current: n === current, hideOnMobile });
+    if (i < pages.length - 1 && pages[i + 1] - n > 1) {
+      cells.push({ kind: 'dots' });
+    }
+  }
+  return cells;
+}
+
+const cells = buildCells(currentPage, lastPage);
+const hasPrev = currentPage > 1;
+const hasNext = currentPage < lastPage;
 ---
 
 {
   lastPage > 1 && (
-    <nav class="pagination" aria-label="Pagination">
-      {prevUrl ? (
-        <a href={prevUrl} class="page-link prev">
-          &larr; Previous
+    <nav class="pager" aria-label="Pagination">
+      {hasPrev ? (
+        <a href={pageHref(currentPage - 1)} rel="prev" aria-label="Previous page">
+          &larr;
         </a>
       ) : (
-        <span class="page-link prev disabled">&larr; Previous</span>
+        <span class="num disabled" aria-hidden="true">
+          &larr;
+        </span>
       )}
-      <span class="page-info">
-        {currentPage} / {lastPage}
-      </span>
-      {nextUrl ? (
-        <a href={nextUrl} class="page-link next">
-          Next &rarr;
+
+      {cells.map((cell) =>
+        cell.kind === 'dots' ? (
+          <span class="dots hide-on-mobile" aria-hidden="true">
+            &hellip;
+          </span>
+        ) : cell.current ? (
+          <span class="num current" aria-current="page">
+            {cell.n}
+          </span>
+        ) : (
+          <a href={pageHref(cell.n)} class={cell.hideOnMobile ? 'hide-on-mobile' : undefined}>
+            {cell.n}
+          </a>
+        ),
+      )}
+
+      {hasNext ? (
+        <a href={pageHref(currentPage + 1)} rel="next" aria-label="Next page">
+          &rarr;
         </a>
       ) : (
-        <span class="page-link next disabled">Next &rarr;</span>
+        <span class="num disabled" aria-hidden="true">
+          &rarr;
+        </span>
       )}
     </nav>
   )
 }
-
-<style>
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1.5rem;
-    margin-top: 2.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--color-border-light);
-  }
-
-  .page-link {
-    font-size: 0.875rem;
-    font-weight: 500;
-  }
-
-  .page-link.disabled {
-    color: var(--color-text-tertiary);
-    pointer-events: none;
-    opacity: 0.4;
-  }
-
-  .page-info {
-    font-size: 0.8125rem;
-    color: var(--color-text-tertiary);
-    font-variant-numeric: tabular-nums;
-  }
-</style>

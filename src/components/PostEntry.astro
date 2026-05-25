@@ -1,0 +1,30 @@
+---
+interface Props {
+  title: string;
+  date: Date;
+  href: string;
+  readingTime: string;
+  tags?: string[];
+}
+
+const { title, date, href, readingTime, tags = [] } = Astro.props;
+const isoDate = date.toISOString();
+const ymd = isoDate.slice(0, 10);
+---
+
+<div class="entry">
+  <time class="date" datetime={isoDate}>{ymd}</time>
+  <span class="title"><a href={href}>{title}</a></span>
+  <span class="read">{readingTime}</span>
+  {
+    tags.length > 0 && (
+      <div class="tags">
+        {tags.slice(0, 4).map((tag) => (
+          <a href={`/tags/${tag}`} class="tag-link">
+            {tag}
+          </a>
+        ))}
+      </div>
+    )
+  }
+</div>
