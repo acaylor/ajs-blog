@@ -737,7 +737,13 @@ h1.post-title::before {
   content: '#### ';
   color: var(--amber);
 }
+/* amber-strong instead of amber so body link text clears WCAG AA 4.5:1
+   against the cream bg (regular amber on cream is ~3.85:1). The token
+   resolves to a brighter tint in dark mode where amber already passes. */
 .prose a {
+  color: var(--amber-strong);
+}
+.prose a:hover {
   color: var(--amber);
 }
 .prose ul,

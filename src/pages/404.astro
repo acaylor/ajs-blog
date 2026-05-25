@@ -1,43 +1,65 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Prompt from '../components/Prompt.astro';
 ---
 
-<BaseLayout title="Page Not Found">
-  <div class="container error-page">
-    <h1>404</h1>
-    <p>The page you're looking for doesn't exist.</p>
-    <a href="/" class="back-home">&larr; Back to home</a>
+<BaseLayout title="404">
+  <div class="banner">
+    <div class="row">
+      <span class="ts" aria-hidden="true">0.000142</span>
+      <span>command line: <b>cat {Astro.url.pathname}</b></span>
+    </div>
+    <div class="row">
+      <span class="ts" aria-hidden="true">0.000389</span>
+      <span><span class="tag-err">[ERR]</span> no such file or directory</span>
+    </div>
   </div>
 
-  <style>
-    .error-page {
-      padding: 6rem 0;
-      text-align: center;
-    }
+  <h1 class="title">404</h1>
+  <p class="title-sub">that page is not on disk</p>
 
-    h1 {
-      font-size: 5rem;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      color: var(--color-text-tertiary);
-      margin-bottom: 0.5rem;
-    }
+  <p class="log">
+    <span class="tag-note">[NOTE]</span> the route may have been moved or removed. try one of:
+  </p>
+  <ul class="not-found-links">
+    <li><a href="/">/</a> &mdash; home</li>
+    <li><a href="/posts/">/posts</a> &mdash; the full archive</li>
+    <li><a href="/tags/">/tags</a> &mdash; topic index</li>
+    <li><a href="/categories/">/categories</a> &mdash; category index</li>
+  </ul>
 
-    p {
-      font-size: 1.125rem;
-      color: var(--color-text-secondary);
-      margin-bottom: 2rem;
-    }
+  <p class="log not-found-cd">
+    <a href="/">aj@blog:~$ cd /</a>
+  </p>
 
-    .back-home {
-      font-size: 0.9375rem;
-      font-weight: 500;
-      color: var(--color-accent);
-    }
-
-    .back-home:hover {
-      text-decoration: none;
-      color: var(--color-accent-hover);
-    }
-  </style>
+  <Prompt />
 </BaseLayout>
+
+<style>
+  .not-found-links {
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0 1rem;
+    font-size: 13px;
+    color: var(--fg-soft);
+  }
+  .not-found-links li {
+    padding: 0.15rem 0;
+  }
+  .not-found-links a {
+    text-decoration: none;
+  }
+  .not-found-links a:hover {
+    text-decoration: underline;
+  }
+  .not-found-cd {
+    margin-top: 1.5rem;
+  }
+  .not-found-cd a {
+    text-decoration: none;
+    color: var(--ok);
+  }
+  .not-found-cd a:hover {
+    color: var(--amber);
+  }
+</style>
