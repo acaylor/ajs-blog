@@ -1,31 +1,32 @@
 ---
-
+// Injects a small bordered "copy" chip into every <pre> on the page. The
+// button absolutely-positions itself inside the <pre> and only becomes visible
+// on hover/focus-within, matching the mockup chrome.
 ---
 
 <script>
-  function initCopyButtons() {
-    document.querySelectorAll('pre:not(.copy-wrapped)').forEach((pre) => {
-      pre.classList.add('copy-wrapped');
-
-      const wrapper = document.createElement('div');
-      wrapper.className = 'code-block';
-      pre.parentNode!.insertBefore(wrapper, pre);
-      wrapper.appendChild(pre);
+  function initCopyButtons(): void {
+    document.querySelectorAll<HTMLPreElement>('pre:not([data-copy-attached])').forEach((pre) => {
+      pre.setAttribute('data-copy-attached', '');
 
       const btn = document.createElement('button');
+      btn.type = 'button';
       btn.className = 'copy-btn';
-      btn.setAttribute('aria-label', 'Copy code');
-      btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
-      wrapper.appendChild(btn);
+      btn.textContent = 'copy';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+      pre.appendChild(btn);
 
       btn.addEventListener('click', async () => {
         const code = pre.querySelector('code');
-        if (code) {
-          await navigator.clipboard.writeText(code.textContent || '');
-          btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+        if (!code) return;
+        try {
+          await navigator.clipboard.writeText(code.textContent ?? '');
+          btn.textContent = 'copied';
           setTimeout(() => {
-            btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+            btn.textContent = 'copy';
           }, 1500);
+        } catch {
+          /* clipboard refused — leave the label alone */
         }
       });
     });
@@ -36,45 +37,43 @@
 </script>
 
 <style is:global>
-  .code-block {
+  .prose pre {
     position: relative;
-    margin: 1.5rem 0;
   }
 
-  .code-block pre {
-    margin: 0;
-  }
-
-  .copy-btn {
+  .prose pre .copy-btn {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    z-index: 1;
-    background: var(--color-bg-tertiary);
-    border: 1px solid var(--color-border);
-    border-radius: 0.375rem;
-    padding: 0.35rem;
+    top: 0.4rem;
+    right: 0.4rem;
+    font: inherit;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.1rem 0.5rem;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    color: var(--fg-faint);
     cursor: pointer;
-    color: var(--color-text-tertiary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     opacity: 0;
     transition:
-      opacity var(--transition),
-      color var(--transition);
+      opacity 120ms,
+      color 120ms,
+      border-color 120ms;
   }
 
-  .code-block:hover .copy-btn {
+  .prose pre:hover .copy-btn,
+  .prose pre:focus-within .copy-btn {
     opacity: 1;
   }
 
-  .copy-btn:hover {
-    color: var(--color-accent);
+  .prose pre .copy-btn:hover,
+  .prose pre .copy-btn:focus-visible {
+    color: var(--amber);
+    border-color: var(--amber);
   }
 
   @media (hover: none) {
-    .copy-btn {
+    .prose pre .copy-btn {
       opacity: 1;
     }
   }

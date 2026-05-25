@@ -615,6 +615,315 @@ table.stat .pct {
   text-decoration: underline;
 }
 
+/* ===========================================================
+   Post layout (PostLayout.astro)
+   =========================================================== */
+
+main.post {
+  max-width: 100ch;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 22ch;
+  gap: 2.5rem;
+}
+main.post > article {
+  min-width: 0;
+  overflow: hidden;
+}
+@media (max-width: 1023px) {
+  main.post {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  aside.toc {
+    display: none;
+  }
+}
+
+.post-meta {
+  color: var(--fg-faint);
+  font-size: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  margin-top: 1.25rem;
+  font-variant-numeric: tabular-nums;
+}
+.post-meta .dot {
+  color: var(--rule);
+}
+.post-meta .cat {
+  color: var(--note);
+  text-decoration: none;
+}
+.post-meta .cat:hover {
+  color: var(--amber);
+  background: none;
+}
+
+h1.post-title {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  line-height: 1.2;
+  margin: 0.5rem 0 0.85rem;
+  color: var(--fg);
+  word-break: break-word;
+}
+h1.post-title::before {
+  content: '> ';
+  color: var(--amber);
+}
+
+.post-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.post-tags-row .label {
+  color: var(--fg-faint);
+  font-size: 11.5px;
+  margin-right: 0.4rem;
+}
+
+/* ===== Prose (rendered markdown body) ===== */
+.prose {
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: var(--fg);
+  min-width: 0;
+}
+.prose p {
+  margin-bottom: 1rem;
+}
+.prose h2 {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 500;
+  margin-top: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--fg);
+  letter-spacing: 0;
+  scroll-margin-top: 4rem;
+}
+.prose h2::before {
+  content: '## ';
+  color: var(--amber);
+}
+.prose h3 {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+  color: var(--fg);
+  scroll-margin-top: 4rem;
+}
+.prose h3::before {
+  content: '### ';
+  color: var(--amber);
+}
+.prose h4 {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-top: 1.5rem;
+  margin-bottom: 0.4rem;
+  color: var(--fg);
+  scroll-margin-top: 4rem;
+}
+.prose h4::before {
+  content: '#### ';
+  color: var(--amber);
+}
+.prose a {
+  color: var(--amber);
+}
+.prose ul,
+.prose ol {
+  margin: 0 0 1rem 1.5rem;
+  padding-left: 0.5rem;
+}
+.prose li {
+  margin-bottom: 0.25rem;
+}
+.prose ul li::marker {
+  color: var(--amber);
+}
+.prose blockquote {
+  border-left: 3px solid var(--amber);
+  padding: 0.25rem 0 0.25rem 1rem;
+  margin: 1.25rem 0;
+  color: var(--fg-soft);
+  font-style: normal;
+}
+.prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+.prose :not(pre) > code {
+  background: var(--bg-card);
+  padding: 0.05em 0.4em;
+  border: 1px solid var(--rule);
+  color: var(--amber-strong);
+  font-size: 0.9em;
+}
+[data-theme='dark'] .prose :not(pre) > code {
+  color: var(--amber);
+}
+.prose pre {
+  margin: 1.25rem 0 1.5rem;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+.prose pre code {
+  font-family: var(--font-mono);
+  font-size: inherit;
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-size: 13px;
+}
+.prose th,
+.prose td {
+  border: 1px solid var(--rule);
+  padding: 0.4rem 0.6rem;
+  text-align: left;
+}
+.prose th {
+  background: var(--bg-card);
+  font-weight: 500;
+}
+.prose hr {
+  border: none;
+  border-top: 1px dashed var(--rule);
+  margin: 2rem 0;
+}
+.prose img {
+  margin: 1.25rem 0;
+  border: 1px solid var(--rule);
+  background: var(--bg-card);
+  padding: 0.4rem;
+}
+.prose figure {
+  margin: 1.5rem 0;
+  border: 1px solid var(--rule);
+  padding: 0.5rem;
+  background: var(--bg-card);
+}
+.prose figcaption {
+  font-size: 11.5px;
+  color: var(--fg-faint);
+  margin-top: 0.5rem;
+  text-align: center;
+}
+.prose mark {
+  background: var(--amber-soft);
+  color: var(--fg);
+  padding: 0.05em 0.25em;
+}
+.prose kbd {
+  font: inherit;
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  padding: 0.05em 0.4em;
+  font-size: 0.85em;
+}
+
+/* ===== TOC sidebar ===== */
+aside.toc {
+  position: sticky;
+  top: 4rem;
+  align-self: start;
+  font-size: 12px;
+  color: var(--fg-soft);
+  max-height: calc(100vh - 6rem);
+  overflow-y: auto;
+  padding-top: 1.5rem;
+}
+aside.toc .toc-title {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg-faint);
+  margin-bottom: 0.5rem;
+}
+aside.toc .toc-title::before {
+  content: '$ tree ';
+  color: var(--ok);
+  text-transform: none;
+  letter-spacing: 0;
+}
+aside.toc ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+aside.toc li {
+  font-family: var(--font-mono);
+  line-height: 1.7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+aside.toc li.depth-3,
+aside.toc li.depth-4 {
+  padding-left: 1.25rem;
+}
+aside.toc li.depth-4 {
+  padding-left: 2.5rem;
+}
+aside.toc li a {
+  color: var(--fg-soft);
+  text-decoration: none;
+}
+aside.toc li a:hover,
+aside.toc li a.active {
+  color: var(--amber);
+  background: none;
+}
+aside.toc .tree {
+  color: var(--fg-faint);
+  white-space: pre;
+  user-select: none;
+}
+
+/* ===== prev/next nav (post layout) ===== */
+.navnext {
+  margin-top: 1.25rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  font-size: 12.5px;
+}
+.navnext a {
+  text-decoration: none;
+  color: var(--fg-soft);
+  border: 1px solid var(--rule);
+  padding: 0.6rem 0.75rem;
+  background: var(--bg);
+  transition:
+    color 120ms,
+    border-color 120ms,
+    background 120ms;
+}
+.navnext a:hover {
+  color: var(--amber);
+  border-color: var(--amber);
+  background: var(--amber-soft);
+}
+.navnext .dir {
+  color: var(--fg-faint);
+  font-size: 11px;
+  display: block;
+  margin-bottom: 0.1rem;
+}
+.navnext .next {
+  text-align: right;
+}
+
 /* ===== Share row ($ share --x --linkedin ...) ===== */
 .share {
   margin-top: 2rem;
@@ -800,5 +1109,24 @@ table.stat .pct {
   .pager .num.hide-on-mobile,
   .pager a.hide-on-mobile {
     display: none;
+  }
+
+  /* post layout — tighter type on small screens */
+  h1.post-title {
+    font-size: 1.25rem;
+  }
+  .prose {
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+  .prose h2 {
+    font-size: 1.05rem;
+  }
+  .prose pre {
+    font-size: 11.5px;
+    padding: 0.65rem 0.75rem;
+  }
+  .navnext {
+    grid-template-columns: 1fr;
   }
 }
