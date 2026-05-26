@@ -1,7 +1,7 @@
 ---
 title: PostgreSQL
 author: aj
-image: /images/pg_logo.png
+image: /images/pg_logo.svg
 date: 2024-09-02
 
 categories:

@@ -5,9 +5,4 @@
 
 no_progress = true
 
-# Temporary: /images/pg_logo.png is referenced as the hero image on every
-# PostgreSQL post, but the asset has not been committed yet. Remove this
-# entry once the file lands in public/images/.
-exclude = [
-  "/images/pg_logo\\.png",
-]
+exclude = []
