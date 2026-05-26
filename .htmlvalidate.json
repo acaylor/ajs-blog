@@ -7,8 +7,6 @@
     "no-raw-characters": "off",
     "long-title": "off",
 
-    "no-implicit-button-type": "off",
-    "unique-landmark": "off",
     "valid-id": "off",
     "element-name": "off"
   }

@@ -1,8 +1,11 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PostCard from '../../components/PostCard.astro';
+import Banner from '../../components/Banner.astro';
+import Module from '../../components/Module.astro';
+import PostEntry from '../../components/PostEntry.astro';
 import Pagination from '../../components/Pagination.astro';
+import Prompt from '../../components/Prompt.astro';
 import { getCollection } from 'astro:content';
 import { getReadingTime } from '../../utils/reading-time';
 
@@ -14,35 +17,38 @@ export const getStaticPaths = (async ({ paginate }) => {
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;
-const totalPosts = page.total;
+const moduleName = `page_${String(page.currentPage).padStart(3, '0')}`;
+const pageLabel = `page ${page.currentPage}/${page.lastPage}`;
 ---
 
 <BaseLayout title={page.currentPage > 1 ? `Posts - Page ${page.currentPage}` : 'Posts'}>
-  <div class="container page-section">
-    <h1 class="page-title">All Posts</h1>
-    <p class="page-subtitle">{totalPosts} articles</p>
+  <Banner
+    command="journalctl /posts --reverse --limit 12"
+    status={{
+      tag: 'info',
+      label: '[INFO]',
+      text: `${page.total} entries · ${pageLabel} · sorted by date desc`,
+    }}
+  />
 
-    <div class="post-grid">
-      {
-        page.data.map((post) => (
-          <PostCard
-            title={post.data.title}
-            date={post.data.date}
-            description={post.data.description}
-            tags={post.data.tags}
-            readingTime={getReadingTime(post.body || '')}
-            href={`/posts/${post.id}`}
-            image={post.data.image}
-          />
-        ))
-      }
-    </div>
+  <h1 class="title">posts</h1>
+  <p class="title-sub">all entries · newest first</p>
 
-    <Pagination
-      prevUrl={page.url.prev}
-      nextUrl={page.url.next}
-      currentPage={page.currentPage}
-      lastPage={page.lastPage}
-    />
-  </div>
+  <Module name={moduleName} />
+
+  {
+    page.data.map((post) => (
+      <PostEntry
+        title={post.data.title}
+        date={post.data.date}
+        href={`/posts/${post.id}/`}
+        readingTime={getReadingTime(post.body || '')}
+        tags={post.data.tags}
+      />
+    ))
+  }
+
+  <Pagination currentPage={page.currentPage} lastPage={page.lastPage} basePath="/posts" />
+
+  <Prompt />
 </BaseLayout>

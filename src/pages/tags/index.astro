@@ -1,32 +1,97 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Banner from '../../components/Banner.astro';
+import Prompt from '../../components/Prompt.astro';
 import { getCollection } from 'astro:content';
 
 const posts = await getCollection('blog', ({ data }) => !data.draft);
-const tagCounts = new Map<string, number>();
 
-posts.forEach((post) => {
-  post.data.tags?.forEach((tag) => {
-    tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
-  });
-});
+// Collapse case-duplicate tags to one row per lowercase key (Decision 4 in REFACTOR.md).
+// Within each group, the dominant case (most posts) wins the URL and the count — clicking
+// the chip lands on a route that actually contains the displayed number of posts.
+// Minority-case routes still exist (rendered by [tag]/[...page].astro) but don't surface here.
+const byLower = new Map<string, Map<string, number>>();
+for (const post of posts) {
+  for (const tag of post.data.tags ?? []) {
+    const key = tag.toLowerCase();
+    let cases = byLower.get(key);
+    if (!cases) {
+      cases = new Map();
+      byLower.set(key, cases);
+    }
+    cases.set(tag, (cases.get(tag) ?? 0) + 1);
+  }
+}
 
-const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
+const tags = [...byLower.values()]
+  .map((cases) => {
+    const [display, count] = [...cases.entries()].sort(
+      (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]),
+    )[0];
+    return { display, count };
+  })
+  .sort((a, b) => b.count - a.count || a.display.localeCompare(b.display));
+
+const totalTagged = tags.reduce((sum, t) => sum + t.count, 0);
+const maxCount = tags[0]?.count ?? 1;
+const longTailThreshold = 5;
+const longTail = tags.filter((t) => t.count < longTailThreshold).length;
 ---
 
 <BaseLayout title="Tags">
-  <div class="container page-section">
-    <h1 class="page-title">Tags</h1>
-    <p class="page-subtitle">{tags.length} tags</p>
-    <div class="chip-grid">
+  <Banner
+    command="sort -k2 -rn /var/blog/tags.tsv"
+    status={{
+      tag: 'info',
+      label: '[INFO]',
+      text: `${tags.length} tags · ${totalTagged} tag-uses · sorted by count desc`,
+    }}
+  />
+
+  <h1 class="title">tags</h1>
+  <p class="title-sub">{tags.length} unique tags across {posts.length} posts</p>
+
+  <table class="stat" aria-label="Tag frequency">
+    <thead>
+      <tr>
+        <th scope="col">tag</th>
+        <th scope="col" class="bar">usage</th>
+        <th scope="col">count</th>
+        <th scope="col">%</th>
+      </tr>
+    </thead>
+    <tbody>
       {
-        tags.map(([tag, count]) => (
-          <a href={`/tags/${tag}`} class="chip">
-            <span>{tag}</span>
-            <span class="chip-count">{count}</span>
-          </a>
-        ))
+        tags.map(({ display, count }) => {
+          const pct = (count / totalTagged) * 100;
+          const barPct = (count / maxCount) * 100;
+          return (
+            <tr>
+              <td class="name">
+                <a href={`/tags/${display}/`}>{display}</a>
+              </td>
+              <td class="bar">
+                <span class="bar-track" aria-hidden="true">
+                  <span class="bar-fill" style={`width: ${barPct.toFixed(1)}%`} />
+                </span>
+              </td>
+              <td class="count">{count}</td>
+              <td class="pct">{pct.toFixed(1)}%</td>
+            </tr>
+          );
+        })
       }
-    </div>
-  </div>
+    </tbody>
+  </table>
+
+  {
+    longTail > 0 && (
+      <p class="log" style="margin-top: 1rem">
+        <span class="tag-note">[NOTE]</span> {longTail} tags appear in fewer than{' '}
+        {longTailThreshold} posts &middot; consider consolidating before they fragment further.
+      </p>
+    )
+  }
+
+  <Prompt />
 </BaseLayout>

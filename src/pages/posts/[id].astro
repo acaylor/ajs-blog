@@ -4,16 +4,31 @@ import { getCollection, render } from 'astro:content';
 import { getReadingTime } from '../../utils/reading-time';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
-  return posts.map((post) => ({
-    params: { id: post.id },
-    props: { post },
-  }));
+  const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  );
+
+  return posts.map((post, index) => {
+    const newer = posts[index - 1];
+    const older = posts[index + 1];
+
+    return {
+      params: { id: post.id },
+      props: {
+        post,
+        prev: older ? { title: older.data.title, href: `/posts/${older.id}/` } : undefined,
+        next: newer ? { title: newer.data.title, href: `/posts/${newer.id}/` } : undefined,
+      },
+    };
+  });
 }
 
-const { post } = Astro.props;
+const { post, prev, next } = Astro.props;
 const { Content, headings } = await render(post);
-const readingTime = getReadingTime(post.body || '');
+
+const body = post.body ?? '';
+const readingTime = getReadingTime(body);
+const wordCount = body.trim().split(/\s+/).filter(Boolean).length;
 ---
 
 <PostLayout
@@ -24,8 +39,13 @@ const readingTime = getReadingTime(post.body || '');
   tags={post.data.tags}
   categories={post.data.categories}
   readingTime={readingTime}
+  wordCount={wordCount}
+  image={post.data.image}
   headings={headings}
   updated={post.data.updated}
+  postId={post.id}
+  prev={prev}
+  next={next}
 >
   <Content />
 </PostLayout>

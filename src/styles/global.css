@@ -177,3 +177,79 @@ pre code {
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
+/* ===== Print ===== */
+@media print {
+  /* Force black-on-white regardless of system theme so the output reads. */
+  :root,
+  [data-theme='dark'] {
+    --bg: #ffffff;
+    --bg-deep: #ffffff;
+    --bg-card: #f5f5f5;
+    --fg: #000000;
+    --fg-soft: #1a1a1a;
+    --fg-faint: #555555;
+    --rule: #cccccc;
+    --amber: #6b3f00;
+    --amber-soft: transparent;
+    --amber-strong: #6b3f00;
+  }
+
+  body {
+    background: #ffffff;
+    color: #000000;
+  }
+
+  /* drop the boot banner and the blinking-cursor prompt — they're chrome,
+     not content, and they don't read well in ink */
+  .banner,
+  .prompt,
+  .term-head,
+  aside.toc,
+  .navnext,
+  .share,
+  .pager {
+    display: none !important;
+  }
+
+  /* term-foot stays as a small attribution footer but loses the bg */
+  .term-foot {
+    background: none;
+    border-top: 1px solid #cccccc;
+  }
+  .term-foot .links {
+    display: none;
+  }
+
+  /* code blocks: always light bg so they're legible in print */
+  pre,
+  [data-theme='dark'] pre,
+  .prose pre,
+  [data-theme='dark'] .prose pre {
+    background: #f5f5f5 !important;
+    color: #000000 !important;
+    border: 1px solid #cccccc;
+    page-break-inside: avoid;
+  }
+  pre code,
+  pre code span {
+    color: #000000 !important;
+    background: none !important;
+  }
+
+  /* avoid orphaned headings */
+  h1,
+  h2,
+  h3,
+  h4 {
+    page-break-after: avoid;
+  }
+
+  /* expose link targets in print */
+  .prose a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.85em;
+    color: #555555;
+    word-break: break-all;
+  }
+}
