@@ -1,7 +1,8 @@
 ---
-// Injects a small bordered "copy" chip into every <pre> on the page. The
-// button absolutely-positions itself inside the <pre> and only becomes visible
-// on hover/focus-within, matching the mockup chrome.
+// Wraps every <pre> in a <div class="code-block"> and attaches a small
+// bordered "copy" chip to the wrapper. The wrapper carries the relative
+// positioning context so the button stays pinned to the visible corner
+// while content inside the <pre> scrolls horizontally.
 ---
 
 <script>
@@ -9,12 +10,17 @@
     document.querySelectorAll<HTMLPreElement>('pre:not([data-copy-attached])').forEach((pre) => {
       pre.setAttribute('data-copy-attached', '');
 
+      const wrapper = document.createElement('div');
+      wrapper.className = 'code-block';
+      pre.parentNode?.insertBefore(wrapper, pre);
+      wrapper.appendChild(pre);
+
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'copy-btn';
       btn.textContent = 'copy';
       btn.setAttribute('aria-label', 'Copy code to clipboard');
-      pre.appendChild(btn);
+      wrapper.appendChild(btn);
 
       btn.addEventListener('click', async () => {
         const code = pre.querySelector('code');
@@ -37,11 +43,19 @@
 </script>
 
 <style is:global>
-  .prose pre {
+  /* The wrapper carries position: relative so the copy chip is pinned to
+     the visible corner; the <pre> inside it owns the horizontal scroll.
+     We move the pre's vertical margin onto the wrapper so spacing in
+     long-form prose is preserved. */
+  .code-block {
     position: relative;
+    margin: 1.25rem 0 1.5rem;
+  }
+  .code-block > pre {
+    margin: 0;
   }
 
-  .prose pre .copy-btn {
+  .code-block .copy-btn {
     position: absolute;
     top: 0.4rem;
     right: 0.4rem;
@@ -61,19 +75,19 @@
       border-color 120ms;
   }
 
-  .prose pre:hover .copy-btn,
-  .prose pre:focus-within .copy-btn {
+  .code-block:hover .copy-btn,
+  .code-block:focus-within .copy-btn {
     opacity: 1;
   }
 
-  .prose pre .copy-btn:hover,
-  .prose pre .copy-btn:focus-visible {
+  .code-block .copy-btn:hover,
+  .code-block .copy-btn:focus-visible {
     color: var(--amber);
     border-color: var(--amber);
   }
 
   @media (hover: none) {
-    .prose pre .copy-btn {
+    .code-block .copy-btn {
       opacity: 1;
     }
   }
