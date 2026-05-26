@@ -106,7 +106,7 @@ Enter the token from the previous step here to log in:
 
 ### Deploy an application
 
-After logging in with the token, select the plus <key>+</key> sign at the top of the web page. Then select "Create from form":
+After logging in with the token, select the plus <kbd>+</kbd> sign at the top of the web page. Then select "Create from form":
 
 We can deploy a container image easily just like with a `docker` command.
 
@@ -208,9 +208,9 @@ k9s
 
 If you work with multiple clusters, you can add the flag `--cluster <cluster_name>` or point to another kubeconfig file with the flag `--kubeconfig path/to/kubeconfig`
 
-This program uses the same navigation keys as the `vi` editor. Pressing <key>:</key> will open the command prompt. Enter "pods" and press enter to view all pods.
+This program uses the same navigation keys as the `vi` editor. Pressing <kbd>:</kbd> will open the command prompt. Enter "pods" and press enter to view all pods.
 
-Press <key>0</key> to show pods from all namespaces.
+Press <kbd>0</kbd> to show pods from all namespaces.
 
 ![k9s_pods](/images/k9s_pods.png)
 
@@ -218,7 +218,7 @@ You can use the arrow keys to select different pods that are running in kubernet
 
 From here if you look at the top of the screen, you can perform various operations on pods. You can view the logs of containers, attach to the shell of the containers, view the configuration, open a port forward connection to your local machine, delete the pod, and there are even more options.
 
-There is also a menu for seeing an overview of the cluster. Pressing <key>:</key> will open the command prompt. Enter "pulses" and press enter to view.
+There is also a menu for seeing an overview of the cluster. Pressing <kbd>:</kbd> will open the command prompt. Enter "pulses" and press enter to view.
 
 When opening the pulses menu, there may not be any information without installing the kubernetes metrics server. To install the metrics server:
 
@@ -238,7 +238,7 @@ The k9s program can be used to view any object in the cluster and that includes 
 
 ### Exit k9s
 
-You can exit k9s the same way as the `vi` editor. Pressing <key>:</key> will open the command prompt. Enter <key>q</key> to quit the program.
+You can exit k9s the same way as the `vi` editor. Pressing <kbd>:</kbd> will open the command prompt. Enter <kbd>q</kbd> to quit the program.
 
 [1]: /posts/kubernetes
 [2]: https://k9scli.io

@@ -28,8 +28,8 @@ GitLab CI is configured in `.gitlab-ci.yml` with two stages:
 
 ### Test Stage
 
-- **lint** — runs ESLint and Prettier checks
-- **build** — runs `npm run build`, saves `dist/` as an artifact
+- **lint** — `npm ci`, then `npm run lint` (ESLint), `npm run check` (astro check), `npm run format:check` (Prettier)
+- **build_and_verify** — `npm run build`, then `npm run a11y` (html-validate on rendered HTML), then a `lychee` offline link check against `dist/`. Saves `dist/` as a 1-week artifact. The lychee binary is fetched at runtime from GitHub releases to avoid the cost of a second `npm ci`.
 
 ### Build Stage
 

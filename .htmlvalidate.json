@@ -2,12 +2,8 @@
   "extends": ["html-validate:recommended"],
   "rules": {
     "no-inline-style": "off",
-    "void-style": "off",
-    "no-trailing-whitespace": "off",
-    "no-raw-characters": "off",
-    "long-title": "off",
 
-    "valid-id": "off",
-    "element-name": "off"
+    "valid-id": ["error", { "relaxed": true }],
+    "long-title": ["error", { "maxlength": 90 }]
   }
 }

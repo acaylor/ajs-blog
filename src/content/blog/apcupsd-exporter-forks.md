@@ -133,7 +133,7 @@ Expected startup log looks like:
 starting apcupsd exporter on ":9162" for server tcp://:3551
 ```
 
-Stop with <key>Ctrl</key> + <key>C</key> after testing.
+Stop with <kbd>Ctrl</kbd> + <kbd>C</kbd> after testing.
 
 ### 4. Install exporter as a systemd service
 

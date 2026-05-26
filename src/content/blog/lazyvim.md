@@ -103,20 +103,20 @@ opt.relativenumber = false
 
 This will change the line numbers on the left of the buffer.
 
-Pressing the "leader key", which is <key>SPACE</key> by default, will bring up a menu from `which-key.nvim` to help you remember keymaps. So for example to open the file explorer in a buffer to the left press: <key>SPACE</key> + <key>e</key>
+Pressing the "leader key", which is <kbd>SPACE</kbd> by default, will bring up a menu from `which-key.nvim` to help you remember keymaps. So for example to open the file explorer in a buffer to the left press: <kbd>SPACE</kbd> + <kbd>e</kbd>
 
 ![lazyvim_example](/images/lazyvim_example.png)
 
 #### Lazygit integration
 
-If you have `lazygit` installed and you are working in a repo, pressing <key>SPACE</key> + <key>g</key> + <key>g</key> will open `lazygit` from the root of your git repo all within neovim.
+If you have `lazygit` installed and you are working in a repo, pressing <kbd>SPACE</kbd> + <kbd>g</kbd> + <kbd>g</kbd> will open `lazygit` from the root of your git repo all within neovim.
 
 #### fzf integration
 
 Once you have fzf, fd, and ripgrep Lazyvim can make searching through your project easier. For example:
 
-- Pressing <key>SPACE</key> + <key>SPACE</key> will allow you to search through all files in your project and match incomplete(fuzzy) strings.
-- Pressing <key>SPACE</key> + <key>/</key> will allow you to recursively search for a fuzzy string in any file in your project.
+- Pressing <kbd>SPACE</kbd> + <kbd>SPACE</kbd> will allow you to search through all files in your project and match incomplete(fuzzy) strings.
+- Pressing <kbd>SPACE</kbd> + <kbd>/</kbd> will allow you to recursively search for a fuzzy string in any file in your project.
 
 [1]: https://github.com/LazyVim/LazyVim
 [2]: /posts/modern-cli-2026

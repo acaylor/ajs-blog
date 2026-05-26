@@ -124,4 +124,4 @@ _Disclaimer: I used an LLM to help create this post. Opinions expressed are like
 [2]: https://github.com/acaylor/hass-poller
 [3]: https://www.timescale.com/
 [4]: https://github.com/acaylor/hass-poller/blob/main/docs/ARCHITECTURE.md
-[5]: posts/prometheus-homelab
+[5]: /posts/prometheus-homelab

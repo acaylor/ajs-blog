@@ -27,7 +27,7 @@ This desktop environment includes some applications such as the excellent web br
 
 ### Installing software
 
-The GNOME desktop includes an application to install and update software in the repositories configured for the system. If during setup you enable third-party repositories, you can see what all is enabled with a terminal command. In GNOME desktop enter the keyboard shortcut <key>super</key> (super, also known as the CMD key on Macs and the key with a Windows logo on most keyboards) which will open an application launcher. From here you can search for "terminal" or select the terminal icon shortcut on the application launcher.
+The GNOME desktop includes an application to install and update software in the repositories configured for the system. If during setup you enable third-party repositories, you can see what all is enabled with a terminal command. In GNOME desktop enter the keyboard shortcut <kbd>super</kbd> (super, also known as the CMD key on Macs and the key with a Windows logo on most keyboards) which will open an application launcher. From here you can search for "terminal" or select the terminal icon shortcut on the application launcher.
 
 Once in the terminal application, check what software repositories are enabled on the system:
 

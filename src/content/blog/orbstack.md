@@ -153,7 +153,7 @@ Once you have a container running you can view it in the UI:
 
 ### Create a new container in the UI
 
-When you have Orbstack app open in the Containers view, you can select the **+** icon or <key>CMD</key> + <key>N</key> to add a new container:
+When you have Orbstack app open in the Containers view, you can select the **+** icon or <kbd>CMD</kbd> + <kbd>N</kbd> to add a new container:
 
 ![orbstack_new_container](/images/orbstack_new_container.png)
 
@@ -161,7 +161,7 @@ Select **Create and Start** to create a new container.
 
 ### Open the container in Finder
 
-When Orbstack is running, there is a network mounted directory on your mac that has containers, images, volumes and Linux machines if you create those. You can press <key>CMD</key> + <key>O</key> from the Containers menu to open the container in Finder.
+When Orbstack is running, there is a network mounted directory on your mac that has containers, images, volumes and Linux machines if you create those. You can press <kbd>CMD</kbd> + <kbd>O</kbd> from the Containers menu to open the container in Finder.
 
 These files are only available when Orbstack is running as it is presented to your mac as a NFS mount.
 

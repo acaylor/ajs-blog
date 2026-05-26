@@ -207,7 +207,7 @@ kubectl port-forward service/argocd-server -n argocd 4443:443
 
 That will make the argoCD UI available on your `localhost` port `4443`.
 
-Access the UI in the browser via `https://localhost:4443` and accept the warning about a self-signed certificate. The proxy will be active until you press <key>CTRL</key> + <key>C</key> to exit the process in your terminal.
+Access the UI in the browser via `https://localhost:4443` and accept the warning about a self-signed certificate. The proxy will be active until you press <kbd>CTRL</kbd> + <kbd>C</kbd> to exit the process in your terminal.
 
 ## Clean up
 

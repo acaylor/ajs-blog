@@ -91,7 +91,7 @@ If the build works, there should be a file in the current directory that you can
 2024/10/09 18:26:30 starting apcupsd exporter on ":9162" for server tcp://:3551
 ```
 
-This process will run until you exit with <key>Ctrl</key> + <key>C</key> or the system shuts down.
+This process will run until you exit with <kbd>Ctrl</kbd> + <kbd>C</kbd> or the system shuts down.
 
 ## Create system daemon service for apcupsd_exporter
 

@@ -1,7 +1,6 @@
 ---
 title: Monitor Your Linux System with the Elastic agent
 author: aj
-image: /images/elastic_logo.png
 date: 2025-11-18
 draft: true
 categories:

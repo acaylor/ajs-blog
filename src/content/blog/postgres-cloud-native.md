@@ -1,7 +1,7 @@
 ---
 title: Running CloudNativePG on Kubernetes with Argo CD
 author: aj
-image: /images/pg_logo.png
+image: /images/pg_logo.svg
 date: 2026-05-01
 description: 'Use CloudNativePG and Argo CD to run PostgreSQL on Kubernetes with operator-managed services, credentials, monitoring, and room for backups.'
 draft: true

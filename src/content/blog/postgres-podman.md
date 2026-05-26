@@ -1,7 +1,7 @@
 ---
 title: PostgreSQL with Podman
 author: aj
-image: /images/pg_logo.png
+image: /images/pg_logo.svg
 date: 2024-10-14
 
 categories:

@@ -12,6 +12,7 @@ tags:
   - homelab
   - promtail
   - logging
+  - alloy
   - grafana alloy
 ---
 

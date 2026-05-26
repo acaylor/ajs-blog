@@ -340,7 +340,7 @@ Enter the following command in a new terminal to use `kubectl` to forward the ar
 kubectl port-forward svc/argocd-server -n argocd 8443:443
 ```
 
-This will proxy the argo api server to your machine on port 8443. Access the UI in the browser via `https://localhost:8443` and accept the warning about a self-signed certificate. The proxy will be active until you press <key>CTRL</key> + <key>C</key> to exit the process in your terminal.
+This will proxy the argo api server to your machine on port 8443. Access the UI in the browser via `https://localhost:8443` and accept the warning about a self-signed certificate. The proxy will be active until you press <kbd>CTRL</kbd> + <kbd>C</kbd> to exit the process in your terminal.
 
 You should see the argo login prompt. You can retrieve the auto generated token to log in:
 

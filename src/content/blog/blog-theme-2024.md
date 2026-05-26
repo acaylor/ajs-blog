@@ -72,7 +72,7 @@ Replace `$giturl` with the git url of the theme you want to use. The [theme I cr
 
 Replace `$themename` with the name of the theme you have chosen. Usually this would be the name of the git repo for the theme.
 
-In powershell the commands should be the same but always press <key>TAB</key> when entering the name of a file or directory for the shell to auto-complete you command.
+In powershell the commands should be the same but always press <kbd>TAB</kbd> when entering the name of a file or directory for the shell to auto-complete you command.
 
 ### Configure the site
 
