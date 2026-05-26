@@ -94,7 +94,7 @@ Once those are installed, ComfyUI can be started by executing the `main.py` file
 python main.py
 ```
 
-That will start the program in your terminal. If you have `screen` or `tmux` those can be used to run ComfyUI and you can detach with <key>CTRL</key> + <key>b</key> + <key>d</key>
+That will start the program in your terminal. If you have `screen` or `tmux` those can be used to run ComfyUI and you can detach with <kbd>CTRL</kbd> + <kbd>b</kbd> + <kbd>d</kbd>
 
 To have the webserver listen on all interfaces, run the main file with an extra argument:
 
@@ -132,7 +132,7 @@ These 3 files go into the `ComfyUI/models/clip` directory.
 
 Once these files are added to the ComfyUI models directory, you can use them in a workflow. We can use the example workflow included with the SD3.5L model but some of the clip filenames may need to be adjusted before we can execute the workflow. This is the example workflow file and you will need to be authenticated to download: `https://huggingface.co/stabilityai/stable-diffusion-3.5-large/blob/main/SD3.5L_example_workflow.json`
 
-Open the workflows menu with the <key>w</key> key and select the button at the top to load a workflow from the local filesystem. Navigate to where you saved the example workflow and open it.
+Open the workflows menu with the <kbd>w</kbd> key and select the button at the top to load a workflow from the local filesystem. Navigate to where you saved the example workflow and open it.
 
 You can attempt to test things at this point by loading the workflow and then pressing the "queue" button at the bottom of the page. If the clip nodes turn red, try pressing the arrows to select the 3 filenames that we downloaded. The example workflow may not have the same t5xxl clip selected by default that you are using for example.
 

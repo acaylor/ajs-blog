@@ -258,7 +258,7 @@ time                value
 2025-12-01T21:39:49.627060584Z 75160584
 ```
 
-Exit with <key>CTRL</key>+<key>D</key>
+Exit with <kbd>CTRL</kbd>+<kbd>D</kbd>
 
 ### 3) Quick Grafana panel (optional)
 

@@ -44,7 +44,7 @@ git init
 git submodule add https://github.com/zzossig/hugo-theme-zzo.git themes/zzo
 ```
 
-In powershell the commands should be the same but always press <key>TAB</key> when entering the name of a file or directory for the shell to auto-complete you command.
+In powershell the commands should be the same but always press <kbd>TAB</kbd> when entering the name of a file or directory for the shell to auto-complete you command.
 
 ### 4. Configure the site
 

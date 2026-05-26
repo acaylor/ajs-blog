@@ -114,7 +114,7 @@ Keyboard shortcuts:
 - T -> Text
 - P -> Pen
 
-Hold <key>Shift</key> for straight lines & proportional shapes (eg. making a square/circle that is symmetrical).
+Hold <kbd>Shift</kbd> for straight lines & proportional shapes (eg. making a square/circle that is symmetrical).
 
 ### Connectors
 

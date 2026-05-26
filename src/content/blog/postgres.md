@@ -82,7 +82,7 @@ Once logged into the server, create a database and table using SQL statements.
 
 This command creates a new database called "development". It is best practice to create a new database instead of using the default database "postgres". Then you can log out of the default database "postgres"
 
-Enter the command `\q` and then <key>ENTER</key> to log out of the database.
+Enter the command `\q` and then <kbd>ENTER</kbd> to log out of the database.
 
 ### Connect to new database
 

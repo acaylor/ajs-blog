@@ -123,11 +123,11 @@ The vim editor can be opened with the command `vim` in the terminal. You can spe
 
 When you first open vim it will be in `Normal` mode. In this mode there are a lot of keyboard shortcuts to navigate the file, search for text, and manipulate text. This is NOT the mode where typing will enter text into the file.
 
-In order to start typing into the open file you want to enter `Insert` mode by pressing the <key>i</key>.
+In order to start typing into the open file you want to enter `Insert` mode by pressing the <kbd>i</kbd>.
 
-Another mode is `Visual` mode by pressing <key>v</key> from `Normal` mode where you can select blocks of text to edit or delete.
+Another mode is `Visual` mode by pressing <kbd>v</kbd> from `Normal` mode where you can select blocks of text to edit or delete.
 
-In order to exit `vim`, press <key>Escape</key> and then `:` to enter a command. The command to quit is <key>q</key> and if you have a file open and want to save the changes, enter `:wq` to write changes and quit.
+In order to exit `vim`, press <kbd>Escape</kbd> and then `:` to enter a command. The command to quit is <kbd>q</kbd> and if you have a file open and want to save the changes, enter `:wq` to write changes and quit.
 
 #### Commands
 

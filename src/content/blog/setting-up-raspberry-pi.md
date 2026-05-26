@@ -118,7 +118,7 @@ sudo dd if=ubuntu-20.04.3-preinstalled-server-arm64+raspi.img of=/dev/rdisk2 bs=
 
 Replace `2` with the disk number from `diskutil list`
 
-You can check on the progress with <key>CTRL</key> + <key>T</key>
+You can check on the progress with <kbd>CTRL</kbd> + <kbd>T</kbd>
 
 Once this command completes, eject the SD card
 
@@ -244,7 +244,7 @@ If you see:
 Are you sure you want to continue connecting (yes/no/[fingerprint])?
 ```
 
-Type `yes` into the terminal and press <key>ENTER</key>
+Type `yes` into the terminal and press <kbd>ENTER</kbd>
 
 When prompted, enter 'ubuntu' as the password without quotes. (The cursor will not print the letters that you type).
 
@@ -292,7 +292,7 @@ sudo usermod -aG ssl-cert xrdp
 sudo reboot now
 ```
 
-For example from a Windows system, press <key>WIN</key> key near <key>CTRL</key> and <key>ALT</key> and type "Remote Desktop Connection" without the quotes and open the corresponding app.
+For example from a Windows system, press <kbd>WIN</kbd> key near <kbd>CTRL</kbd> and <kbd>ALT</kbd> and type "Remote Desktop Connection" without the quotes and open the corresponding app.
 
 In the _Computer_ text box, enter the IP address of your Pi from earlier steps.
 
@@ -353,7 +353,7 @@ open vnc://localhost:5001
 
 OR
 
-<key>CMD</key> + <key>k</key> , and enter `vnc://localhost:5001`
+<kbd>CMD</kbd> + <kbd>k</kbd> , and enter `vnc://localhost:5001`
 
 to use built in vnc client.
 

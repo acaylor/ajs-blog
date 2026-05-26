@@ -7,7 +7,6 @@
     "no-raw-characters": "off",
     "long-title": "off",
 
-    "valid-id": "off",
-    "element-name": "off"
+    "valid-id": ["error", { "relaxed": true }]
   }
 }
