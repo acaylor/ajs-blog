@@ -1,19 +1,8 @@
 # Configuration for the `linkcheck` CI job (lychee).
-# Baselined against current `main` (2026-05-25). Entries listed below are
-# pre-existing broken links in the published content that should be fixed
-# in a content pass — not regressions from any refactor. Remove from this
-# list as each one is fixed.
+# The previous baseline of pre-existing broken links has been cleared; all
+# entries were addressed in a content pass on 2026-05-26. Add new excludes
+# only as a last resort — prefer fixing the underlying link.
 
 no_progress = true
 
-# Regex patterns matched against the resolved URL (lychee turns
-# root-relative links into file:// URLs against --root-dir).
-exclude = [
-  "/images/elastic_logo\\.png",
-  "/images/pg_logo\\.png",
-  "/images/strong-app-schema\\.png",
-  "/posts/hass-polling-to-db/posts/prometheus-homelab",
-  "/posts/packer/?$",
-  "/posts/zsh-2026/?$",
-  "/tags/alloy/?$",
-]
+exclude = []

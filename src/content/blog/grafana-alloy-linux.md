@@ -7,6 +7,7 @@ categories:
 tags:
   - metrics
   - logging
+  - alloy
   - grafana alloy
   - grafana
   - prometheus

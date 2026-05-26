@@ -1351,7 +1351,7 @@ I believe that all of the software I looked at today is open-source and I know t
 
 > _Disclaimer: I used an LLM to help create this post. Opinions expressed are likely from me and not the LLM._
 
-[1]: /posts/zsh-2026
+[1]: /posts/zshell-2026
 [2]: https://www.zsh.org/
 [3]: https://www.gnu.org/software/coreutils/
 [4]: https://github.com/BurntSushi/ripgrep

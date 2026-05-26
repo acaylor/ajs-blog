@@ -1,7 +1,6 @@
 ---
 title: Elasticsearch
 author: aj
-image: /images/elastic_logo.png
 date: 2025-04-03
 
 categories:

@@ -11,6 +11,7 @@ categories:
 tags:
   - homelab
   - logging
+  - alloy
   - grafana alloy
 ---
 

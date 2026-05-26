@@ -10,6 +10,7 @@ categories:
   - Logging
 tags:
   - kubernetes
+  - alloy
   - grafana alloy
   - loki
   - argocd
