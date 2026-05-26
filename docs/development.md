@@ -26,12 +26,28 @@ npm run build    # production build to dist/
 npm run preview  # preview the build locally
 ```
 
-## Linting and Formatting
+## Linting, Type-checking, Formatting
 
 ```bash
 npm run lint          # eslint
+npm run check         # astro check (TypeScript + Astro diagnostics)
 npm run format:check  # prettier check
 npm run format        # prettier fix
+```
+
+## HTML / Accessibility / Link Checks
+
+These run against the built `dist/` output and mirror what CI runs:
+
+```bash
+npm run build         # produce dist/
+npm run a11y          # html-validate against dist/**/*.html
+```
+
+Internal link integrity uses [lychee](https://github.com/lycheeverse/lychee). In CI it's fetched as a static binary; locally, install it however you prefer (`brew install lychee`) and run:
+
+```bash
+lychee --offline --root-dir "$PWD/dist" --config lychee.toml 'dist/**/*.html'
 ```
 
 ## Content
@@ -58,15 +74,27 @@ Optional frontmatter fields: `author`, `image` (featured image path), `updated` 
 ```
 src/
   content/blog/        # markdown posts
-  components/          # Astro components (PostCard, Pagination, etc.)
-  layouts/             # BaseLayout, PostLayout
+  components/
+    Banner.astro            # boot-style "cat /path" + [ OK ] status line
+    Module.astro            # named dashed-rule section divider
+    Prompt.astro            # trailing aj@blog:~$ block with blinking cursor
+    PostCard.astro          # .unit block on the home page
+    PostEntry.astro         # compact journalctl-style row for list pages
+    Pagination.astro        # numeric bordered-pill pager
+    ShareButtons.astro      # bordered pills (x / linkedin / hn / copy)
+    TableOfContents.astro   # tree-style heading listing
+    ThemeToggle.astro       # dark/light toggle with pre-paint script
+    CopyCode.astro          # wraps <pre> + attaches copy chip
+  layouts/             # BaseLayout (term-head/term-foot chrome), PostLayout
   pages/               # routes (posts, tags, categories, about, 404, RSS)
   styles/
-    global.css         # CSS custom properties, light/dark theme, reset
-    patterns.css       # shared UI patterns (post-grid, chips, cards, page headers)
+    global.css         # dmesg color tokens, DM Mono import, reset, base elements, print
+    patterns.css       # boot-log primitives (.banner, .module, .unit, .entry, .post, etc.)
   utils/               # reading time helper
 public/
   images/              # post images
   robots.txt
 docs/                  # project documentation
 ```
+
+The site uses [DM Mono](https://fontsource.org/fonts/dm-mono) (via `@fontsource/dm-mono`) for the whole UI and a dmesg / boot-log visual direction — see `src/styles/global.css` for the token palette and `src/styles/patterns.css` for the primitive set.
