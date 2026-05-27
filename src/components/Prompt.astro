@@ -1,5 +1,70 @@
 ---
-// Trailing shell prompt with a blinking cursor — bottom of every main flow.
+// Trailing shell prompt that cycles through a few fake commands —
+// types one out character by character, holds, deletes, then types
+// the next. Disabled under prefers-reduced-motion (cursor still blinks).
+
+const messages = [
+  'echo "Comments were removed, email instead"',
+  'journalctl -u aj-blog.service',
+  'cat src/content/blog/index.html',
+  'echo "Check the about page for contact info"',
+  'man dmesg',
+  'claude -p "Write me a new post and make it good"',
+  'git commit -m "Add new post"',
+  'systemctl status aj-blog.service',
+  'ip addr show',
+  'echo "I ran out of coffee again"',
+  'shutdown -r now',
+];
 ---
 
-<div class="prompt"><span class="cursor" aria-hidden="true"></span></div>
+<div class="prompt">
+  <span class="line">
+    <span class="cmd" aria-hidden="true"></span><span class="cursor" aria-hidden="true"></span>
+  </span>
+</div>
+
+<script is:inline define:vars={{ messages }}>
+  function initPrompt() {
+    document.querySelectorAll('.prompt:not([data-prompt-attached])').forEach((root) => {
+      root.setAttribute('data-prompt-attached', '');
+      const cmd = root.querySelector('.cmd');
+      if (!cmd) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      let mi = 0;
+      let ci = 0;
+      let typing = true;
+
+      function tick() {
+        const msg = messages[mi];
+        if (typing) {
+          ci += 1;
+          cmd.textContent = msg.slice(0, ci);
+          if (ci >= msg.length) {
+            typing = false;
+            setTimeout(tick, 2400);
+            return;
+          }
+          // 55–115 ms per char gives a believable typing cadence
+          setTimeout(tick, 55 + Math.random() * 60);
+        } else {
+          ci -= 1;
+          cmd.textContent = msg.slice(0, ci);
+          if (ci <= 0) {
+            typing = true;
+            mi = (mi + 1) % messages.length;
+            setTimeout(tick, 500);
+            return;
+          }
+          // delete a little faster than typing
+          setTimeout(tick, 30 + Math.random() * 25);
+        }
+      }
+      tick();
+    });
+  }
+
+  initPrompt();
+  document.addEventListener('astro:after-swap', initPrompt);
+</script>

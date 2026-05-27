@@ -6,7 +6,7 @@
 /* ===== Main column ===== */
 main {
   flex: 1;
-  max-width: 76ch;
+  max-width: 96ch;
   width: 100%;
   margin: 0 auto;
   padding: 1.5rem 1.25rem 3rem;
@@ -24,7 +24,7 @@ main {
   color: var(--fg-faint);
 }
 .term-head .inner {
-  max-width: 76ch;
+  max-width: 96ch;
   margin: 0 auto;
   padding: 0.5rem 1.25rem;
   display: flex;
@@ -422,7 +422,6 @@ table.proc a:hover {
 /* ===== top-style frequency table (tags / categories index) ===== */
 table.stat {
   width: 100%;
-  max-width: 68ch;
   border-collapse: collapse;
   font-size: 13px;
 }
@@ -620,10 +619,10 @@ table.stat .pct {
    =========================================================== */
 
 main.post {
-  max-width: 100ch;
+  max-width: 120ch;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 22ch;
-  gap: 2.5rem;
+  grid-template-columns: minmax(0, 1fr) 23ch;
+  gap: 2.25rem;
 }
 main.post > article {
   min-width: 0;
@@ -689,7 +688,7 @@ h1.post-title::before {
 
 /* ===== Prose (rendered markdown body) ===== */
 .prose {
-  font-size: 14.5px;
+  font-size: 15.5px;
   line-height: 1.75;
   color: var(--fg);
   min-width: 0;
@@ -981,6 +980,12 @@ aside.toc .tree {
   content: 'aj@blog:~$ ';
   color: var(--ok);
 }
+.prompt .line {
+  white-space: pre;
+}
+.prompt .cmd {
+  color: var(--fg-soft);
+}
 .prompt .cursor {
   display: inline-block;
   width: 0.55ch;
@@ -1008,7 +1013,7 @@ aside.toc .tree {
   background: var(--bg-deep);
 }
 .term-foot .inner {
-  max-width: 76ch;
+  max-width: 96ch;
   margin: 0 auto;
   padding: 1.25rem;
   display: flex;

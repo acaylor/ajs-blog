@@ -61,7 +61,7 @@ body {
 
 body {
   font-family: var(--font-mono);
-  font-size: 13.5px;
+  font-size: 14.5px;
   line-height: 1.7;
   min-height: 100vh;
   font-feature-settings: 'liga' 0;
