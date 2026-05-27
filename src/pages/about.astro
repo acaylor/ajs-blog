@@ -15,7 +15,7 @@ const projects: Project[] = [
   {
     title: "AJ's Blog",
     description:
-      'This site — a static blog built with Astro, served by nginx, deployed via GitLab CI.',
+      'This site - a static blog built with Astro, served by AWS Amplify, deployed via GitLab CI.',
     tags: ['astro', 'typescript', 'gitlab-ci'],
     url: 'https://gitlab.com/acaylor/ajs-blog',
   },
@@ -25,6 +25,12 @@ const projects: Project[] = [
       'Self-hosted services on Kubernetes across Proxmox and Raspberry Pis with automated deployments and monitoring.',
     tags: ['kubernetes', 'proxmox', 'argocd'],
     url: '/posts/homelab-2025-plans/',
+  },
+  {
+    title: 'Home Assistant Poller',
+    description: 'A Go service that polls Home Assistant and stores sensor data in a database.',
+    tags: ['go', 'home-assistant', 'timescaledb', 'grafana'],
+    url: 'https://github.com/acaylor/hass-poller',
   },
 ];
 
@@ -77,8 +83,9 @@ const hardware: HardwareRow[] = [
 
   <Module name="contact" ts="0.041" id="contact" />
   <p class="log">
-    <span class="tag-warn">[WARN]</span> comments are disabled — previous platform added ads and there
-    was no engagement. write directly if you have something to say.
+    <span class="tag-warn">[WARN]</span> comments are disabled. The previous platform added ads and there
+    was no engagement. write directly if you have something to say. I appreciate folks who have reached
+    out over the years.
   </p>
   <dl class="channels">
     <div class="channel">
@@ -106,20 +113,19 @@ const hardware: HardwareRow[] = [
   <Module name="history" ts="0.082" />
   <p class="log">
     The lab began with the first-model Raspberry Pi while I was in school. I wrote a version of
-    Snake in Java, compiled it to a jar, dropped it on the Pi behind an Apache web server, and
-    tunneled in so I could pull it down from anywhere. That hooked me on networking and
-    self-hosting.
+    Snake in Java, compiled it to a jar, dropped it on the Pi behind an Apache web server, and used
+    a proxy so I could pull it down from anywhere. That hooked me on networking and self-hosting.
   </p>
   <p class="log">
-    I set up an Ubuntu NAS with SMB and moved everything off the Pi. School was Java until a final
-    web-dev class that ran on ASP.NET. My capstone project was a meal-prep app with a recipe
-    database — also the first time I used <code>git</code> seriously to collaborate.
+    I set up an Ubuntu NAS with SMB and moved everything off the Pi. My coursework was Java until a
+    final web-dev class that ran on ASP.NET. My capstone project was a meal-prep app with a recipe
+    database which was the first time I used <code>git</code> to collaborate.
   </p>
   <p class="log">
-    First job was Windows AD plus a Linux HPC fleet. I ran a Dell PowerEdge R610 at home with ESXi
+    First job was Windows AD plus a Linux HPC fleet. I ran a Dell PowerEdge R510 at home with ESXi
     and Windows VMs for AD lab work. Every job after has been Linux-shaped. Around 2018 I moved the
     lab to Proxmox and TrueNAS. Later jobs centered on Kubernetes, so the lab followed with Ubuntu
-    VMs running k8s clusters.
+    VMs running k8s clusters. Now I am running a mix of Raspberry Pis and Proxmox VMs with k3s.
   </p>
 
   <Module name="hardware" ts="0.142" />
@@ -148,7 +154,7 @@ const hardware: HardwareRow[] = [
   </table>
   <p class="log">
     <span class="tag-note">[NOTE]</span> power draw offset by solar &middot; wireguard for remote &middot;
-    password manager for creds
+    password manager for secrets
   </p>
 
   <Module name="projects" ts="0.201" />
