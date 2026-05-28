@@ -12,7 +12,7 @@ tags:
   - llm
   - codex
   - claude code
-  - go
+  - golang
   - home assistant
   - timescaledb
   - grafana

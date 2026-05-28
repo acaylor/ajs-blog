@@ -9,7 +9,7 @@ categories:
 tags:
   - blog
   - astro
-  - javascript
+  - typescript
   - Hugo
   - git
   - markdown
