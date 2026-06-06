@@ -19,6 +19,11 @@
     "@fontsource/dm-mono": "^5.2.7",
     "astro": "^6.1.5"
   },
+  "overrides": {
+    "yaml-language-server": {
+      "yaml": "2.9.0"
+    }
+  },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
     "@typescript-eslint/eslint-plugin": "^8.58.1",
