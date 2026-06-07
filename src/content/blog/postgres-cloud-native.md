@@ -2,9 +2,8 @@
 title: Running CloudNativePG on Kubernetes with Argo CD
 author: aj
 image: /images/pg_logo.svg
-date: 2026-05-01
+date: 2026-06-06
 description: 'Use CloudNativePG and Argo CD to run PostgreSQL on Kubernetes with operator-managed services, credentials, monitoring, and room for backups.'
-draft: true
 categories:
   - Database Management
   - Homelab
@@ -20,13 +19,13 @@ tags:
   - homelab
 ---
 
-[PostgreSQL][1] is the database I keep reaching for in the homelab, and for years the answer to "how do I run it on Kubernetes" was either "use a hosted service" or "write your own StatefulSet and hope you enjoy day-2 operations." [CloudNativePG][2] closes that gap. It is a Kubernetes operator that owns the lifecycle of a PostgreSQL cluster end to end, so I can declare a `Cluster` resource and let the controller handle failover, replication, backups, scaling, minor version upgrades, and connection routing.
+[PostgreSQL][1] is the database I like using, and for years the answer to "how do I run it on Kubernetes" was either "use a hosted service" or "write your own StatefulSet and hope you enjoy when it blows up." [CloudNativePG][2] closes that gap. It is a Kubernetes operator that owns the lifecycle of a PostgreSQL cluster end to end, so I can declare a `Cluster` resource and let the controller handle failover, replication, backups, scaling, minor version upgrades, and connection routing. If you are not familiar with Kubernetes, check out [a previous post][11] for an introduction.
 
-I recently added the operator to an [Argo CD][3] app-of-apps repo and brought up my first managed cluster. This post walks through both pieces and shows how a regular Deployment can consume the database the operator provisions.
+I recently added the operator to an [Argo CD][3] app-of-apps repo and brought up my first managed Database in Kubernetes. This post walks through both pieces and shows how a regular Deployment can consume the database the operator provisions.
 
 ## Why a PostgreSQL operator
 
-Plain StatefulSets are fine for some workloads, but PostgreSQL is the opposite of stateless and the day-2 work is where things get interesting. CloudNativePG handles the parts I would otherwise build by hand:
+Plain StatefulSets are fine for some workloads, but PostgreSQL is the opposite of stateless and the day-2 work is where things get out of hand quickly. CloudNativePG handles the parts you would otherwise build by hand:
 
 - **Primary election and failover.** It promotes a healthy replica when the primary goes away and updates the read-write Service to point at the new one.
 - **Streaming replication.** Replicas are configured automatically. Adding an instance is a single field change.
@@ -40,7 +39,7 @@ Compared to a hosted database, the tradeoff is the usual homelab one: I own back
 
 ## Argo CD layout
 
-I deploy the operator and each database cluster as separate Argo CD apps. The operator is shared infrastructure; each cluster has its own lifecycle, credentials, and retention policy. Splitting them keeps deletes safer and reviews small.
+I deploy the operator and each database cluster as separate Argo CD apps. The operator is shared infrastructure; each cluster has its own lifecycle, credentials, and retention policy.
 
 ```text
 argo-apps/apps/cloudnative-pg/
@@ -112,6 +111,8 @@ resources:
 ```
 
 After Argo CD syncs, the operator pod, CRDs, and webhooks are in place. From here, every database is just a `Cluster` custom resource.
+
+![cnpg_argo_app](/images/cnpg_argo_app.png)
 
 ## Creating a cluster
 
@@ -237,30 +238,21 @@ spec:
     - port: metrics
 ```
 
-The metrics port on every CloudNativePG instance pod is named `metrics` and listens on TCP 9187. Pods carry the `cnpg.io/cluster: <name>` label, so the selector is straightforward. Once scraping works, the Grafana dashboard from the operator chart has data to show.
+The metrics port on every CloudNativePG instance pod is named `metrics` and listens on port `9187`. Pods carry the `cnpg.io/cluster: <name>` label, so the selector is straightforward. Once scraping works, the Grafana dashboard from the CNPG operator chart has data to show.
 
-## Before production
+![cnpg_grafana_dashboard](/images/cnpg_grafana_dashboard.png)
+
+## Closing Thoughts
+
+### Before production
 
 This setup is enough for a homelab service, but I would not stop here for production. Before running something important, configure at least three instances, set an explicit storage class, define backup and WAL archiving to object storage, test a restore, add resource limits that match your workload, and decide whether applications should connect through CloudNativePG's PgBouncer `Pooler`.
 
 The backup and restore test is the most important part. A PostgreSQL operator can automate a lot, but it cannot make an untested backup strategy real.
 
-## Validation
+### Validation
 
-Before sync, the usual dry runs:
-
-```bash
-kubectl apply --dry-run=client -f argo-apps/apps/cloudnative-pg/app.yaml
-helm template cnpg cloudnative-pg/cloudnative-pg \
-  --version 0.28.0 \
-  --namespace cnpg-system \
-  --values argo-apps/apps/cloudnative-pg/values.yaml \
-  > /tmp/cnpg-rendered.yaml
-
-kubectl apply --dry-run=server -f argo-apps/apps/app-db/templates/
-```
-
-After sync:
+After you create a new cluster object, ensure the pods are healthy:
 
 ```bash
 kubectl get cluster -n apps app-db
@@ -270,6 +262,9 @@ kubectl -n apps get secret app-db-app
 ```
 
 A healthy cluster reports `Cluster in healthy state` with the primary instance name in the `PRIMARY` column. If the PodMonitor is wired correctly, the `cnpg-controller-manager` and `app-db` targets show up in the Prometheus UI.
+
+
+---
 
 ## Sources
 
@@ -294,3 +289,4 @@ A healthy cluster reports `Cluster in healthy state` with the primary instance n
 [8]: https://cloudnative-pg.io/docs/1.29/monitoring/
 [9]: https://cloudnative-pg.io/docs/1.29/backup/
 [10]: https://cloudnative-pg.io/docs/1.29/connection_pooling/
+[11]: /posts/kubernetes
