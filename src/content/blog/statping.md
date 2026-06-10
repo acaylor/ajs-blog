@@ -5,7 +5,7 @@ type: post
 date: 2021-10-30
 
 categories:
-  - cloud
+  - Cloud
 tags:
   - statping
   - cloud

@@ -7,7 +7,7 @@ categories:
 tags:
   - containers
   - orbstack
-  - macos
+  - macOS
   - software
   - javascript
   - developer tools

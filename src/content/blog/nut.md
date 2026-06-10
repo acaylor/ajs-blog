@@ -4,7 +4,7 @@ author: aj
 date: 2022-05-29
 updated: 2024-02-03
 categories:
-  - Rasperry Pi
+  - Raspberry Pi
   - Homelab
 tags:
   - nut

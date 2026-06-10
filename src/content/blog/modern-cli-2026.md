@@ -9,7 +9,7 @@ tags:
   - coreutils
   - terminal
   - software
-  - development tools
+  - developer tools
 ---
 
 If you spend a lot of time in a terminal, GNU coreutils are probably part of your muscle memory. Commands like `ls`, `cp`, `mv`, `rm`, and `cat` have been around for a very long time. They are found on small embedded computers and the BSD version lives on all macOS systems. The reason they have been around so long and so widely used is for their reliability.

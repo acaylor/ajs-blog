@@ -10,7 +10,6 @@ categories:
 tags:
   - ai
   - postgres
-  - postgresql
   - open-webui
 ---
 

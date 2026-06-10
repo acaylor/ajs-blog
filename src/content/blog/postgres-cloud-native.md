@@ -10,7 +10,6 @@ categories:
   - Kubernetes
 tags:
   - postgres
-  - postgresql
   - database
   - cloudnativepg
   - kubernetes
@@ -262,7 +261,6 @@ kubectl -n apps get secret app-db-app
 ```
 
 A healthy cluster reports `Cluster in healthy state` with the primary instance name in the `PRIMARY` column. If the PodMonitor is wired correctly, the `cnpg-controller-manager` and `app-db` targets show up in the Prometheus UI.
-
 
 ---
 

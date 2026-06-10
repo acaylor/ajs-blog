@@ -8,7 +8,6 @@ categories:
   - Database Management
 tags:
   - postgres
-  - postgresql
   - database
   - podman
 ---

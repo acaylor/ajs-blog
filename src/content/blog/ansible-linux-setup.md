@@ -6,7 +6,7 @@ date: 2022-02-18
 draft: true
 categories:
   - ansible
-  - Rasperry Pi
+  - Raspberry Pi
   - Linux
 tags:
   - ansible

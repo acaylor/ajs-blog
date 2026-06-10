@@ -10,7 +10,7 @@ categories:
 tags:
   - containers
   - kubernetes
-  - argoCD
+  - argocd
   - helm
   - gitops
 ---

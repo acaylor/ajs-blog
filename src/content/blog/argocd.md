@@ -10,7 +10,7 @@ categories:
 tags:
   - containers
   - kubernetes
-  - argoCD
+  - argocd
 ---
 
 _updated: 2024-02-01_

@@ -6,7 +6,7 @@ date: 2024-12-22
 categories:
   - macOS
 tags:
-  - macos
+  - macOS
   - software
   - macOS setup
 ---

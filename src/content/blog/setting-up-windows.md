@@ -4,7 +4,7 @@ author: aj
 date: 2021-07-11
 image: /images/windows10_desktop.png
 categories:
-  - Windows 10
+  - Windows
 tags:
   - chocolatey
   - powershell
@@ -12,7 +12,6 @@ tags:
   - rufus
   - visual studio code
   - windows
-  - windows 10
   - windows terminal
 ---
 

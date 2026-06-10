@@ -8,7 +8,7 @@ categories:
   - Homelab
   - Containers
   - Observability
-  - Rasperry Pi
+  - Raspberry Pi
 tags:
   - containers
   - cadvisor

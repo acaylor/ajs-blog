@@ -7,7 +7,7 @@ categories:
   - Software
 tags:
   - linux
-  - macos
+  - macOS
   - software
 ---
 
