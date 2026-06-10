@@ -48,6 +48,7 @@ const totalPosts = posts.length;
         description={post.data.description}
         tags={post.data.tags}
         categories={post.data.categories}
+        image={post.data.image}
         readingTime={getReadingTime(post.body || '')}
         href={`/posts/${post.id}/`}
         draft={post.data.draft}

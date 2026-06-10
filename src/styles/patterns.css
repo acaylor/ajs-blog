@@ -88,6 +88,17 @@ main {
   color: var(--amber);
   border-color: var(--amber);
 }
+.term-head .progress {
+  display: inline-flex;
+  gap: 0.5ch;
+  font-size: 11px;
+  color: var(--fg-faint);
+  font-variant-numeric: tabular-nums;
+  white-space: pre;
+}
+.term-head .progress .cells {
+  color: var(--amber);
+}
 
 /* ===== Status tags ([ OK ] / [INFO] / [WARN] / [NOTE]) ===== */
 .tag-ok {
@@ -366,6 +377,47 @@ table.proc a:hover {
   flex-wrap: wrap;
   align-items: center;
   gap: 0;
+}
+.unit.has-thumb {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 1rem;
+  align-items: start;
+}
+.unit .thumb {
+  display: block;
+  background: none;
+}
+.unit .thumb:hover {
+  background: none;
+}
+.unit .thumb img {
+  display: block;
+  width: 5.5rem;
+  height: 5.5rem;
+  object-fit: contain;
+  padding: 0.45rem;
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  filter: grayscale(0.7) contrast(1.05) sepia(0.35);
+  transition:
+    filter 150ms,
+    border-color 150ms;
+}
+.unit:hover .thumb img {
+  filter: none;
+  border-color: var(--amber);
+}
+[data-theme='dark'] .unit .thumb img {
+  filter: grayscale(1) contrast(1.05) brightness(0.85) sepia(0.5) hue-rotate(-10deg);
+}
+[data-theme='dark'] .unit:hover .thumb img {
+  filter: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .unit .thumb img {
+    transition: none;
+  }
 }
 .unit .tags .label {
   color: var(--fg-faint);
@@ -976,15 +1028,27 @@ aside.toc .tree {
   color: var(--fg-faint);
   font-size: 12.5px;
 }
-.prompt::before {
-  content: 'aj@blog:~$ ';
-  color: var(--ok);
-}
 .prompt .line {
-  white-space: pre;
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+/* display:block above would defeat the hidden attribute's UA rule */
+.prompt [hidden] {
+  display: none;
+}
+.prompt .ps1 {
+  color: var(--ok);
+  user-select: none;
 }
 .prompt .cmd {
   color: var(--fg-soft);
+}
+.prompt .out {
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--fg-faint);
 }
 .prompt .cursor {
   display: inline-block;
@@ -1069,6 +1133,10 @@ aside.toc .tree {
   .term-foot .inner {
     padding: 0.5rem 0.9rem;
   }
+  /* keep the header to one row on phones — percentage only */
+  .term-head .progress .cells {
+    display: none;
+  }
 
   h1.title {
     font-size: 1.25rem;
@@ -1105,6 +1173,11 @@ aside.toc .tree {
 
   .unit .name {
     font-size: 13px;
+  }
+  .unit .thumb img {
+    width: 4rem;
+    height: 4rem;
+    padding: 0.3rem;
   }
 
   .entry {

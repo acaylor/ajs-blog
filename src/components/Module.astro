@@ -1,14 +1,18 @@
 ---
+import { nextTs } from '../utils/log-clock';
+
 interface Props {
   name: string;
+  /** Override the auto-generated monotonic timestamp. */
   ts?: string;
   id?: string;
 }
 
-const { name, ts = '0.012', id } = Astro.props;
+const { name, ts, id } = Astro.props;
+const stamp = ts ?? nextTs(Astro.url.pathname);
 ---
 
 <div class="module" id={id}>
-  <span class="ts" aria-hidden="true">{ts}</span>
+  <span class="ts" aria-hidden="true">{stamp}</span>
   <span class="name">{name}</span>
 </div>
