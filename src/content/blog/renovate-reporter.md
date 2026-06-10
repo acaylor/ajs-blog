@@ -1,7 +1,7 @@
 ---
 title: Building Renovate Reporter
 author: aj
-date: 2026-05-27
+date: 2026-06-10
 description: 'A small Go web app for turning Renovate debug logs into a local dependency report.'
 
 categories:
@@ -177,6 +177,8 @@ I like the container option because the runtime image is just the compiled stati
 
 ## Release workflow
 
+Since this project is hosted in GitHub, I set up GitHub Actions workflows so that new versions of the app are packaged and ready to deploy as a container as well as executable binaries for any system.
+
 The release process is tied to the changelog. The project keeps a `CHANGELOG.md` using the Keep a Changelog format. When I push a tag like `v0.1.0`, the release workflow checks that the changelog has a matching `## [0.1.0]` section.
 
 If the section is missing or empty, the release fails. If it is present, GitHub Actions:
@@ -208,6 +210,8 @@ That keeps repeated log messages from turning into duplicate table rows.
 This is not a replacement for Renovate dashboards, dependency management platforms, or persistent reporting.
 
 It is a local inspection tool. It is useful when I have a directory full of Renovate logs and want to quickly understand what Renovate saw. There is no database, no authentication, no deployment story, and no background ingestion service. The log files are the source of truth.
+
+Most of the time I am just merging Renovate Pull Requests but when a project gets very out of date this tool is helpful to understand the scope of what needs to be updated.
 
 ## Next steps
 
