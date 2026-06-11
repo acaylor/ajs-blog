@@ -1,26 +1,54 @@
 ---
-// Trailing shell prompt that cycles through a few fake commands —
-// types one out character by character, holds, deletes, then types
-// the next. Disabled under prefers-reduced-motion (cursor still blinks).
+// Trailing shell prompt that cycles through a few fake commands — types one
+// out character by character, "executes" it (prints an output line and a
+// fresh prompt below, like a real shell), holds, deletes, then types the
+// next. Outputs use real build/site data where they can. Disabled under
+// prefers-reduced-motion (first command + output shown statically).
+
+import { getBlogStats } from '../utils/blog-stats';
+import { commitSha, buildYmd } from '../utils/build-info';
+
+const { postCount, uptimeDays, firstPostYmd } = await getBlogStats();
 
 const messages = [
-  'echo "Comments were removed, email instead"',
-  'journalctl -u aj-blog.service',
-  'cat src/content/blog/index.html',
-  'echo "Check the about page for contact info"',
-  'man dmesg',
-  'claude -p "Write me a new post and make it good"',
-  'git commit -m "Add new post"',
-  'systemctl status aj-blog.service',
-  'ip addr show',
-  'echo "I ran out of coffee again"',
-  'shutdown -r now',
+  {
+    cmd: 'echo "Comments were removed, email instead"',
+    out: 'Comments were removed, email instead',
+  },
+  { cmd: 'uptime', out: `up ${uptimeDays} days,  1 user,  load average: 0.42, 0.15, 0.09` },
+  { cmd: 'ls src/content/blog | wc -l', out: `${postCount}` },
+  {
+    cmd: 'journalctl -u aj-blog.service',
+    out: `-- Logs begin at ${firstPostYmd}, end at ${buildYmd}. --`,
+  },
+  {
+    cmd: 'cat src/content/blog/index.html',
+    out: 'cat: src/content/blog/index.html: No such file or directory',
+  },
+  {
+    cmd: 'claude -p "Write me a new post and make it good"',
+    out: 'declined: a human still writes these',
+  },
+  { cmd: 'git commit -m "Add new post"', out: `[main ${commitSha}] Add new post` },
+  {
+    cmd: 'systemctl status aj-blog.service',
+    out: `● aj-blog.service — active (running) since ${firstPostYmd}; ${uptimeDays} days ago`,
+  },
+  { cmd: 'whoami', out: 'aj' },
+  { cmd: 'man dmesg', out: 'you are reading it' },
+  { cmd: 'echo "I ran out of coffee again"', out: 'I ran out of coffee again' },
+  { cmd: 'shutdown -r now', out: 'Connection to blog closed.' },
 ];
 ---
 
 <div class="prompt">
   <span class="line">
-    <span class="cmd" aria-hidden="true"></span><span class="cursor" aria-hidden="true"></span>
+    <span class="ps1" aria-hidden="true">aj@blog:~$ </span><span class="cmd" aria-hidden="true"
+    ></span><span class="cursor" aria-hidden="true"></span>
+  </span>
+  <span class="out" aria-hidden="true" hidden></span>
+  <span class="line line2" aria-hidden="true" hidden>
+    <span class="ps1">aj@blog:~$ </span><span class="cursor"></span>
   </span>
 </div>
 
@@ -29,8 +57,20 @@ const messages = [
     document.querySelectorAll('.prompt:not([data-prompt-attached])').forEach((root) => {
       root.setAttribute('data-prompt-attached', '');
       const cmd = root.querySelector('.cmd');
-      if (!cmd) return;
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const out = root.querySelector('.out');
+      const line2 = root.querySelector('.line2');
+      const cursor1 = root.querySelector('.line .cursor');
+      if (!cmd || !out || !line2 || !cursor1) return;
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        // No animation: show the first command and its output statically.
+        cmd.textContent = messages[0].cmd;
+        out.textContent = messages[0].out;
+        out.hidden = false;
+        line2.hidden = false;
+        cursor1.style.display = 'none';
+        return;
+      }
 
       let mi = 0;
       let ci = 0;
@@ -40,17 +80,30 @@ const messages = [
         const msg = messages[mi];
         if (typing) {
           ci += 1;
-          cmd.textContent = msg.slice(0, ci);
-          if (ci >= msg.length) {
+          cmd.textContent = msg.cmd.slice(0, ci);
+          if (ci >= msg.cmd.length) {
             typing = false;
-            setTimeout(tick, 2400);
+            // brief pause, then "execute": output + a fresh prompt line
+            setTimeout(() => {
+              out.textContent = msg.out;
+              out.hidden = false;
+              line2.hidden = false;
+              cursor1.style.display = 'none';
+              setTimeout(tick, 2600);
+            }, 350);
             return;
           }
           // 55–115 ms per char gives a believable typing cadence
           setTimeout(tick, 55 + Math.random() * 60);
         } else {
+          if (!out.hidden) {
+            // clear the "screen" below before deleting the command
+            out.hidden = true;
+            line2.hidden = true;
+            cursor1.style.display = '';
+          }
           ci -= 1;
-          cmd.textContent = msg.slice(0, ci);
+          cmd.textContent = msg.cmd.slice(0, ci);
           if (ci <= 0) {
             typing = true;
             mi = (mi + 1) % messages.length;

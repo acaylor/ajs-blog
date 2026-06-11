@@ -1,4 +1,7 @@
 ---
+import { buildVersion, commitSha } from '../utils/build-info';
+import { resetClock, nextTs } from '../utils/log-clock';
+
 interface Props {
   /** Override the `command line: cat /<route>` default. */
   command?: string;
@@ -17,6 +20,13 @@ const { command = `cat ${path}`, status, showPreamble = true } = Astro.props;
 
 const tagClass = status?.tag ? `tag-${status.tag}` : 'tag-ok';
 const tagLabel = status?.label ?? '[ OK ]';
+
+// The banner is the first log element on every page, so it owns starting
+// the page's fake dmesg clock. Modules further down keep ticking it.
+resetClock(Astro.url.pathname);
+const tsPreamble = showPreamble ? nextTs(Astro.url.pathname) : null;
+const tsCommand = nextTs(Astro.url.pathname);
+const tsStatus = status ? nextTs(Astro.url.pathname) : null;
 ---
 
 <div class="banner">
@@ -24,23 +34,23 @@ const tagLabel = status?.label ?? '[ OK ]';
     showPreamble && (
       <div class="row">
         <span class="ts" aria-hidden="true">
-          0.000000
+          {tsPreamble}
         </span>
         <span>
-          <b>aj's blog</b> v4.2.0-stable (acaylor@build) astro/6 &middot; gitlab-ci
+          <b>aj's blog</b> v{buildVersion} ({commitSha}) astro/6 &middot; gitlab-ci
         </span>
       </div>
     )
   }
   <div class="row">
-    <span class="ts" aria-hidden="true">0.000142</span>
+    <span class="ts" aria-hidden="true">{tsCommand}</span>
     <span>command line: <b>{command}</b></span>
   </div>
   {
     status && (
       <div class="row">
         <span class="ts" aria-hidden="true">
-          0.000389
+          {tsStatus}
         </span>
         <span>
           <span class={tagClass}>{tagLabel}</span> {status.text}

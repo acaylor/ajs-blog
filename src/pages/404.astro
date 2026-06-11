@@ -1,22 +1,32 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Banner from '../components/Banner.astro';
 import Prompt from '../components/Prompt.astro';
 ---
 
 <BaseLayout title="404">
-  <div class="banner">
-    <div class="row">
-      <span class="ts" aria-hidden="true">0.000142</span>
-      <span>command line: <b>cat {Astro.url.pathname}</b></span>
-    </div>
-    <div class="row">
-      <span class="ts" aria-hidden="true">0.000389</span>
-      <span><span class="tag-err">[ERR]</span> no such file or directory</span>
-    </div>
-  </div>
+  <Banner
+    showPreamble={false}
+    status={{
+      tag: 'err',
+      label: '[FAIL]',
+      text: 'segfault at 0x00000194 ip 0x00000404 error 4 in route.so',
+    }}
+  />
 
   <h1 class="title">404</h1>
-  <p class="title-sub">that page is not on disk</p>
+  <p class="title-sub">Kernel panic — not syncing: attempted to read a page that does not exist</p>
+
+  <pre
+    class="panic"
+    aria-hidden="true">Call Trace:
+ &lt;TASK&gt;
+ resolve_route+0x194/0x404 [aj_blog]
+ render_page+0x0ff/0xdead [astro]
+ do_request+0x042/0x1337
+ entry_HTTP_GET+0x00/0x80
+ &lt;/TASK&gt;
+---[ end trace 0000000000000404 ]---</pre>
 
   <p class="log">
     <span class="tag-note">[NOTE]</span> the route may have been moved or removed. try one of:
@@ -36,6 +46,13 @@ import Prompt from '../components/Prompt.astro';
 </BaseLayout>
 
 <style>
+  .panic {
+    margin: 1rem 0 1.5rem;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--fg-faint);
+    max-width: 68ch;
+  }
   .not-found-links {
     list-style: none;
     padding: 0;

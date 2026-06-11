@@ -1,5 +1,6 @@
 ---
 import ThemeToggle from '../components/ThemeToggle.astro';
+import { getBlogStats } from '../utils/blog-stats';
 import '../styles/global.css';
 import '../styles/patterns.css';
 import dmMono400 from '@fontsource/dm-mono/files/dm-mono-latin-400-normal.woff2?url';
@@ -22,6 +23,8 @@ const isCurrent = (prefix: string) =>
   prefix === '/' ? path === '/' : path === prefix || path.startsWith(prefix + '/');
 
 const year = new Date().getFullYear();
+const isPost = mainClass === 'post';
+const { postCount, uptimeDays } = await getBlogStats();
 ---
 
 <!doctype html>
@@ -65,6 +68,14 @@ const year = new Date().getFullYear();
           <a href="/about" class={isCurrent('/about') ? 'current' : undefined}>about</a>
         </nav>
         <span class="spacer"></span>
+        {
+          isPost && (
+            <span class="progress" aria-hidden="true">
+              <span class="cells" />
+              <span class="pct" />
+            </span>
+          )
+        }
         <ThemeToggle />
       </div>
     </header>
@@ -76,6 +87,7 @@ const year = new Date().getFullYear();
     <footer class="term-foot">
       <div class="inner">
         <span class="copy">&copy; {year} aj's blog &middot; built with astro</span>
+        <span class="up">up {uptimeDays} days &middot; {postCount} posts</span>
         <div class="links">
           <a
             href="https://github.com/acaylor"
@@ -145,5 +157,34 @@ const year = new Date().getFullYear();
         </div>
       </div>
     </footer>
+    <!-- reading-progress gauge; no-ops on pages without .progress in the header -->
+    <script is:inline>
+      (function () {
+        var el = document.querySelector('.term-head .progress');
+        if (!el) return;
+        var cells = el.querySelector('.cells');
+        var pct = el.querySelector('.pct');
+        var SLOTS = 10;
+        var ticking = false;
+        function render() {
+          ticking = false;
+          var doc = document.documentElement;
+          var max = doc.scrollHeight - window.innerHeight;
+          var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 1;
+          var filled = Math.round(p * SLOTS);
+          cells.textContent = '[' + '#'.repeat(filled) + '-'.repeat(SLOTS - filled) + ']';
+          pct.textContent = String(Math.round(p * 100)).padStart(3, ' ') + '%';
+        }
+        function onScroll() {
+          if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(render);
+          }
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll, { passive: true });
+        render();
+      })();
+    </script>
   </body>
 </html>

@@ -18,6 +18,7 @@ const {
   tags = [],
   readingTime,
   href,
+  image,
   categories = [],
   draft = false,
 } = Astro.props;
@@ -27,27 +28,36 @@ const ymd = isoDate.slice(0, 10);
 const metaCategory = categories.slice(0, 2).join(' / ');
 ---
 
-<div class="unit">
-  <div class="head">
-    <span class="dot" class:list={[{ draft }]} aria-hidden="true">●</span>
-    <span class="name"><a href={href}>{title}</a></span>
-  </div>
-  <div class="meta">
-    <time datetime={isoDate}>{ymd}</time> &middot; {readingTime}{
-      metaCategory && <> &middot; {metaCategory}</>
+<div class="unit" class:list={[{ 'has-thumb': Boolean(image) }]}>
+  <div class="unit-body">
+    <div class="head">
+      <span class="dot" class:list={[{ draft }]} aria-hidden="true">●</span>
+      <span class="name"><a href={href}>{title}</a></span>
+    </div>
+    <div class="meta">
+      <time datetime={isoDate}>{ymd}</time> &middot; {readingTime}{
+        metaCategory && <> &middot; {metaCategory}</>
+      }
+    </div>
+    {description && <div class="desc">{description}</div>}
+    {
+      tags.length > 0 && (
+        <div class="tags">
+          <span class="label">tags</span>
+          {tags.slice(0, 4).map((tag) => (
+            <a href={`/tags/${tag}`} class="tag-link">
+              {tag}
+            </a>
+          ))}
+        </div>
+      )
     }
   </div>
-  {description && <div class="desc">{description}</div>}
   {
-    tags.length > 0 && (
-      <div class="tags">
-        <span class="label">tags</span>
-        {tags.slice(0, 4).map((tag) => (
-          <a href={`/tags/${tag}`} class="tag-link">
-            {tag}
-          </a>
-        ))}
-      </div>
+    image && (
+      <a class="thumb" href={href} tabindex="-1" aria-hidden="true">
+        <img src={image} alt="" loading="lazy" width="88" height="88" />
+      </a>
     )
   }
 </div>
