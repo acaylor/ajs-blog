@@ -8,6 +8,11 @@ categories:
   - Software Development
 tags:
   - ai
+  - claude
+  - claude-code
+  - codex
+  - gemini
+  - opencode
   - llm
   - terminal
   - cli

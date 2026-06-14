@@ -6,6 +6,9 @@ categories:
   - AI
 tags:
   - ai
+  - claude
+  - chatgpt
+  - gemini
   - llm
 ---
 
