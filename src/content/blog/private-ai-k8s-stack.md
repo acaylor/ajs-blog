@@ -1,8 +1,8 @@
 ---
 title: A private AI stack on Kubernetes with the GPU Operator, Ollama, and Open WebUI
 author: aj
-date: 2026-06-09
-description: 'Run a private chatbot on Kubernetes using NVIDIA GPU Operator, Ollama, and Open WebUI, backed by CloudNativePG and a self-hosted SearXNG.'
+date: 2026-06-18
+description: 'Run a private chatbot on Kubernetes using NVIDIA GPU Operator, Ollama, and Open WebUI, backed by PostgreSQL and a self-hosted SearXNG.'
 draft: true
 categories:
   - Homelab
@@ -15,22 +15,22 @@ tags:
   - open-webui
   - nvidia
   - gpu-operator
-  - cloudnativepg
+  - postgres
   - searxng
   - homelab
 ---
 
-I have already run the first version of a private AI setup in the homelab: [Ollama and Open WebUI on a Linux box][17], then image generation through [Open WebUI and ComfyUI][18], and later local coding experiments with [OpenCode and Ollama][19]. Those setups proved the idea worked, but they still felt like single-machine services that happened to live near the rest of the homelab.
+I have already run the first version of a private AI setup in my homelab: [Ollama and Open WebUI on a Linux box][17], then image generation through [Open WebUI and ComfyUI][18], and later local coding experiments with [OpenCode and Ollama][19]. Those setups proved the idea worked, but they did not fit into my homelab Kubernetes (k8s) ecosystem.
 
-This post is a follow-up: moving the useful pieces into Kubernetes so the private chatbot is managed like everything else in my [Argo CD][1] app-of-apps repo. The goals are still the same as before: prompts and uploads stay on my hardware, model weights run locally on a GPU I own, and the UI is available behind the same ingress and TLS pattern as the rest of the cluster. The stack uses [NVIDIA GPU Operator][2], [Ollama][3], and [Open WebUI][4], then plugs into two existing homelab services: my Kubernetes [SearXNG search instance][20] and a [CloudNativePG][6] cluster for the chat database.
+This post is a follow-up: moving the useful pieces into k8s so the private chatbot is managed like everything else in my [Argo CD][1] app-of-apps repo. The goals are still the same as before: prompts and uploads stay on my hardware, model weights run locally on a GPU I own, and the UI is available on my private network. The stack uses [NVIDIA GPU Operator][2], [Ollama][3], and [Open WebUI][4], then plugs into two existing homelab services: my k8s [SearXNG search instance][20] and a [CloudNativePG][6] cluster for the chat database.
 
-This is not an introduction to Ollama or Open WebUI. The earlier post covers the standalone version. Today I am deploying these on Kubernetes: GPU scheduling, persistent model storage, Postgres-backed Open WebUI, SearXNG search, and GPU metrics. I am happy to be able to leverage some previous homelab projects since SearXNG has been one of the most useful self-hosted apps that I have set up.
+This is not an introduction to Ollama or Open WebUI. The earlier post covers the standalone version. Today I am deploying these on k8s: GPU scheduling, persistent model storage, Postgres-backed Open WebUI, SearXNG search, and GPU metrics. I am happy to be able to leverage some previous homelab projects since SearXNG has been one of the most useful self-hosted apps that I have set up.
 
 ## The shape of the stack
 
 ![private_ai_k8s](/images/private_ai_k8s.png)
 
-The Kubernetes version adds three apps (`gpu-operator`, `ollama`, `open-webui`) around two services I already had running (`searxng`, `cloudnative-pg`). They all live under `argo-apps/apps/`. The Helm-backed apps use the multi-source Argo CD pattern: an upstream chart, an in-repo `values.yaml`, and an optional `templates/` directory for namespace, PVC, and other extras. SearXNG is the exception because the older Helm chart is archived, so that app is plain Kubernetes manifests.
+The k8s version adds three apps (`gpu-operator`, `ollama`, `open-webui`) around two services I already had running (`searxng`, `cloudnative-pg`). They all live under `argo-apps/apps/`. The Helm-backed apps use the multi-source Argo CD pattern: an upstream chart, an in-repo `values.yaml`, and an optional `templates/` directory for namespace, PVC, and other extras. SearXNG is the exception because the older Helm chart is archived, so that app is plain k8s manifests.
 
 ## Prerequisites
 
@@ -41,8 +41,8 @@ Before deploying any of this, the cluster needs:
 - **A node with an NVIDIA GPU.** The proprietary NVIDIA driver and [`nvidia-container-toolkit`][11] must be installed directly on the host before deploying the GPU Operator. On k3s the agent autodetects the toolkit at startup and registers the `nvidia` runtime in containerd; other distributions may need a manual containerd config.
 - **A storage class for general-purpose PVCs.** Open WebUI keeps uploaded files and a small vector DB on a PVC; an NFS-backed StorageClass is a good fit because the pod can move between nodes.
 - **A storage class for local node-pinned volumes.** Ollama's models can be tens of gigabytes and should not redownload on every pod restart. I use a `local-storage` StorageClass with a manually defined PV at a path on the GPU node.
-- **A PostgreSQL cluster.** I use [CloudNativePG][6]; my [CloudNativePG post][21] covers the install. Open WebUI accepts any PostgreSQL connection URL, so a hosted Postgres or any other operator works.
-- **A SearXNG instance** if you want web search. My [SearXNG post][20] covers the standalone and Kubernetes setup. Optional — Open WebUI runs fine without it.
+- **A PostgreSQL cluster.** I use [CloudNativePG][6]; my [CloudNativePG post][21] covers the install. Open WebUI accepts any PostgreSQL connection URL, so a hosted Postgres or any other server works.
+- **A SearXNG instance** if you want web search. My [SearXNG post][20] covers the standalone and Kubernetes setup. (_Optional: Open WebUI runs fine without it._)
 
 ## Reserve the GPU node for AI workloads
 
@@ -52,9 +52,9 @@ A bare GPU node will accept any pod the scheduler throws at it. To make sure the
 kubectl taint node <gpu-node> workload=ai:NoSchedule
 ```
 
-This taint is the load-bearing piece of the whole setup. With it in place, only pods that explicitly tolerate `workload=ai:NoSchedule` can land on the GPU node. The GPU Operator's component DaemonSets and Ollama will both declare the toleration; everything else stays away.
+With this taint in place, only pods that explicitly tolerate `workload=ai:NoSchedule` can land on the GPU node. The GPU Operator's component DaemonSets and Ollama will both declare the toleration.
 
-The taint is set imperatively on the node and does not live in any manifest, so reapply it if the node is ever rebuilt.
+When you create a taint that way it does not live in any manifest, so reapply it if the node is ever rebuilt.
 
 ## GPU Operator: the lightest install
 
@@ -302,7 +302,7 @@ After a `kubectl rollout restart deploy/searxng`, Open WebUI's queries show up i
 
 ### Keep SearXNG's cache on the PVC
 
-The official SearXNG container uses `/var/cache/searxng` for persistent cache data, so the Kubernetes app mounts a PVC there. One subtle wrinkle is that SearXNG's generic SQLite cache code uses Python's temp directory for `sxng_cache_DATA_CACHE.db` and `sxng_cache_ENGINES_CACHE.db` when no explicit `db_url` is set. Setting `TMPDIR=/var/cache/searxng` keeps those cache DBs on the same PVC instead of the container's ephemeral `/tmp`:
+The official SearXNG container uses `/var/cache/searxng` for persistent cache data, so the k8s app mounts a PVC there. One subtle wrinkle is that SearXNG's generic SQLite cache code uses Python's temp directory for `sxng_cache_DATA_CACHE.db` and `sxng_cache_ENGINES_CACHE.db` when no explicit `db_url` is set. Setting `TMPDIR=/var/cache/searxng` keeps those cache DBs on the same PVC instead of the container's ephemeral `/tmp`:
 
 ```yaml
 env:
@@ -334,11 +334,11 @@ The first line makes Open WebUI consume the JSON API rather than SearXNG's HTML 
 
 ### Upstream rate limits
 
-A separate rate limit problem worth knowing about: upstream search engines (Google, Bing) rate-limit SearXNG's outgoing requests, since a single residential IP making constant queries looks scrapery to them. SearXNG handles it gracefully — it suspends the offending engine for a few minutes and falls back to others — so the user-facing impact is reduced result quality, not failure. Disabling Google and leaning on DuckDuckGo, Brave, Mojeek, and the specialized engines (Wikipedia, arXiv, GitHub) is the usual workaround.
+A separate rate limit problem worth knowing about: upstream search engines (Google, Bing) rate-limit SearXNG's outgoing requests, since a single residential IP making constant queries looks scrapery to them. SearXNG handles it gracefully, it suspends the offending engine for a few minutes and falls back to others, so the user-facing impact is reduced result quality, not failure. Disabling Google and leaning on DuckDuckGo, Brave, Mojeek, and the specialized engines (Wikipedia, arXiv, GitHub) is the usual workaround.
 
 ## GPU metrics
 
-The GPU Operator already deploys [`nvidia-dcgm-exporter`][13] on every GPU node — it just needs a `ServiceMonitor` with the `release: prometheus` label that [kube-prometheus-stack][15] discovers on. One more `ServiceMonitor` covers the operator's controller metrics:
+The GPU Operator already deploys [`nvidia-dcgm-exporter`][13] on every GPU node. It just needs a `ServiceMonitor` with the `release: prometheus` label that [kube-prometheus-stack][15] discovers on. One more `ServiceMonitor` covers the operator's controller metrics:
 
 ```yaml
 # argo-apps/apps/gpu-operator/templates/servicemonitor.yaml
@@ -393,6 +393,10 @@ DCGM_FI_DEV_POWER_USAGE{exported_container="ollama"}
 ```
 
 For dashboards, NVIDIA publishes a [Grafana dashboard for DCGM][16] (ID `12239`) that drops in cleanly and gives you the standard utilization / temperature / power / VRAM panels split by GPU.
+
+![nvidia_dcgm_dashboard](/images/nvidia_dcgm_dashboard.png)
+
+I might have to tweak this official dashboard, It looks a little off.
 
 The rest of the stack does not expose Prometheus metrics natively. Ollama, Open WebUI, and SearXNG all lack a `/metrics` endpoint at the time of writing. Basic uptime is covered by `kube-state-metrics` (pod readiness, restart counts) and the GPU side is fully covered by DCGM, which is enough to know whether the stack is healthy and whether the GPU is doing work.
 
