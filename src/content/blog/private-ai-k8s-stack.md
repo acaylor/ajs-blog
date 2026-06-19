@@ -3,7 +3,6 @@ title: A private AI stack on Kubernetes with the GPU Operator, Ollama, and Open 
 author: aj
 date: 2026-06-18
 description: 'Run a private chatbot on Kubernetes using NVIDIA GPU Operator, Ollama, and Open WebUI, backed by PostgreSQL and a self-hosted SearXNG.'
-draft: true
 categories:
   - Homelab
   - Kubernetes
@@ -463,6 +462,10 @@ If those pass, you have a private chatbot. The final real-world check is in the 
 - [kube-prometheus-stack][15]
 - [NVIDIA DCGM Grafana dashboard][16]
 
+---
+
+_Disclaimer: I used an LLM to assist with this work and post. Opinions expressed are my own._
+
 [1]: https://argo-cd.readthedocs.io/
 [2]: https://github.com/NVIDIA/gpu-operator
 [3]: https://ollama.com
@@ -484,4 +487,4 @@ If those pass, you have a private chatbot. The final real-world check is in the 
 [19]: /posts/opencode-ollama
 [20]: /posts/searxng
 [21]: /posts/postgres-cloud-native
-[22]: /posts/kubernetes-gpu-operator
+[ 2]: /posts/kubernetes-gpu-operator
