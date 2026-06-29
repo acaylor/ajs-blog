@@ -1,0 +1,104 @@
+direction: down
+
+classes: {
+  service: {
+    shape: rectangle
+    style: {
+      fill: "#fff8e8"
+      stroke: "#3b3428"
+      stroke-width: 2
+    }
+  }
+  store: {
+    shape: cylinder
+    style: {
+      fill: "#f4efe2"
+      stroke: "#3b3428"
+      stroke-width: 2
+    }
+  }
+  endpoint: {
+    shape: rectangle
+    style: {
+      fill: "#f7f7f7"
+      stroke: "#555"
+      stroke-dash: 4
+    }
+  }
+}
+
+user: "browser" {
+  class: endpoint
+}
+
+compose: "docker compose project" {
+  style: {
+    fill: "#fcfaf5"
+    stroke: "#8a5300"
+    stroke-width: 2
+  }
+
+  app: "node-server\nsample app\n:3001" {
+    class: service
+  }
+
+  grafana: "grafana\nUI + alerts\n:3000" {
+    class: service
+  }
+
+  prometheus: "prometheus\nmetrics scrape\n:9090" {
+    class: service
+  }
+
+  influxdb: "influxdb\nmetrics store\n:8086" {
+    class: store
+  }
+
+  telegraf: "telegraf\nhost metrics" {
+    class: service
+  }
+
+  fluentd: "fluentd\nlog router\n:24224" {
+    class: service
+  }
+
+  otel: "otel-collector\nfluent forward\n:8006" {
+    class: service
+  }
+
+  loki: "loki\nlog store\n:3100" {
+    class: store
+  }
+}
+
+volumes: "named volumes" {
+  class: endpoint
+  fluentd: "fluentd-storage"
+  grafana: "grafana-storage"
+  influxdb: "influxdb-storage"
+  loki: "loki-storage"
+}
+
+user -> compose.grafana: "open dashboards"
+
+compose.app -> compose.fluentd: "container logs"
+compose.grafana -> compose.fluentd: "container logs"
+compose.prometheus -> compose.fluentd: "container logs"
+compose.influxdb -> compose.fluentd: "container logs"
+compose.telegraf -> compose.fluentd: "container logs"
+compose.loki -> compose.fluentd: "container logs"
+
+compose.fluentd -> compose.otel: "forward"
+compose.otel -> compose.loki: "logs"
+
+compose.telegraf -> compose.influxdb: "write metrics"
+compose.prometheus -> compose.app: "scrape metrics"
+
+compose.grafana -> compose.loki: "query logs"
+compose.grafana -> compose.prometheus: "query metrics"
+compose.grafana -> compose.influxdb: "query metrics"
+
+compose.fluentd -> volumes.fluentd: "persist"
+compose.grafana -> volumes.grafana: "persist"
+compose.influxdb -> volumes.influxdb: "persist"
+compose.loki -> volumes.loki: "persist"
