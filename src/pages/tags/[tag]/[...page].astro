@@ -8,30 +8,32 @@ import Pagination from '../../../components/Pagination.astro';
 import Prompt from '../../../components/Prompt.astro';
 import { getCollection } from 'astro:content';
 import { getReadingTime } from '../../../utils/reading-time';
+import { groupBySlug } from '../../../utils/taxonomy';
 
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
-  const tags = new Set<string>();
-  posts.forEach((post) => post.data.tags?.forEach((tag) => tags.add(tag)));
 
-  return [...tags].flatMap((tag) => {
-    const filtered = posts
-      .filter((post) => post.data.tags?.includes(tag))
-      .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-    return paginate(filtered, { params: { tag }, pageSize: 12 });
-  });
+  return groupBySlug(posts, 'tags').flatMap((group) =>
+    paginate(group.posts, {
+      params: { tag: group.slug },
+      props: { display: group.display },
+      pageSize: 12,
+    }),
+  );
 }) satisfies GetStaticPaths;
 
 const { tag } = Astro.params;
-const { page } = Astro.props;
+const { page, display } = Astro.props;
 const moduleName = `page_${String(page.currentPage).padStart(3, '0')}`;
 const pageLabel = `page ${page.currentPage}/${page.lastPage}`;
 const basePath = `/tags/${tag}`;
 ---
 
-<BaseLayout title={page.currentPage > 1 ? `tag: ${tag} - Page ${page.currentPage}` : `tag: ${tag}`}>
+<BaseLayout
+  title={page.currentPage > 1 ? `tag: ${display} - Page ${page.currentPage}` : `tag: ${display}`}
+>
   <Banner
-    command={`grep -l "tag:${tag}" /posts/*.md`}
+    command={`grep -l "tag:${display}" /posts/*.md`}
     status={{
       tag: 'info',
       label: '[INFO]',
@@ -39,7 +41,7 @@ const basePath = `/tags/${tag}`;
     }}
   />
 
-  <h1 class="title">tag: {tag}</h1>
+  <h1 class="title">tag: {display}</h1>
   <p class="title-sub">
     <a href="/tags/">&larr; all tags</a>
   </p>

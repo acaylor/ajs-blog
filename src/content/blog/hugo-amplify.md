@@ -16,7 +16,7 @@ tags:
   - docker
 ---
 
-_Note (2026-04-18): This blog has been [migrated to Astro](/posts/astro-migration-2026) but still uses the same Amplify setup described here. See [Deploying an Astro site to AWS Amplify](/posts/static-amplify) for the current configuration._
+_Note (2026-04-18): This blog has been [migrated to Astro](/posts/astro-migration-2026/) but still uses the same Amplify setup described here. See [Deploying an Astro site to AWS Amplify](/posts/static-amplify/) for the current configuration._
 
 [AWS Amplify][1] is a set of tools and services that can be used together or on their own, to help front-end web and mobile developers build scalable full stack applications, powered by [AWS][2] (Amazon Web Services). With Amplify, you can configure app backends and connect your app in minutes, deploy static web apps in a few clicks, and easily manage app content outside of AWS.
 

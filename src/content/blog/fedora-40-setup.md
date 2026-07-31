@@ -59,7 +59,7 @@ rpm -qa |sort
 
 You will see a list numbering in the hundreds. In my case it was `1968` packages.
 
-Another package that is already included is `podman` which is an alternative to the popular Docker software for running and managing containers on your system. Check out a [previous post](/posts/docker-alternatives) for more information about podman and other alternatives to Docker.
+Another package that is already included is `podman` which is an alternative to the popular Docker software for running and managing containers on your system. Check out a [previous post](/posts/docker-alternatives/) for more information about podman and other alternatives to Docker.
 
 #### Installing new software
 
@@ -156,7 +156,7 @@ Some software included there:
 
 ## Next steps
 
-At this point my system is ready to use once I customize the system shell. Check out a previous [post](/posts/zshell) to set up ZSH.
+At this point my system is ready to use once I customize the system shell. Check out a previous [post](/posts/zshell/) to set up ZSH.
 
 To keep your system up to date there is a GNOME software app that will prompt you to install updates and restart. If you prefer, you can update the software on the system using `dnf` package manager in a terminal.
 

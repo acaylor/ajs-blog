@@ -3,34 +3,19 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Banner from '../../components/Banner.astro';
 import Prompt from '../../components/Prompt.astro';
 import { getCollection } from 'astro:content';
+import { groupBySlug } from '../../utils/taxonomy';
 
 const posts = await getCollection('blog', ({ data }) => !data.draft);
 
-// Collapse case-duplicate tags to one row per lowercase key (Decision 4 in REFACTOR.md).
-// Within each group, the dominant case (most posts) wins the URL and the count — clicking
-// the chip lands on a route that actually contains the displayed number of posts.
-// Minority-case routes still exist (rendered by [tag]/[...page].astro) but don't surface here.
-const byLower = new Map<string, Map<string, number>>();
-for (const post of posts) {
-  for (const tag of post.data.tags ?? []) {
-    const key = tag.toLowerCase();
-    let cases = byLower.get(key);
-    if (!cases) {
-      cases = new Map();
-      byLower.set(key, cases);
-    }
-    cases.set(tag, (cases.get(tag) ?? 0) + 1);
-  }
-}
-
-const tags = [...byLower.values()]
-  .map((cases) => {
-    const [display, count] = [...cases.entries()].sort(
-      (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]),
-    )[0];
-    return { display, count };
-  })
-  .sort((a, b) => b.count - a.count || a.display.localeCompare(b.display));
+// Case-duplicate tags collapse into a single row because they now share one slug
+// (Decision 4 in REFACTOR.md). `macOS` and `macos` are one route, so the count shown
+// here is the real number of posts behind the link rather than the dominant spelling's
+// share of them.
+const tags = groupBySlug(posts, 'tags').map((group) => ({
+  slug: group.slug,
+  display: group.display,
+  count: group.posts.length,
+}));
 
 const totalTagged = tags.reduce((sum, t) => sum + t.count, 0);
 const maxCount = tags[0]?.count ?? 1;
@@ -62,13 +47,13 @@ const longTail = tags.filter((t) => t.count < longTailThreshold).length;
     </thead>
     <tbody>
       {
-        tags.map(({ display, count }) => {
+        tags.map(({ slug, display, count }) => {
           const pct = (count / totalTagged) * 100;
           const barPct = (count / maxCount) * 100;
           return (
             <tr>
               <td class="name">
-                <a href={`/tags/${display}/`}>{display}</a>
+                <a href={`/tags/${slug}/`}>{display}</a>
               </td>
               <td class="bar">
                 <span class="bar-track" aria-hidden="true">

@@ -9,7 +9,7 @@ tags:
   - software
 ---
 
-Renovate is used to help manage code dependencies. Checkout a [previous post](/posts/renovate) for more details on what Renovate is.
+Renovate is used to help manage code dependencies. Checkout a [previous post](/posts/renovate/) for more details on what Renovate is.
 
 Renovate is able to parse dockerfiles to look for newer container images. This only works with either a sha256 digest or a version tag. Tags such as `latest` or some other arbitrary string will not work.
 
