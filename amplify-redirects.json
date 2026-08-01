@@ -15,7 +15,7 @@
     "status": "301"
   },
   {
-    "source": "/categories/Command Line/",
+    "source": "/categories/Command%20Line/",
     "target": "/categories/command-line/",
     "status": "301"
   },
@@ -35,7 +35,7 @@
     "status": "301"
   },
   {
-    "source": "/categories/Database Management/",
+    "source": "/categories/Database%20Management/",
     "target": "/categories/database-management/",
     "status": "301"
   },
@@ -115,7 +115,7 @@
     "status": "301"
   },
   {
-    "source": "/categories/Raspberry Pi/",
+    "source": "/categories/Raspberry%20Pi/",
     "target": "/categories/raspberry-pi/",
     "status": "301"
   },
@@ -125,12 +125,12 @@
     "status": "301"
   },
   {
-    "source": "/categories/Software Development/",
+    "source": "/categories/Software%20Development/",
     "target": "/categories/software-development/",
     "status": "301"
   },
   {
-    "source": "/categories/Software Development/2/",
+    "source": "/categories/Software%20Development/2/",
     "target": "/categories/software-development/2/",
     "status": "301"
   },
@@ -150,12 +150,12 @@
     "status": "301"
   },
   {
-    "source": "/categories/Virtual Machines/",
+    "source": "/categories/Virtual%20Machines/",
     "target": "/categories/virtual-machines/",
     "status": "301"
   },
   {
-    "source": "/categories/Virtual Machines/2/",
+    "source": "/categories/Virtual%20Machines/2/",
     "target": "/categories/virtual-machines/2/",
     "status": "301"
   },
@@ -170,7 +170,7 @@
     "status": "301"
   },
   {
-    "source": "/tags/AWS Amplify/",
+    "source": "/tags/AWS%20Amplify/",
     "target": "/tags/aws-amplify/",
     "status": "301"
   },
@@ -185,7 +185,7 @@
     "status": "301"
   },
   {
-    "source": "/tags/Gitlab CI/",
+    "source": "/tags/Gitlab%20CI/",
     "target": "/tags/gitlab-ci/",
     "status": "301"
   },
@@ -210,67 +210,67 @@
     "status": "301"
   },
   {
-    "source": "/tags/claude code/",
+    "source": "/tags/claude%20code/",
     "target": "/tags/claude-code/",
     "status": "301"
   },
   {
-    "source": "/tags/configuration management/",
+    "source": "/tags/configuration%20management/",
     "target": "/tags/configuration-management/",
     "status": "301"
   },
   {
-    "source": "/tags/developer tools/",
+    "source": "/tags/developer%20tools/",
     "target": "/tags/developer-tools/",
     "status": "301"
   },
   {
-    "source": "/tags/developer tools/2/",
+    "source": "/tags/developer%20tools/2/",
     "target": "/tags/developer-tools/2/",
     "status": "301"
   },
   {
-    "source": "/tags/file conversion/",
+    "source": "/tags/file%20conversion/",
     "target": "/tags/file-conversion/",
     "status": "301"
   },
   {
-    "source": "/tags/fluent bit/",
+    "source": "/tags/fluent%20bit/",
     "target": "/tags/fluent-bit/",
     "status": "301"
   },
   {
-    "source": "/tags/frontend design/",
+    "source": "/tags/frontend%20design/",
     "target": "/tags/frontend-design/",
     "status": "301"
   },
   {
-    "source": "/tags/google cloud/",
+    "source": "/tags/google%20cloud/",
     "target": "/tags/google-cloud/",
     "status": "301"
   },
   {
-    "source": "/tags/grafana alloy/",
+    "source": "/tags/grafana%20alloy/",
     "target": "/tags/grafana-alloy/",
     "status": "301"
   },
   {
-    "source": "/tags/grafana mimir/",
+    "source": "/tags/grafana%20mimir/",
     "target": "/tags/grafana-mimir/",
     "status": "301"
   },
   {
-    "source": "/tags/home assistant/",
+    "source": "/tags/home%20assistant/",
     "target": "/tags/home-assistant/",
     "status": "301"
   },
   {
-    "source": "/tags/infrastructure as code/",
+    "source": "/tags/infrastructure%20as%20code/",
     "target": "/tags/infrastructure-as-code/",
     "status": "301"
   },
   {
-    "source": "/tags/macOS setup/",
+    "source": "/tags/macOS%20setup/",
     "target": "/tags/macos-setup/",
     "status": "301"
   },
@@ -280,17 +280,17 @@
     "status": "301"
   },
   {
-    "source": "/tags/mx linux/",
+    "source": "/tags/mx%20linux/",
     "target": "/tags/mx-linux/",
     "status": "301"
   },
   {
-    "source": "/tags/nginx proxy manager/",
+    "source": "/tags/nginx%20proxy%20manager/",
     "target": "/tags/nginx-proxy-manager/",
     "status": "301"
   },
   {
-    "source": "/tags/open source/",
+    "source": "/tags/open%20source/",
     "target": "/tags/open-source/",
     "status": "301"
   },
@@ -300,47 +300,47 @@
     "status": "301"
   },
   {
-    "source": "/tags/raspberry pi/",
+    "source": "/tags/raspberry%20pi/",
     "target": "/tags/raspberry-pi/",
     "status": "301"
   },
   {
-    "source": "/tags/reverse proxy/",
+    "source": "/tags/reverse%20proxy/",
     "target": "/tags/reverse-proxy/",
     "status": "301"
   },
   {
-    "source": "/tags/search engine/",
+    "source": "/tags/search%20engine/",
     "target": "/tags/search-engine/",
     "status": "301"
   },
   {
-    "source": "/tags/stable diffusion/",
+    "source": "/tags/stable%20diffusion/",
     "target": "/tags/stable-diffusion/",
     "status": "301"
   },
   {
-    "source": "/tags/uptime kuma/",
+    "source": "/tags/uptime%20kuma/",
     "target": "/tags/uptime-kuma/",
     "status": "301"
   },
   {
-    "source": "/tags/virtual machine/",
+    "source": "/tags/virtual%20machine/",
     "target": "/tags/virtual-machine/",
     "status": "301"
   },
   {
-    "source": "/tags/visual studio code/",
+    "source": "/tags/visual%20studio%20code/",
     "target": "/tags/visual-studio-code/",
     "status": "301"
   },
   {
-    "source": "/tags/vm template/",
+    "source": "/tags/vm%20template/",
     "target": "/tags/vm-template/",
     "status": "301"
   },
   {
-    "source": "/tags/windows terminal/",
+    "source": "/tags/windows%20terminal/",
     "target": "/tags/windows-terminal/",
     "status": "301"
   },
@@ -367,6 +367,6 @@
   {
     "source": "</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json|xml)$)([^.]+$)/>",
     "target": "/404.html",
-    "status": "404"
+    "status": "404-200"
   }
 ]

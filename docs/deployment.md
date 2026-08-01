@@ -31,9 +31,47 @@ the next person will have no idea what production is actually doing.
    deliberately left to 404: Amplify can't backreference a regex capture into the target, and
    redirecting ~82 dead listing pages to a generic index reads as a soft 404 to Google. `nginx.conf`
    can express the capture and does, so test hosting is slightly more thorough than production here.
-4. **A catch-all that serves `/404.html`.** This is Amplify's stock rule with the target changed
-   from `/index.html`. Before this, every dead URL returned the _homepage_ body under a 404 status
-   and the built 404 page was never served at all.
+4. **A catch-all that serves `/404.html`** with status **`404-200`**, not `404`. Before this, every
+   dead URL returned the _homepage_ body under a 404 status and the built 404 page was never served.
+
+Two Amplify quirks are load-bearing here, both found by testing against production:
+
+- **Sources must be percent-encoded.** Amplify matches the raw request path, so the source has to
+  be `/tags/developer%20tools/`. Written with a literal space it silently never matches. This is the
+  opposite of `nginx.conf`, which matches the decoded `$uri` and therefore needs the literal space —
+  the two files genuinely differ on these 34 rules, and that is not a mistake to "fix".
+- **`404` is a redirect; `404-200` is a rewrite.** Status `404` pointed at `/404.html` issues a
+  302 to it, so the client ends up at a 200 — a soft 404, which is the exact thing this work exists
+  to eliminate. `404-200` (`NOT_FOUND_REWRITE`) serves the page at the requested URL with a genuine
+  404 and no redirect hop. Amplify's own stock rule uses `404` only because its target is
+  `/index.html`, which it special-cases; the docs allude to this under "unexpected 302 response".
+
+### Does this list grow as the blog grows?
+
+No. It is a closed historical set, and adding posts, tags, categories or pages never requires an
+entry:
+
+- A **new term** is slugified the moment it is written, so its URL is correct from birth and has no
+  predecessor to redirect from.
+- A **new pagination page** is just another file in `dist/`, served directly.
+
+The 69 entries only exist because a set of URLs was live under different spellings between April and
+July 2026. That window is closed and cannot reopen.
+
+Two things _would_ need a new rule, and both are deliberate acts rather than side effects of
+publishing:
+
+- **Renaming a term** in frontmatter — `Homelab` to `Home Lab` changes the URL and orphans the old
+  one. Prefer keeping the term and letting the display label be wrong over breaking an indexed URL.
+- **Deleting or drafting posts** such that a term drops below a pagination boundary, which removes
+  a `/N/` page that a rule points at.
+
+`npm run check:redirects` catches both, against the freshly built `dist/`. It runs in the
+`build_and_verify` CI job and fails the build on a dead non-paginated target, a source that shadows
+a real page, a self-redirect, a literal space in a source, or a catch-all that isn't `404-200`.
+Missing _pagination_ targets only warn, since a term sitting just under a boundary is a normal
+transient state — the `/categories/AI/2/` rule warns today and will stop once the pending AI posts
+are published.
 
 ### After applying, verify
 
