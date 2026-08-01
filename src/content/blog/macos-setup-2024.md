@@ -389,7 +389,7 @@ Prometheus should now be able to scrape metrics from port `:9100` on your mac.
 # Links
 
 - [my package install script](https://github.com/acaylor/linux_setup/mac-packages.sh)
-- [A previous post to install docker and colima](/posts/colima)
+- [A previous post to install docker and colima](/posts/colima/)
 - [Apple Developer Documentation](https://developer.apple.com/documentation/)
 - [MacOS keyboard shortcuts](https://support.apple.com/en-us/102650)
 - [MacOS developer tips](https://www.xda-developers.com/macos-tips-and-tricks/)

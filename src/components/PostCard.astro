@@ -1,4 +1,6 @@
 ---
+import { slugify } from '../utils/slug';
+
 interface Props {
   title: string;
   date: Date;
@@ -45,7 +47,7 @@ const metaCategory = categories.slice(0, 2).join(' / ');
         <div class="tags">
           <span class="label">tags</span>
           {tags.slice(0, 4).map((tag) => (
-            <a href={`/tags/${tag}`} class="tag-link">
+            <a href={`/tags/${slugify(tag)}/`} class="tag-link">
               {tag}
             </a>
           ))}

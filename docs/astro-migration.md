@@ -72,9 +72,18 @@ The `[...page].astro` rest parameter pattern gives clean URLs (`/posts/2` instea
 - `public/robots.txt` allows all user agents and points to the sitemap.
 - `@astrojs/sitemap` generates `sitemap-index.xml` and `sitemap-0.xml` at build time.
 - Post URLs are unchanged: Hugo used `posts = "/posts/:contentbasename"` which matches Astro's `/posts/${post.id}` routing.
-- Tag and category URLs are unchanged.
+- ~~Tag and category URLs are unchanged.~~ **This was wrong.** Hugo ran taxonomy terms
+  through `MakePathSanitized` (lowercase, spaces to hyphens); the Astro routes used the raw
+  frontmatter string. Every term with a capital or a space silently changed URL —
+  `/categories/kubernetes/` became `/categories/Kubernetes/`, `/tags/developer-tools/` became
+  `/tags/developer%20tools/` — 404ing 58 terms plus their pagination. Caught in July 2026 via
+  Search Console. Fixed by restoring Hugo's slug rules in `src/utils/slug.ts`; the interim
+  Astro-form URLs are 301'd in `nginx.conf`.
 - Per-section and per-taxonomy RSS feeds from Hugo are no longer generated. A single global RSS feed is available at `/rss.xml`.
-- Trailing slashes were removed from all internal markdown links to avoid unnecessary 301 redirects under nginx.
+- ~~Trailing slashes were removed from all internal markdown links to avoid unnecessary 301
+  redirects under nginx.~~ **Backwards.** In production `/posts/foo` 301s _to_ `/posts/foo/`, so
+  the no-slash form is the one that costs a redirect hop. Component-generated links all carry the
+  trailing slash; the ~15 remaining no-slash links in markdown bodies are the ones to fix.
 - The nginx config uses `absolute_redirect off` and `try_files $uri $uri/index.html $uri/` to serve Astro's directory-based output directly without redirect hops.
 
 ### Infrastructure

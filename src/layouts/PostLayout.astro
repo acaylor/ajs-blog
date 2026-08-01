@@ -6,6 +6,7 @@ import Prompt from '../components/Prompt.astro';
 import ShareButtons from '../components/ShareButtons.astro';
 import TableOfContents from '../components/TableOfContents.astro';
 import CopyCode from '../components/CopyCode.astro';
+import { slugify } from '../utils/slug';
 
 interface AdjacentPost {
   title: string;
@@ -91,7 +92,7 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://blog.ayjc.net
               {categories.map((cat, i) => (
                 <>
                   {i > 0 && ' / '}
-                  <a href={`/categories/${cat}/`} class="cat">
+                  <a href={`/categories/${slugify(cat)}/`} class="cat">
                     {cat}
                   </a>
                 </>
@@ -119,7 +120,7 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://blog.ayjc.net
         <div class="post-tags-row">
           <span class="label">tags</span>
           {tags.map((tag) => (
-            <a href={`/tags/${tag}/`} class="tag-link">
+            <a href={`/tags/${slugify(tag)}/`} class="tag-link">
               {tag}
             </a>
           ))}

@@ -14,9 +14,9 @@ tags:
 
 _updated: 2024-12-19_
 
-[Colima](https://github.com/abiosoft/colima) is a tool that allows you to run container runtimes on macOS (and Linux) with minimal setup. If you are not familiar with containers and software such as Docker, check out [a previous post](/posts/containers) to learn more.
+[Colima](https://github.com/abiosoft/colima) is a tool that allows you to run container runtimes on macOS (and Linux) with minimal setup. If you are not familiar with containers and software such as Docker, check out [a previous post](/posts/containers/) to learn more.
 
-It uses Lima, a lightweight virtual machine manager, to create and manage VMs that run Docker or containerd. If you have not worked with virtual machines before, I have an [introductory post](/posts/getting-started-with-virtual-machines) to explain the concept.
+It uses Lima, a lightweight virtual machine manager, to create and manage VMs that run Docker or containerd. If you have not worked with virtual machines before, I have an [introductory post](/posts/getting-started-with-virtual-machines/) to explain the concept.
 
 ## Installation
 
@@ -62,7 +62,7 @@ You can see the full list of available flags by running `colima start —help`.
 
 ## Using Colima
 
-Once Colima is started, you can use the Docker or containerd CLI to interact with your containers. If you would like to know more about containerd, check out [a previous post](/posts/docker-alternatives) about alternatives to Docker for running containers.
+Once Colima is started, you can use the Docker or containerd CLI to interact with your containers. If you would like to know more about containerd, check out [a previous post](/posts/docker-alternatives/) about alternatives to Docker for running containers.
 
 ### Example: run a container in the CLI
 
@@ -142,7 +142,7 @@ kubectl cluster-info
 kubectl get nodes
 ```
 
-If you are not familiar with Kubernetes, check out a [previous post](/posts/kubernetes) to get started and install the `kubectl` tool.
+If you are not familiar with Kubernetes, check out a [previous post](/posts/kubernetes/) to get started and install the `kubectl` tool.
 
 You can also deploy applications to your cluster using `kubectl` or `helm`. For example, you can run the following commands to install a WordPress application from the bitnami helm repo:
 

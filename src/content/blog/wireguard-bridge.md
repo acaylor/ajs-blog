@@ -25,7 +25,7 @@ This project will involve setting up a "remote site" or "edge" location (which i
 - The Wi-Fi router is a VPN client for the primary homelab network.
   - VPN software: Wireguard server in homelab
 
-I have been using a Wireguard server as my VPN for several years. If you are not familiar with Wireguard, check out [a previous post](/posts/wireguard) to get started and set up a VPN server.
+I have been using a Wireguard server as my VPN for several years. If you are not familiar with Wireguard, check out [a previous post](/posts/wireguard/) to get started and set up a VPN server.
 
 #### Setup
 
@@ -51,7 +51,7 @@ Once logged into openWRT, it was simple to set the router to Wi-Fi [repeater mod
 
 The documentation from the vendor includes instructions for configuring a Wireguard VPN <https://docs.gl-inet.com/router/en/4/interface_guide/wireguard_client/#setup-wireguard-client>
 
-When setting up a Wireguard server, if following my [previous post](/posts/wireguard), there should be a peer .conf file based on the number of `PEERS` are configured as an environment variable. One of these conf files can be used to configure the Wi-Fi router. You can upload the peer.conf file if it is on your local machine or enter it into the web console:
+When setting up a Wireguard server, if following my [previous post](/posts/wireguard/), there should be a peer .conf file based on the number of `PEERS` are configured as an environment variable. One of these conf files can be used to configure the Wi-Fi router. You can upload the peer.conf file if it is on your local machine or enter it into the web console:
 
 ![wireguard_config_example](/images/wireguard_config_example.png)
 

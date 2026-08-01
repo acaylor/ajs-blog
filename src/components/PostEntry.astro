@@ -1,4 +1,6 @@
 ---
+import { slugify } from '../utils/slug';
+
 interface Props {
   title: string;
   date: Date;
@@ -20,7 +22,7 @@ const ymd = isoDate.slice(0, 10);
     tags.length > 0 && (
       <div class="tags">
         {tags.slice(0, 4).map((tag) => (
-          <a href={`/tags/${tag}`} class="tag-link">
+          <a href={`/tags/${slugify(tag)}/`} class="tag-link">
             {tag}
           </a>
         ))}

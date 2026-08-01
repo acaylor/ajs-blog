@@ -8,32 +8,29 @@ import Pagination from '../../../components/Pagination.astro';
 import Prompt from '../../../components/Prompt.astro';
 import { getCollection } from 'astro:content';
 import { getReadingTime } from '../../../utils/reading-time';
+import { groupBySlug } from '../../../utils/taxonomy';
 
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
-  const categories = new Set<string>();
-  posts.forEach((post) => post.data.categories?.forEach((cat) => categories.add(cat)));
 
-  return [...categories].flatMap((category) => {
-    const filtered = posts
-      .filter((post) => post.data.categories?.includes(category))
-      .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-    return paginate(filtered, { params: { category }, pageSize: 12 });
-  });
+  return groupBySlug(posts, 'categories').flatMap((group) =>
+    paginate(group.posts, {
+      params: { category: group.slug },
+      props: { display: group.display },
+      pageSize: 12,
+    }),
+  );
 }) satisfies GetStaticPaths;
 
-const { category } = Astro.params;
-const { page } = Astro.props;
+const { page, display } = Astro.props;
 const moduleName = `page_${String(page.currentPage).padStart(3, '0')}`;
 const pageLabel = `page ${page.currentPage}/${page.lastPage}`;
-const basePath = `/categories/${category}`;
+const basePath = `/categories/${Astro.params.category}`;
 ---
 
-<BaseLayout
-  title={page.currentPage > 1 ? `${category} - Page ${page.currentPage}` : String(category)}
->
+<BaseLayout title={page.currentPage > 1 ? `${display} - Page ${page.currentPage}` : display}>
   <Banner
-    command={`ls -lah /categories/${category}/`}
+    command={`ls -lah /categories/${display}/`}
     status={{
       tag: 'info',
       label: '[INFO]',
@@ -41,7 +38,7 @@ const basePath = `/categories/${category}`;
     }}
   />
 
-  <h1 class="title">category: {category}</h1>
+  <h1 class="title">category: {display}</h1>
   <p class="title-sub">
     <a href="/categories/">&larr; all categories</a>
   </p>

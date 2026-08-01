@@ -23,7 +23,7 @@ I will start with tools that I use for development work on macOS and Linux. If y
 
 ### Terminal emulators
 
-Most quick tasks can be accomplished in a terminal emulator. This program will also open other terminal based tools. Before setting up a terminal emulator, I recommend checking out [zshell](/posts/zshell).
+Most quick tasks can be accomplished in a terminal emulator. This program will also open other terminal based tools. Before setting up a terminal emulator, I recommend checking out [zshell](/posts/zshell/).
 
 #### kitty
 
@@ -51,7 +51,7 @@ Vi 'workalike' with [many additional features](https://www.vim.org/). This is a 
 
 My text editor of choice is Vim. There is a steep learning curve but the benefit of learning Vim is that it is a minimal program that can be found on systems that do not have a graphical user interface such as headless Linux servers.
 
-I have a whole post on the topic of [vim and setting up some addons](/posts/vim).
+I have a whole post on the topic of [vim and setting up some addons](/posts/vim/).
 
 #### neovim
 
@@ -205,7 +205,7 @@ There are plenty of tools that are useful to a desktop user but not related to s
 
 - At the homelab I use [LibreOffice](https://www.libreoffice.org/) which is not as robust as Excel but for personal productivity it is sufficient.
 - Obsidian I will mention again for taking notes and staying organized.
-- [kanboard](/posts/kanboard) is a tool I made a post about. I use this for organizing projects. It can be used for agile software development.
+- [kanboard](/posts/kanboard/) is a tool I made a post about. I use this for organizing projects. It can be used for agile software development.
 - [Firefox](https://www.mozilla.org/en-US/firefox/new/) is my web browser of choice and it is able to use hardware video decoding on Linux.
 - [Librewolf](https://librewolf.net/) is my second web browser of choice. It removes the telemetry built in to Firefox. It purges every browsing session so I use it for online shopping to avoid being tracked by advertisers.
 

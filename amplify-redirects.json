@@ -1,0 +1,372 @@
+[
+  {
+    "source": "/categories/AI/",
+    "target": "/categories/ai/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/AI/2/",
+    "target": "/categories/ai/2/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Cloud/",
+    "target": "/categories/cloud/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Command Line/",
+    "target": "/categories/command-line/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Containers/",
+    "target": "/categories/containers/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Containers/2/",
+    "target": "/categories/containers/2/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Containers/3/",
+    "target": "/categories/containers/3/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Database Management/",
+    "target": "/categories/database-management/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Homelab/",
+    "target": "/categories/homelab/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Homelab/2/",
+    "target": "/categories/homelab/2/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Homelab/3/",
+    "target": "/categories/homelab/3/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Homelab/4/",
+    "target": "/categories/homelab/4/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Homelab/5/",
+    "target": "/categories/homelab/5/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Kubernetes/",
+    "target": "/categories/kubernetes/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Kubernetes/2/",
+    "target": "/categories/kubernetes/2/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Linux/",
+    "target": "/categories/linux/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Linux/2/",
+    "target": "/categories/linux/2/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Logging/",
+    "target": "/categories/logging/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Networking/",
+    "target": "/categories/networking/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Observability/",
+    "target": "/categories/observability/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Observability/2/",
+    "target": "/categories/observability/2/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Proxmox/",
+    "target": "/categories/proxmox/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Python/",
+    "target": "/categories/python/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Raspberry Pi/",
+    "target": "/categories/raspberry-pi/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Security/",
+    "target": "/categories/security/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Software Development/",
+    "target": "/categories/software-development/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Software Development/2/",
+    "target": "/categories/software-development/2/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Software/",
+    "target": "/categories/software/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Software/2/",
+    "target": "/categories/software/2/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Software/3/",
+    "target": "/categories/software/3/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Virtual Machines/",
+    "target": "/categories/virtual-machines/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Virtual Machines/2/",
+    "target": "/categories/virtual-machines/2/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/Windows/",
+    "target": "/categories/windows/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/macOS/",
+    "target": "/categories/macos/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/AWS Amplify/",
+    "target": "/tags/aws-amplify/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/AWS/",
+    "target": "/tags/aws/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/GCP/",
+    "target": "/tags/gcp/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/Gitlab CI/",
+    "target": "/tags/gitlab-ci/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/Gitlab/",
+    "target": "/tags/gitlab/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/Hugo/",
+    "target": "/tags/hugo/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/IPAM/",
+    "target": "/tags/ipam/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/Kanboard/",
+    "target": "/tags/kanboard/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/claude code/",
+    "target": "/tags/claude-code/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/configuration management/",
+    "target": "/tags/configuration-management/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/developer tools/",
+    "target": "/tags/developer-tools/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/developer tools/2/",
+    "target": "/tags/developer-tools/2/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/file conversion/",
+    "target": "/tags/file-conversion/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/fluent bit/",
+    "target": "/tags/fluent-bit/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/frontend design/",
+    "target": "/tags/frontend-design/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/google cloud/",
+    "target": "/tags/google-cloud/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/grafana alloy/",
+    "target": "/tags/grafana-alloy/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/grafana mimir/",
+    "target": "/tags/grafana-mimir/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/home assistant/",
+    "target": "/tags/home-assistant/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/infrastructure as code/",
+    "target": "/tags/infrastructure-as-code/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/macOS setup/",
+    "target": "/tags/macos-setup/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/macOS/",
+    "target": "/tags/macos/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/mx linux/",
+    "target": "/tags/mx-linux/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/nginx proxy manager/",
+    "target": "/tags/nginx-proxy-manager/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/open source/",
+    "target": "/tags/open-source/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/openEBS/",
+    "target": "/tags/openebs/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/raspberry pi/",
+    "target": "/tags/raspberry-pi/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/reverse proxy/",
+    "target": "/tags/reverse-proxy/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/search engine/",
+    "target": "/tags/search-engine/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/stable diffusion/",
+    "target": "/tags/stable-diffusion/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/uptime kuma/",
+    "target": "/tags/uptime-kuma/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/virtual machine/",
+    "target": "/tags/virtual-machine/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/visual studio code/",
+    "target": "/tags/visual-studio-code/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/vm template/",
+    "target": "/tags/vm-template/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/windows terminal/",
+    "target": "/tags/windows-terminal/",
+    "status": "301"
+  },
+  {
+    "source": "/index.xml",
+    "target": "/rss.xml",
+    "status": "301"
+  },
+  {
+    "source": "/posts/index.xml",
+    "target": "/rss.xml",
+    "status": "301"
+  },
+  {
+    "source": "</^\\/(tags|categories)\\/[^\\/]+\\/index\\.xml$/>",
+    "target": "/rss.xml",
+    "status": "301"
+  },
+  {
+    "source": "/posts/page/<*>",
+    "target": "/posts/",
+    "status": "301"
+  },
+  {
+    "source": "</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json|xml)$)([^.]+$)/>",
+    "target": "/404.html",
+    "status": "404"
+  }
+]
