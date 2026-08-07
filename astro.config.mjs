@@ -5,6 +5,7 @@ const site = process.env.SITE_URL ?? process.env.URL ?? 'https://blog.ayjc.net';
 
 export default defineConfig({
   site,
+  compressHTML: true,
   integrations: [sitemap()],
   server: {
     host: true,
