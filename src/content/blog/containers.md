@@ -75,4 +75,4 @@ There are alternatives to running Docker and Docker desktop on your system. Chec
 [7]: https://galaxy.ansible.com
 [8]: https://docs.docker.com/get-docker/
 [9]: https://brew.sh
-[10]: /posts/docker-alternatives
+[10]: /posts/docker-alternatives/

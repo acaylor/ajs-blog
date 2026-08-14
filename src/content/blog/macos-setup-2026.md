@@ -590,11 +590,11 @@ Here are some resources for Developing on macOS:
 [3]: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 [4]: https://brew.sh
 [5]: https://github.com/Homebrew/brew/releases/latest
-[6]: /posts/zshell
+[6]: /posts/zshell/
 [7]: https://www.vim.org/
-[8]: /posts/vim
+[8]: /posts/vim/
 [9]: https://neovim.io
 [10]: /tags/alloy/
-[11]: /posts/containers
-[12]: /posts/colima
+[11]: /posts/containers/
+[12]: /posts/colima/
 [13]: https://github.com/acaylor/linux_setup/blob/master/mac-packages.sh

@@ -235,6 +235,6 @@ This is an example of starting a new chat with the llama3 model referenced earli
 ![open-webui-example](/images/open-webui-ex.png)
 
 [1]: https://ollama.com
-[2]: /posts/ansible
-[3]: /posts/containers
-[4]: /posts/docker-alternatives
+[2]: /posts/ansible/
+[3]: /posts/containers/
+[4]: /posts/docker-alternatives/

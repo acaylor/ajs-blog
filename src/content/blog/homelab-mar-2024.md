@@ -82,5 +82,5 @@ Soon I will begin setting up a new lab.
 [1]: https://en.wikipedia.org/wiki/Microsoft_Windows
 [2]: https://en.wikipedia.org/wiki/MacOS
 [3]: https://en.wikipedia.org/wiki/Linux
-[4]: /posts/getting-started-with-virtual-machines
-[5]: /posts/tools-jan-2024
+[4]: /posts/getting-started-with-virtual-machines/
+[5]: /posts/tools-jan-2024/

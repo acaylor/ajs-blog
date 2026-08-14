@@ -239,5 +239,5 @@ In the homelab, you can set up nginx along with any other web application to eit
 [2]: http://nginx.org
 [3]: https://getfedora.org/
 [4]: https://en.wikipedia.org/wiki/Red_Hat_Enterprise_Linux
-[5]: /posts/containers
-[6]: /posts/loki-homelab-logging
+[5]: /posts/containers/
+[6]: /posts/loki-homelab-logging/

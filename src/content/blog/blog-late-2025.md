@@ -26,7 +26,7 @@ I doubt I announced it but I also this year open-sourced my blog. Originally in 
 
 [https://github.com/acaylor/ajs-blog](https://github.com/acaylor/ajs-blog)
 
-[1]: /posts/blog-theme-2024
+[1]: /posts/blog-theme-2024/
 [2]: https://github.com/gohugoio/hugo
 [3]: https://github.com/acaylor/ajsTheme
 [4]: https://gitlab.com/acaylor/hugobuild

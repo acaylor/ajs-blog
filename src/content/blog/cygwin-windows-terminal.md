@@ -99,4 +99,4 @@ https://cygwin.com/cygwin-ug-net.html
 [3]: https://en.wikipedia.org/wiki/POSIX
 [4]: https://chocolatey.org/install
 [5]: https://github.com/microsoft/terminal
-[6]: /posts/setting-up-windows
+[6]: /posts/setting-up-windows/

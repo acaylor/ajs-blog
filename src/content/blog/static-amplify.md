@@ -124,8 +124,8 @@ I have used Amplify for almost 5 years with no issues and I hope the next 5 go j
 
 [1]: https://astro.build/
 [2]: https://aws.amazon.com/amplify/
-[3]: /posts/hugo-amplify
+[3]: /posts/hugo-amplify/
 [4]: https://git-lfs.github.com/
-[5]: /posts/hugo-amplify#building-my-blog
+[5]: /posts/hugo-amplify/#building-my-blog
 [6]: https://gitlab.com/acaylor/nodebuild
 [7]: https://gitlab.com/acaylor/nodebuild/container_registry

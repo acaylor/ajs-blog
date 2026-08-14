@@ -186,7 +186,7 @@ You should now have a functioning cluster ready to deploy containers. You can re
 ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=root reset.yml
 ```
 
-[1]: /posts/kubernetes
-[2]: /posts/ansible
+[1]: /posts/kubernetes/
+[2]: /posts/ansible/
 [3]: https://kubespray.io/#/
-[4]: /posts/proxmox-installation
+[4]: /posts/proxmox-installation/

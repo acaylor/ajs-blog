@@ -44,6 +44,6 @@ For an example Hypervisor deployment where this image can be used, check out [a 
 [1]: http://netboot.xyz/
 [2]: https://en.wikipedia.org/wiki/Preboot_Execution_Environment
 [3]: http://ipxe.org/
-[4]: /posts/creating-usb-installation-media
-[5]: /posts/proxmox-installation
-[6]: /posts/getting-started-with-virtual-machines
+[4]: /posts/creating-usb-installation-media/
+[5]: /posts/proxmox-installation/
+[6]: /posts/getting-started-with-virtual-machines/

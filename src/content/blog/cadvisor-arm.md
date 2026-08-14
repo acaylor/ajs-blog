@@ -198,5 +198,5 @@ At this time it has the ID `11600`.
 ![grafana_cadvisor](/images/grafana_cadvisor.png)
 
 [1]: https://github.com/google/cadvisor
-[2]: /posts/prometheus
+[2]: /posts/prometheus/
 [3]: https://github.com/google/cadvisor/issues/1236

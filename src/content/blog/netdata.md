@@ -346,7 +346,7 @@ _New disclaimer I am adding: I used an LLM to help create this post but afterwar
 [2]: https://learn.netdata.cloud/docs/welcome-to-netdata/real-time-monitoring
 [3]: https://www.netdata.cloud/features/dataplatform/metrics-management/
 [4]: https://www.netdata.cloud/features/aiml/machine-learning/
-[5]: /posts/containers
+[5]: /posts/containers/
 [6]: https://docs.docker.com/engine/network/drivers/host/
 [7]: https://learn.netdata.cloud/docs/netdata-agent/installation/docker
 [8]: https://learn.netdata.cloud/docs/exporting-metrics/prometheus-remote-write

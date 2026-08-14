@@ -229,6 +229,6 @@ The source is on [GitHub][3].
 
 _Disclaimer: I used an LLM to assist with this tool and post. Opinions expressed are my own._
 
-[1]: /posts/renovate
-[2]: /posts/renovate-docker
+[1]: /posts/renovate/
+[2]: /posts/renovate-docker/
 [3]: https://github.com/acaylor/renovate-reporter

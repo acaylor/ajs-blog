@@ -516,14 +516,14 @@ Any resources deployed with terraform can be removed with the command:
 terraform destroy
 ```
 
-[1]: /posts/ansible
+[1]: /posts/ansible/
 [2]: https://brew.sh
-[3]: /posts/setting-up-windows
-[4]: /posts/creating-linux-virtual-machine-templates-with-packer
-[5]: /posts/containers
-[6]: /posts/portainer
-[6]: /posts/proxmox-installation
-[7]: /posts/creating-linux-virtual-machine-templates-with-packer
+[3]: /posts/setting-up-windows/
+[4]: /posts/creating-linux-virtual-machine-templates-with-packer/
+[5]: /posts/containers/
+[6]: /posts/portainer/
+[6]: /posts/proxmox-installation/
+[7]: /posts/creating-linux-virtual-machine-templates-with-packer/
 [8]: https://registry.terraform.io/providers/Telmate/proxmox/latest/docs
-[9]: /posts/proxmox-noble
+[9]: /posts/proxmox-noble/
 [10]: https://registry.terraform.io/providers/kreuzwerker/docker/latest/docs

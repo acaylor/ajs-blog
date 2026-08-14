@@ -164,5 +164,5 @@ This will cause the k3os system upgrade controller to react and update k3os.
 
 [1]: https://k3os.io/
 [2]: https://k3s.io/
-[3]: /posts/kubernetes
+[3]: /posts/kubernetes/
 [4]: https://github.com/rancher/k3os/releases

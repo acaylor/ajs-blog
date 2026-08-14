@@ -100,4 +100,4 @@ Once you configure some cron jobs, your dashboard on healthchecks.io should look
 
 In a future post I may explore the self-hosted version of this application but I try to avoid hosting database engines in the cloud.
 
-[1]: /posts/truenas
+[1]: /posts/truenas/

@@ -133,12 +133,12 @@ Check out the [AWS documentation][11] to set this up.
 
 [1]: https://aws.amazon.com/amplify/
 [2]: https://aws.amazon.com/what-is-aws/
-[3]: /posts/building-this-blog
+[3]: /posts/building-this-blog/
 [4]: https://git-lfs.github.com/
-[5]: /posts/containers
+[5]: /posts/containers/
 [6]: https://www.github.com/klakegg/docker-hugo
-[7]: /posts/gitlab-ci
+[7]: /posts/gitlab-ci/
 [8]: https://console.aws.amazon.com/amplify/home?region=us-east-1#/home
-[9]: /posts/statping
+[9]: /posts/statping/
 [10]: https://docs.aws.amazon.com/amplify/latest/userguide/getting-started.html#step-1-connect-repository
 [11]: https://docs.aws.amazon.com/amplify/latest/userguide/custom-domains.html

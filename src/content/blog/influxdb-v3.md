@@ -864,8 +864,8 @@ Whether you're monitoring a single server, migrating from InfluxDB v1, or managi
 
 _Disclaimer: I used an LLM to help create this post. Opinions expressed are likely from me and not the LLM._
 
-[1]: /posts/influxdbv1
-[2]: /posts/containers
+[1]: /posts/influxdbv1/
+[2]: /posts/containers/
 [3]: https://docs.influxdata.com/influxdb3/core/query-data/execute-queries/influxdb-v3-api
 [4]: https://docs.influxdata.com/influxdb3/core/api/v3
 [5]: https://docs.influxdata.com/influxdb3/core/reference/line-protocol

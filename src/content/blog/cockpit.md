@@ -90,4 +90,4 @@ Once you select an installation type, you can allocate storage space and memory 
 
 [1]: https://cockpit-project.org/applications.html
 [2]: https://cockpit-project.org/running.html
-[3]: /posts/kvm-qemu
+[3]: /posts/kvm-qemu/

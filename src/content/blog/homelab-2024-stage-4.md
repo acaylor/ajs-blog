@@ -112,13 +112,13 @@ A VPN is a way to create a secure tunnel from a remote network onto your own net
 
 Check out a previous [post][10] to setup Wireguard as a VPN server and client.
 
-[1]: /posts/setting-up-raspberry-pi
-[2]: /posts/nginx
-[3]: /posts/adguard-home
-[4]: /posts/ubuntu-zfs
-[5]: /posts/ubuntu-nfs
-[6]: /posts/proxmox-installation
-[7]: /posts/getting-started-with-virtual-machines
-[8]: /posts/loki-homelab-logging
-[9]: /posts/prometheus
-[10]: /posts/wireguard
+[1]: /posts/setting-up-raspberry-pi/
+[2]: /posts/nginx/
+[3]: /posts/adguard-home/
+[4]: /posts/ubuntu-zfs/
+[5]: /posts/ubuntu-nfs/
+[6]: /posts/proxmox-installation/
+[7]: /posts/getting-started-with-virtual-machines/
+[8]: /posts/loki-homelab-logging/
+[9]: /posts/prometheus/
+[10]: /posts/wireguard/

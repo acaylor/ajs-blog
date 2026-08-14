@@ -54,5 +54,5 @@ You can open a `psql` shell with another container created within the pod:
 podman run -it --rm --pod postgresp docker.io/postgres psql -h postgres_test -U postgres
 ```
 
-[1]: /posts/postgres
-[2]: /posts/docker-alternatives
+[1]: /posts/postgres/
+[2]: /posts/docker-alternatives/

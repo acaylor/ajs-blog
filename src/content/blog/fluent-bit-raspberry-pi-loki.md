@@ -238,7 +238,7 @@ For example:
 
 This is a small change, but it is exactly the kind of boring homelab maintenance that future me appreciates. Promtail was a great tool for a long time, but it is deprecated. Alloy is the path I prefer on systems where it fits. For this older Raspberry Pi 3, Fluent Bit keeps the setup lightweight, supported on ARMv7, and limited to read-only access to Docker's log files. I actually kind of prefer this over the heavy config required for Grafana Alloy.
 
-[1]: /posts/promtail-to-alloy
+[1]: /posts/promtail-to-alloy/
 [2]: https://fluentbit.io/
 [3]: https://docs.fluentbit.io/manual/installation/docker
 [4]: https://docs.fluentbit.io/manual/pipeline/inputs/tail

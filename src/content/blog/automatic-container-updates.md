@@ -205,10 +205,10 @@ ssh -i ~/.ssh/n8n_deploy_key deploy@your-docker-server.com
 
 **Multiple servers?** Duplicate the workflow and change the host in each SSH node to deploy to different servers.
 
-[1]: /posts/containers
-[2]: /posts/kubernetes
-[3]: /posts/nginx
-[4]: /posts/caddy
-[5]: /posts/adguard-home
-[6]: /posts/gitea
-[7]: /posts/n8n
+[1]: /posts/containers/
+[2]: /posts/kubernetes/
+[3]: /posts/nginx/
+[4]: /posts/caddy/
+[5]: /posts/adguard-home/
+[6]: /posts/gitea/
+[7]: /posts/n8n/

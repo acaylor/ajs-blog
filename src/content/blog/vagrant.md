@@ -87,6 +87,6 @@ vagrant box remove ubuntu/focal64
 There are many more templates online that you can use with vagrant, check out the official website to search for templates that are compatible with Vagrant & VirtualBox: https://app.vagrantup.com/boxes/search?provider=virtualbox
 
 [1]: https://www.vagrantup.com/
-[2]: /posts/getting-started-with-virtual-machines
-[3]: /posts/setting-up-windows
+[2]: /posts/getting-started-with-virtual-machines/
+[3]: /posts/setting-up-windows/
 [4]: https://brew.sh

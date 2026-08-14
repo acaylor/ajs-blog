@@ -220,8 +220,8 @@ That is the right shape once you are comfortable, but it is not the right first 
 [1]: https://headlamp.dev/
 [2]: https://kubernetes.io/blog/2026/01/22/headlamp-in-2025-project-highlights/
 [3]: https://kubernetes.io/docs/reference/access-authn-authz/rbac/
-[4]: /posts/argocd-app-of-apps
+[4]: /posts/argocd-app-of-apps/
 [5]: https://helm.sh/
 [6]: https://kubernetes.io/docs/reference/access-authn-authz/authentication/#token-request
-[7]: /posts/kubernetes-automated-certs
+[7]: /posts/kubernetes-automated-certs/
 [8]: https://headlamp.dev/docs/latest/installation/in-cluster/oidc/

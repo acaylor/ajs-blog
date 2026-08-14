@@ -200,6 +200,6 @@ For more information, see the [statping wiki.][5]
 
 [1]: https://github.com/statping-ng/statping-ng
 [2]: https://aws.amazon.com
-[3]: /posts/ansible
+[3]: /posts/ansible/
 [4]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html
 [5]: https://github.com/statping-ng/statping-ng/wiki

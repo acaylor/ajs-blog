@@ -107,5 +107,5 @@ In the container compose template above, the environment variable `UPDATE_MODS_O
 
 [1]: https://www.factorio.com/
 [2]: https://hub.docker.com/r/factoriotools/factorio
-[3]: /posts/containers
+[3]: /posts/containers/
 [4]: https://portforward.com/

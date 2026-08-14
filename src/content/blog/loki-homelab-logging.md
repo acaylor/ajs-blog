@@ -366,11 +366,11 @@ Loki is able to import logs from more sources than I covered here. If you use `r
 
 I also recommend looking into configuring a firewall for your loki server so that only authorized systems can connect to the loki server. You can also set up a reverse proxy server to encrypt traffic to and from the loki server by serving loki over HTTPS. Check out a [previous post][7] to see how to set up a proxy server with docker.
 
-[1]: /posts/prometheus
+[1]: /posts/prometheus/
 [2]: https://grafana.com/oss/loki/
-[3]: /posts/proxmox-installation
-[4]: /posts/terraform
-[5]: /posts/ansible
-[6]: /posts/containers
-[7]: /posts/pi-proxy
-[8]: /posts/loki-3-upgrade
+[3]: /posts/proxmox-installation/
+[4]: /posts/terraform/
+[5]: /posts/ansible/
+[6]: /posts/containers/
+[7]: /posts/pi-proxy/
+[8]: /posts/loki-3-upgrade/

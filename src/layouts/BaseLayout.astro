@@ -10,12 +10,15 @@ interface Props {
   title: string;
   description?: string;
   mainClass?: string;
+  /** Keep the page out of the index. Set on pages that are not real destinations. */
+  noindex?: boolean;
 }
 
 const {
   title,
   description = 'A personal blog focused on software, technology, and the cloud',
   mainClass,
+  noindex = false,
 } = Astro.props;
 
 const path = Astro.url.pathname;
@@ -25,6 +28,13 @@ const isCurrent = (prefix: string) =>
 const year = new Date().getFullYear();
 const isPost = mainClass === 'post';
 const { postCount, uptimeDays } = await getBlogStats();
+
+// Self-referencing canonical. Astro.site is the production origin, so this stays
+// correct when the same HTML is served from a preview domain or the Docker image —
+// without it, any alternate host Google reaches becomes a duplicate of the real page.
+// The 404 body is served at whatever URL was requested, so a canonical there would
+// point every dead URL at /404/ and invite Google to index the error page itself.
+const canonical = noindex ? null : new URL(path, Astro.site).href;
 ---
 
 <!doctype html>
@@ -33,6 +43,8 @@ const { postCount, uptimeDays } = await getBlogStats();
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    {canonical && <link rel="canonical" href={canonical} />}
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="alternate" type="application/rss+xml" title="AJ's Blog" href="/rss.xml" />
     <link rel="preload" as="font" type="font/woff2" href={dmMono400} crossorigin />
@@ -57,15 +69,15 @@ const { postCount, uptimeDays } = await getBlogStats();
       <div class="inner">
         <a href="/" class="brand">aj@blog</a>
         <nav class="crumb" aria-label="Primary">
-          <a href="/posts" class={isCurrent('/posts') ? 'current' : undefined}>posts</a>
+          <a href="/posts/" class={isCurrent('/posts') ? 'current' : undefined}>posts</a>
           <span class="sep" aria-hidden="true">·</span>
-          <a href="/tags" class={isCurrent('/tags') ? 'current' : undefined}>tags</a>
+          <a href="/tags/" class={isCurrent('/tags') ? 'current' : undefined}>tags</a>
           <span class="sep" aria-hidden="true">·</span>
-          <a href="/categories" class={isCurrent('/categories') ? 'current' : undefined}
+          <a href="/categories/" class={isCurrent('/categories') ? 'current' : undefined}
             >categories</a
           >
           <span class="sep" aria-hidden="true">·</span>
-          <a href="/about" class={isCurrent('/about') ? 'current' : undefined}>about</a>
+          <a href="/about/" class={isCurrent('/about') ? 'current' : undefined}>about</a>
         </nav>
         <span class="spacer"></span>
         {
@@ -123,7 +135,7 @@ const { postCount, uptimeDays } = await getBlogStats();
               ></path>
             </svg>
           </a>
-          <a href="/about#contact" aria-label="Contact">
+          <a href="/about/#contact" aria-label="Contact">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"

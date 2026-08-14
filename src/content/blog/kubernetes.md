@@ -236,6 +236,6 @@ minikube stop
 minikube delete --all
 ```
 
-[1]: /posts/containers
+[1]: /posts/containers/
 [2]: https://brew.sh
-[3]: /posts/setting-up-windows
+[3]: /posts/setting-up-windows/

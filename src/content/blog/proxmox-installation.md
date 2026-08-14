@@ -90,5 +90,5 @@ To clean up everything, simply right click the vm or select the vm and navigate 
 [4]: https://linuxcontainers.org/
 [5]: https://www.proxmox.com/en/downloads
 [6]: http://rufus.ie/
-[7]: /posts/getting-started-with-virtual-machines
-[8]: /posts/creating-usb-installation-media
+[7]: /posts/getting-started-with-virtual-machines/
+[8]: /posts/creating-usb-installation-media/

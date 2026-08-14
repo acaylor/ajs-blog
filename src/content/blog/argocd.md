@@ -222,5 +222,5 @@ kubectl delete namespace argocd
 [3]: https://en.wikipedia.org/wiki/YAML
 [4]: https://en.wikipedia.org/wiki/JSON
 [5]: https://helm.sh/
-[6]: /posts/kubernetes
-[7]: /posts/setting-up-windows
+[6]: /posts/kubernetes/
+[7]: /posts/setting-up-windows/

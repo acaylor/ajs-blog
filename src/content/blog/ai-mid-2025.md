@@ -73,4 +73,4 @@ I would guess that now that the general public is so familiar with tools like Ch
 
 We probably want to move to specialized AI models where one model is a master of human language with a completely separate model that understands the instructions that a CPU expects. I already see AI agents running code to feed information back to themselves. We need to optimize the interface between AI models at a high level similar to how Anthropic have created MCP to help AI agents use existing software.
 
-[1]: /posts/ollama-blog
+[1]: /posts/ollama-blog/

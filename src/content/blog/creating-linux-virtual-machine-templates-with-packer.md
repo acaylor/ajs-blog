@@ -439,5 +439,5 @@ Packer will create an OVF file and a virtual machine hard disk in the specified 
 [14]: https://json.org/
 [15]: https://github.com/hashicorp/hcl
 [16]: https://www.packer.io/docs/builders/proxmox/
-[17]: /posts/setting-up-windows
-[18]: /posts/proxmox-installation
+[17]: /posts/setting-up-windows/
+[18]: /posts/proxmox-installation/

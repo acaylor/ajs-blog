@@ -287,4 +287,4 @@ A healthy cluster reports `Cluster in healthy state` with the primary instance n
 [8]: https://cloudnative-pg.io/docs/1.29/monitoring/
 [9]: https://cloudnative-pg.io/docs/1.29/backup/
 [10]: https://cloudnative-pg.io/docs/1.29/connection_pooling/
-[11]: /posts/kubernetes
+[11]: /posts/kubernetes/

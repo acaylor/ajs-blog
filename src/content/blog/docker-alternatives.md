@@ -263,8 +263,8 @@ podman rm $(podman ps -a -q)
 ```
 
 [1]: https://hub.docker.com
-[2]: /posts/containers
-[3]: /posts/kubernetes
+[2]: /posts/containers/
+[3]: /posts/kubernetes/
 [4]: https://podman.io/
 [5]: https://brew.sh
 [6]: https://github.com/containers/podman/blob/main/docs/tutorials/podman-for-windows.md

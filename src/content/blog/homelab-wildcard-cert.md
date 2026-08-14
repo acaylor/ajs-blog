@@ -164,5 +164,5 @@ Key outputs to expose (names optional):
 [2]: https://www.cloudflare.com/learning/ssl/what-is-https/
 [3]: https://www.git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F
 [4]: https://github.com/acmesh-official/acme.sh/wiki/dnsapi
-[5]: /posts/nginx
-[6]: /posts/terraform
+[5]: /posts/nginx/
+[6]: /posts/terraform/

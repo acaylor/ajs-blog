@@ -118,6 +118,6 @@ INFO[0001] Stopping container hello-world_hello-world_1
 Using `nerdctl` is only half of what Rancher Desktop is capable of. It also lets you run a local kubernetes environment. That is a more robust platform for orchestrating container based services.
 
 [1]: https://rancherdesktop.io/
-[2]: /posts/containers
+[2]: /posts/containers/
 [3]: https://containerd.io/
 [4]: https://docs.rancherdesktop.io/getting-started/installation

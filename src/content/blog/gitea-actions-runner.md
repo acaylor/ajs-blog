@@ -244,5 +244,5 @@ For now, I have unlocked the ability to create CI jobs that run entirely in my h
 
 _Disclaimer: I used an LLM to assist with this work and post. Opinions expressed are my own._
 
-[1]: /posts/gitea
+[1]: /posts/gitea/
 [2]: https://gitea.com/gitea/act_runner

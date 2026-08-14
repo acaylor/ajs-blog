@@ -156,4 +156,4 @@ We could use this database to create a web application. A login form can be crea
 Here is a cool Website that helps to visualize a database <https://drawsql.app/>
 
 [1]: https://www.postgresql.org/
-[2]: /posts/containers
+[2]: /posts/containers/

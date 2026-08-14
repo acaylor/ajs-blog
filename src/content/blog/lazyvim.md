@@ -119,4 +119,4 @@ Once you have fzf, fd, and ripgrep Lazyvim can make searching through your proje
 - Pressing <kbd>SPACE</kbd> + <kbd>/</kbd> will allow you to recursively search for a fuzzy string in any file in your project.
 
 [1]: https://github.com/LazyVim/LazyVim
-[2]: /posts/modern-cli-2026
+[2]: /posts/modern-cli-2026/

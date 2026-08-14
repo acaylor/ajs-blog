@@ -75,12 +75,12 @@ I have no idea what the next six months will add, but I am increasingly interest
 
 _Disclaimer: I used an LLM to help create this post. Opinions expressed are likely from me and not the LLM._
 
-[1]: /posts/ollama-blog
-[2]: /posts/open-webui-image-generation
-[3]: /posts/opencode-ollama
-[4]: /posts/terminal-ai-coding-tools
-[5]: /posts/fable-5-access-suspended
-[6]: /posts/fable-5-access-restored
-[7]: /posts/agent-hollow
+[1]: /posts/ollama-blog/
+[2]: /posts/open-webui-image-generation/
+[3]: /posts/opencode-ollama/
+[4]: /posts/terminal-ai-coding-tools/
+[5]: /posts/fable-5-access-suspended/
+[6]: /posts/fable-5-access-restored/
+[7]: /posts/agent-hollow/
 [8]: https://hermes-agent.nousresearch.com/
-[9]: /posts/private-ai-k8s-stack
+[9]: /posts/private-ai-k8s-stack/

@@ -334,8 +334,8 @@ sum by (upstream) (rate(adguard_processing_time_milliseconds_sum[5m])) / sum by 
 ```
 
 [1]: https://github.com/AdguardTeam/AdGuardHome
-[2]: /posts/containers
+[2]: /posts/containers/
 [3]: https://github.com/bakito/adguardhome-sync/
 [4]: https://docs.linuxserver.io/images/docker-adguardhome-sync/
-[5]: /posts/prometheus
+[5]: /posts/prometheus/
 [6]: https://github.com/henrywhitaker3/adguard-exporter/blob/main/grafana/dashboard.json

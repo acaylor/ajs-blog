@@ -113,10 +113,10 @@ For more details on configurations possible, check out the [Dokuwiki wiki][9].
 
 [1]: https://www.dokuwiki.org/dokuwiki/
 [2]: https://www.dictionary.com/browse/wikis
-[3]: /posts/containers
-[4]: /posts/getting-started-with-virtual-machines
-[5]: /posts/proxmox-installation
+[3]: /posts/containers/
+[4]: /posts/getting-started-with-virtual-machines/
+[5]: /posts/proxmox-installation/
 [6]: https://linuxserver.io
 [7]: https://portforward.com/
-[8]: /posts/pi-proxy
+[8]: /posts/pi-proxy/
 [9]: https://www.dokuwiki.org/dokuwiki/

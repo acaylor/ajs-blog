@@ -378,6 +378,6 @@ Check out some other posts on software that can be installed on a Ubuntu Linux s
 - [Reverse proxy server][2]
 - [Network-wide ad blocker][3]
 
-[1]: /posts/setting-up-windows
-[2]: /posts/pi-proxy
-[3]: /posts/getting-started-in-the-homelab
+[1]: /posts/setting-up-windows/
+[2]: /posts/pi-proxy/
+[3]: /posts/getting-started-in-the-homelab/

@@ -176,8 +176,8 @@ The dashboard requires authentication but the status page will be publicly acces
 ![uptime_kuma](/images/uptime_kuma.png)
 
 [1]: https://github.com/louislam/uptime-kuma
-[2]: /posts/statping
+[2]: /posts/statping/
 [3]: https://linuxserver.io/
-[4]: /posts/containers
-[5]: /posts/docker-alternatives
-[6]: /posts/getting-started-with-virtual-machines
+[4]: /posts/containers/
+[5]: /posts/docker-alternatives/
+[6]: /posts/getting-started-with-virtual-machines/

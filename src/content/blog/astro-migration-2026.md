@@ -163,10 +163,10 @@ The source code is available on [GitLab][8] and mirrored on [GitHub][9].
 _Disclaimer: I used an LLM to assist with this migration and post. Opinions expressed are my own._
 
 [1]: https://gohugo.io/
-[2]: /posts/building-this-blog
-[3]: /posts/blog-theme-2024
-[4]: /posts/blog-ci-2026
-[5]: /posts/blog-late-2025
+[2]: /posts/building-this-blog/
+[3]: /posts/blog-theme-2024/
+[4]: /posts/blog-ci-2026/
+[5]: /posts/blog-late-2025/
 [6]: https://astro.build/
 [7]: https://shiki.style/
 [8]: https://gitlab.com/acaylor/ajs-blog

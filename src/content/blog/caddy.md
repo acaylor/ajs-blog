@@ -143,6 +143,6 @@ You can now use this network in your Compose file to connect multiple services t
 
 [1]: https://en.wikipedia.org/wiki/Reverse_proxy
 [2]: https://caddyserver.com
-[3]: /posts/nginx
-[4]: /posts/containers
-[5]: /posts/docker-alternatives
+[3]: /posts/nginx/
+[4]: /posts/containers/
+[5]: /posts/docker-alternatives/

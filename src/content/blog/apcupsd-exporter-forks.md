@@ -199,7 +199,7 @@ I have mixed feelings about copying/forking the original projects. I settled on 
 
 _New disclaimer: I used an LLM to help create this post. Opinions expressed are likely from me and not the LLM._
 
-[1]: /posts/apcupsd
+[1]: /posts/apcupsd/
 [2]: https://github.com/acaylor/apcupsd_exporter
 [3]: https://github.com/acaylor/apcupsd
-[4]: /posts/apcupsd-dashboard
+[4]: /posts/apcupsd-dashboard/

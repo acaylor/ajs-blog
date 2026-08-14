@@ -187,7 +187,7 @@ I have no idea how this is going to look another 6 months from now.
 
 _Disclaimer: I used an LLM to help create this post. Opinions expressed are likely from me and not the LLM._
 
-[1]: /posts/opencode-ollama
+[1]: /posts/opencode-ollama/
 [2]: https://docs.anthropic.com/en/docs/claude-code/overview
 [3]: https://www.anthropic.com/claude-code
 [4]: https://help.openai.com/en/articles/11096431-openai-codex-ci-getting-started

@@ -666,11 +666,11 @@ Once you have a cluster online, you are ready to start running container-based s
 
 _Disclaimer: I used an LLM to help create this post. Opinions expressed are likely from me and not the LLM._
 
-[1]: /posts/kubernetes
-[2]: /posts/kubespray
+[1]: /posts/kubernetes/
+[2]: /posts/kubespray/
 [3]: https://docs.k3s.io/installation/requirements
 [4]: https://k3d.io/
 [5]: https://docs.k3s.io/datastore/ha-embedded
 [6]: https://docs.k3s.io/
 [7]: https://docs.k3s.io/installation/uninstall
-[8]: /posts/argocd
+[8]: /posts/argocd/

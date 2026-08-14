@@ -77,6 +77,6 @@ qm template 999
 
 Now this template is ready to be used. You can clone the template using the Proxmox console or it could be used in a terraform deployment. If you would like to learn how to do this with terraform, check out [a previous post][3] to get started using terraform for Proxmox.
 
-[1]: /posts/creating-linux-virtual-machine-templates-with-packer
+[1]: /posts/creating-linux-virtual-machine-templates-with-packer/
 [2]: https://www.packer.io/
-[3]: /posts/terraform
+[3]: /posts/terraform/

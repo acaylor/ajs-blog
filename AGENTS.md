@@ -41,10 +41,11 @@ npm run format:check       # prettier
 # what the `build_and_verify` CI job does
 npm run build              # produces dist/
 npm run a11y               # html-validate against dist/**/*.html
+npm run check:links        # no internal link costs a redirect hop, or points nowhere
 lychee --offline --root-dir "$PWD/dist" --config lychee.toml 'dist/**/*.html'
 ```
 
-All six commands must exit clean. The lychee baseline (`lychee.toml` `exclude` list) is **empty** and should stay that way — fix the underlying link rather than add a suppression.
+All seven commands must exit clean. The lychee baseline (`lychee.toml` `exclude` list) is **empty** and should stay that way — fix the underlying link rather than add a suppression.
 
 ## Project layout
 

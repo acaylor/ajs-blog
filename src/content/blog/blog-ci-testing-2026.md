@@ -195,7 +195,7 @@ The source is on [GitLab][5] and mirrored on [GitHub][6].
 
 _Disclaimer: I used an LLM to assist with this work and post. Opinions expressed are my own._
 
-[1]: /posts/astro-migration-2026
+[1]: /posts/astro-migration-2026/
 [2]: https://www.npmjs.com/package/@astrojs/check
 [3]: https://html-validate.org/
 [4]: https://lychee.cli.rs/

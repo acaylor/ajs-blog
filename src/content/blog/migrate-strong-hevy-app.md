@@ -266,4 +266,4 @@ This produces a chart with the top 10 exercises with the highest weight.
 
 Now with this data in a database, other queries can be made to find information such as the total weight in a workout or a set.
 
-[1]: /posts/strong-app-parsing
+[1]: /posts/strong-app-parsing/

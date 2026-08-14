@@ -240,8 +240,8 @@ The k9s program can be used to view any object in the cluster and that includes 
 
 You can exit k9s the same way as the `vi` editor. Pressing <kbd>:</kbd> will open the command prompt. Enter <kbd>q</kbd> to quit the program.
 
-[1]: /posts/kubernetes
+[1]: /posts/kubernetes/
 [2]: https://k9scli.io
-[3]: /posts/setting-up-windows
+[3]: /posts/setting-up-windows/
 [4]: https://brew.sh
 [5]: https://github.com/derailed/k9s/releases

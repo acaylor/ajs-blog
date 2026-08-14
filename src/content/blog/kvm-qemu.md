@@ -147,9 +147,9 @@ Ensure your user is in the `libvirt` group or run `virt-manager` as sudo.
 
 For more details and how to use this tool on other distributions, check out the [official site][6].
 
-[1]: /posts/getting-started-with-virtual-machines
+[1]: /posts/getting-started-with-virtual-machines/
 [2]: https://www.linux-kvm.org/page/Main_Page
 [3]: https://www.qemu.org/
 [4]: https://libvirt.org/
-[5]: /posts/ansible
+[5]: /posts/ansible/
 [6]: https://virt-manager.org/

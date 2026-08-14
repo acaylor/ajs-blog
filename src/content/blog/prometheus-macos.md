@@ -47,5 +47,5 @@ When Prometheus is running, an API is available on your local system `http://loc
 
 You can use prometheus to collect many different types of metrics. Check out [a previous post][1] about prometheus and how to create graphs based on metrics collected using Grafana.
 
-[1]: /posts/prometheus
+[1]: /posts/prometheus/
 [2]: https://brew.sh

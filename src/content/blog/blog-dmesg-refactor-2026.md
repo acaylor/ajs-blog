@@ -236,7 +236,7 @@ The source is on [GitLab][5] and mirrored on [GitHub][6].
 
 _Disclaimer: I used an LLM to assist with this work and post. Opinions expressed are my own._
 
-[1]: /posts/blog-ci-testing-2026
+[1]: /posts/blog-ci-testing-2026/
 [2]: https://man7.org/linux/man-pages/man1/dmesg.1.html
 [3]: https://fontsource.org/fonts/dm-mono
 [4]: https://shiki.style/

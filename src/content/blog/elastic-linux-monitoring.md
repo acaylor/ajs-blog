@@ -483,8 +483,8 @@ Next I am going to take a look at the new Elastic agent which can be an alternat
 
 _New disclaimer I am adding: I used an LLM to help create this post but afterwards I spent more than an hour editing it to the final form._
 
-[1]: /posts/elasticsearch
-[2]: /posts/containers
+[1]: /posts/elasticsearch/
+[2]: /posts/containers/
 [3]: https://www.elastic.co/guide/en/elasticsearch/reference/current/configuring-stack-security.html
 [4]: https://elastic.co/docs
 [5]: https://www.elastic.co/guide/en/beats/metricbeat/current/index.html

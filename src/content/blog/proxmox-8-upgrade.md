@@ -100,5 +100,5 @@ The web console can be accessed by visiting the ip address or hostname of your p
 
 `https://proxmox.hostname:8006`
 
-[1]: /posts/proxmox-installation
+[1]: /posts/proxmox-installation/
 [2]: https://pve.proxmox.com/wiki/Upgrade_from_7_to_8

@@ -268,6 +268,6 @@ Out of these I am most interested in #1 and #3.
 
 _New disclaimer I am adding: I used an LLM to help create this post but afterwards I spent more than an hour editing it to the final form._
 
-[1]: /posts/containers
-[2]: /posts/caddy
-[3]: /posts/prometheus
+[1]: /posts/containers/
+[2]: /posts/caddy/
+[3]: /posts/prometheus/

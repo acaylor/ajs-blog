@@ -55,4 +55,4 @@ find $SYNC -mtime +8 -delete
 This script is okay but it makes assumptions about where the backup archives are being placed. This script implies that the directory defined in the variable `$SYNC` is backed by nfs storage meaning that files placed into the `$DEST` variable defined directory will end up on a remote system with storage mounted to the directory defined in `$SYNC`.
 
 [1]: https://www.ansible.com
-[2]: /posts/ansible
+[2]: /posts/ansible/

@@ -315,7 +315,7 @@ This configuration allows me to view logs in Grafana. You can query by labels. I
 
 For more information on how to set up Grafana check out [a previous post][4]. I have been using Grafana for nearly 8 years now.
 
-[1]: /posts/promtail-to-alloy
-[2]: /posts/kubernetes
+[1]: /posts/promtail-to-alloy/
+[2]: /posts/kubernetes/
 [3]: https://grafana.com/docs/alloy/latest/collect/logs-in-kubernetes/
-[4]: /posts/prometheus-homelab
+[4]: /posts/prometheus-homelab/

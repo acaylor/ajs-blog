@@ -175,6 +175,6 @@ I plan to continue developing the theme. Some features that I am looking to add:
 [3]: https://gohugo.io/
 [4]: https://gitlab.com/acaylor/example_blog
 [5]: https://git-scm.com/book/en/v2/Git-Tools-Submodules
-[6]: /posts/building-this-blog
+[6]: /posts/building-this-blog/
 [7]: https://getbootstrap.com/
 [8]: https://github.com/acaylor/ajsTheme

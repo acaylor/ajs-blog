@@ -110,9 +110,9 @@ Line up your camera with the output of the docker-compose logs to scan the QR co
 
 [1]: https://en.wikipedia.org/wiki/Virtual_private_network
 [2]: https://www.wireguard.com/
-[3]: /posts/containers
-[4]: /posts/getting-started-with-virtual-machines
-[5]: /posts/proxmox-installation
+[3]: /posts/containers/
+[4]: /posts/getting-started-with-virtual-machines/
+[5]: /posts/proxmox-installation/
 [6]: https://linuxserver.io
 [7]: https://portforward.com/
 [8]: https://apps.apple.com/us/app/wireguard/id1441195209

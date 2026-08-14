@@ -379,7 +379,7 @@ Consider the cluster version only if:
 At this point VictoriaMetrics is ingesting data from Prometheus, exposing metrics for validation, and serving queries to Grafana. Due to the way I have my network segmented, I believe I will start storing metrics on VictoriaMetrics and keep short retention periods on my Prometheus servers. Especially since one is running on a Raspberry Pi.
 
 [1]: https://docs.victoriametrics.com/victoriametrics/single-server-victoriametrics/
-[2]: /posts/containers
+[2]: /posts/containers/
 [3]: https://docs.victoriametrics.com/vmbackup.html
 [4]: https://grafana.com/orgs/victoriametrics/dashboards
 [5]: https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/

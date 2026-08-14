@@ -240,7 +240,7 @@ And you can check the status of the service:
 sudo systemctl status comfy.service
 ```
 
-[1]: /posts/ollama-blog
+[1]: /posts/ollama-blog/
 [2]: https://github.com/automatic1111
 [3]: https://www.comfy.org/
 [4]: https://docs.comfy.org/get_started/manual_install

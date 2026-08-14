@@ -91,6 +91,6 @@ _I used Fable 5 to help write this post about itself._
 [2]: https://www.anthropic.com/news/redeploying-fable-5
 [3]: https://www.anthropic.com/claude/opus
 [4]: https://www.anthropic.com/news/fable-mythos-access
-[5]: /posts/fable-5-access-suspended
+[5]: /posts/fable-5-access-suspended/
 [6]: https://github.com/acaylor/isle-of-babel
 [7]: https://acaylor.github.io/isle-of-babel/

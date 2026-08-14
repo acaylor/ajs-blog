@@ -488,7 +488,7 @@ Typical resource consumption:
 
 _New disclaimer I am adding: I used an LLM to help create this post but afterwards I spent more than an hour editing it to the final form._
 
-[1]: /posts/prometheus
+[1]: /posts/prometheus/
 [2]: https://github.com/acaylor/grafana/raw/refs/heads/main/grafana/provisioning/dashboards/synology-snmp.json
 [3]: https://global.download.synology.com/download/Document/Software/DeveloperGuide/Firmware/DSM/All/enu/Synology_DiskStation_MIB_Guide.pdf
 [4]: https://github.com/prometheus/snmp_exporter

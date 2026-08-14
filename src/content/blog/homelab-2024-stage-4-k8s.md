@@ -87,13 +87,13 @@ I run these services outside Kubernetes because I want to ensure that my solutio
 
 With the combination of Git and argoCD, I deploy my containers by defining their configuration in a Git repository. Then argoCD clones the code in the Git repo and uses that to deploy objects to the Kubernetes cluster. Check out [a previous post][10] to see more information about setting up argoCD.
 
-[1]: /posts/kubernetes
-[2]: /posts/adguard-home
+[1]: /posts/kubernetes/
+[2]: /posts/adguard-home/
 [3]: https://github.com/acaylor
 [4]: https://gitlab.com/acaylor
-[5]: /posts/gitea
-[6]: /posts/renovate
-[7]: /posts/kubespray
-[8]: /posts/prometheus
-[9]: /posts/loki-homelab-logging
-[10]: /posts/argocd
+[5]: /posts/gitea/
+[6]: /posts/renovate/
+[7]: /posts/kubespray/
+[8]: /posts/prometheus/
+[9]: /posts/loki-homelab-logging/
+[10]: /posts/argocd/

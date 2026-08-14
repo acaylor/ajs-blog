@@ -207,7 +207,7 @@ Now, when you begin typing, you should see suggestions based on your command his
 [6]: https://en.wikipedia.org/wiki/C_Shell
 [7]: https://www.computerhope.com/unix/uksh.htm
 [8]: https://en.wikipedia.org/wiki/Tcsh
-[9]: /posts/cygwin-windows-terminal
+[9]: /posts/cygwin-windows-terminal/
 [10]: https://ohmyz.sh/
 [11]: https://github.com/romkatv/powerlevel10k
 [12]: https://github.com/zsh-users/zsh-syntax-highlighting
