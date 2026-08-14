@@ -1,5 +1,5 @@
 ---
-import { buildVersion, commitSha } from '../utils/build-info';
+import { buildVersion, commitSha, astroRelease } from '../utils/build-info';
 import { resetClock, nextTs } from '../utils/log-clock';
 
 interface Props {
@@ -37,7 +37,7 @@ const tsStatus = status ? nextTs(Astro.url.pathname) : null;
           {tsPreamble}
         </span>
         <span>
-          <b>aj's blog</b> v{buildVersion} ({commitSha}) astro/6 &middot; gitlab-ci
+          <b>aj's blog</b> v{buildVersion} ({commitSha}) astro/{astroRelease} &middot; gitlab-ci
         </span>
       </div>
     )
