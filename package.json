@@ -34,6 +34,6 @@
     "html-validate": "^11.3.0",
     "prettier": "^3.8.2",
     "prettier-plugin-astro": "^0.14.1",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.0"
   }
 }
