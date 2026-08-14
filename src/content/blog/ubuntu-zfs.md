@@ -124,4 +124,4 @@ The scrub can be checked with the status command.
 [5]: https://en.wikipedia.org/wiki/Internet_SCSI
 [6]: https://linux.die.net/man/5/rsyncd.conf
 [7]: https://en.wikipedia.org/wiki/File_Transfer_Protocol
-[8]: /posts/truenas
+[8]: /posts/truenas/

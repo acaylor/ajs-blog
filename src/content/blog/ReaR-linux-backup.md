@@ -131,7 +131,7 @@ Once the recovery completes, you can reboot the system without using the recover
 Make sure to always test your backup images. There is nothing worse than trying to recover your system only to discover that the backup image is incomplete or corrupted.
 
 [1]: http://relax-and-recover.org/documentation/getting-started
-[2]: /posts/truenas
-[3]: /posts/ansible
-[4]: /posts/creating-usb-installation-media
+[2]: /posts/truenas/
+[3]: /posts/ansible/
+[4]: /posts/creating-usb-installation-media/
 [5]: https://github.com/acaylor/rear

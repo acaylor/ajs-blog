@@ -310,7 +310,7 @@ _Disclaimer: I used an LLM to assist with this work and post. Opinions expressed
 [5]: https://k3s.io/
 [6]: https://mcr.microsoft.com/en-us/artifact/mar/playwright/about
 [7]: https://argo-cd.readthedocs.io/
-[8]: /posts/postgres-cloud-native
+[8]: /posts/postgres-cloud-native/
 [9]: https://bitwarden.com/
 [10]: https://external-secrets.io/
 [11]: https://docs.renovatebot.com/

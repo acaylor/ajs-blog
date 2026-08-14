@@ -115,8 +115,8 @@ Also I have local generative AI in my homelab and I do not want to give it acces
 
 [1]: https://www.home-assistant.io/
 [2]: /tags/pi/
-[3]: /posts/containers
+[3]: /posts/containers/
 [4]: https://www.home-assistant.io/installation/linux#install-home-assistant-container
 [5]: https://github.com/acaylor/grafana/blob/main/grafana/provisioning/dashboards/home/home-dashboard.json
-[6]: /posts/ollama-blog
+[6]: /posts/ollama-blog/
 [7]: https://www.home-assistant.io/integrations/ollama/

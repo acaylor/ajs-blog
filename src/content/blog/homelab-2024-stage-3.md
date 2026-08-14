@@ -84,7 +84,7 @@ This diagram shows the planned computers for the homelab.
 
 ![homelab_servers_2024](/images/homelab_servers_2024.png)
 
-[1]: /posts/setting-up-raspberry-pi
-[2]: /posts/nginx
-[3]: /posts/getting-started-with-virtual-machines
-[4]: /posts/proxmox-installation
+[1]: /posts/setting-up-raspberry-pi/
+[2]: /posts/nginx/
+[3]: /posts/getting-started-with-virtual-machines/
+[4]: /posts/proxmox-installation/

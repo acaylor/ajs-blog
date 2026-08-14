@@ -348,9 +348,9 @@ _New disclaimer I am adding: I used an LLM to help create this post but afterwar
 
 [1]: https://docs.influxdata.com/telegraf/v1/
 [2]: https://prometheus.io/docs/introduction/overview/
-[3]: /posts/prometheus
+[3]: /posts/prometheus/
 [4]: https://docs.influxdata.com/telegraf/v1/configuration/
-[5]: /posts/containers
+[5]: /posts/containers/
 [6]: https://prometheus.io/docs/prometheus/latest/configuration/configuration/
 [7]: https://prometheus.io/docs/prometheus/latest/getting_started/
 [8]: https://grafana.com/docs/grafana/latest/getting-started/

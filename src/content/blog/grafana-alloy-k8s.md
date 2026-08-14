@@ -330,8 +330,8 @@ One practical note: this kind of configuration is a good fit for AI coding agent
 [5]: https://grafana.com/docs/alloy/latest/reference/components/loki/loki.source.journal/
 [6]: https://grafana.com/docs/alloy/latest/reference/components/loki/loki.source.kubernetes_events/
 [7]: https://argo-cd.readthedocs.io/en/stable/user-guide/multiple_sources/
-[8]: /posts/kubespray
-[9]: /posts/argocd-app-of-apps
-[10]: /posts/loki-3-upgrade
-[11]: /posts/promtail-to-alloy-k8s
-[12]: /posts/grafana-alloy-linux
+[8]: /posts/kubespray/
+[9]: /posts/argocd-app-of-apps/
+[10]: /posts/loki-3-upgrade/
+[11]: /posts/promtail-to-alloy-k8s/
+[12]: /posts/grafana-alloy-linux/

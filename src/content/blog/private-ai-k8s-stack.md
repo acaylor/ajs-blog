@@ -482,9 +482,9 @@ _Disclaimer: I used an LLM to assist with this work and post. Opinions expressed
 [14]: https://github.com/otwld/ollama-helm
 [15]: https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack
 [16]: https://grafana.com/grafana/dashboards/12239
-[17]: /posts/ollama-blog
-[18]: /posts/open-webui-image-generation
-[19]: /posts/opencode-ollama
-[20]: /posts/searxng
-[21]: /posts/postgres-cloud-native
-[ 2]: /posts/kubernetes-gpu-operator
+[17]: /posts/ollama-blog/
+[18]: /posts/open-webui-image-generation/
+[19]: /posts/opencode-ollama/
+[20]: /posts/searxng/
+[21]: /posts/postgres-cloud-native/
+[ 2]: /posts/kubernetes-gpu-operator/

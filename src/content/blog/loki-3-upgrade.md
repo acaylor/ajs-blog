@@ -105,5 +105,5 @@ curl loki.example.com/ready
 
 Once I checked Grafana, Logs were still available from before the upgrade. Check your storage config most likely if you have issues upgrading.
 
-[1]: /posts/loki-homelab-logging
+[1]: /posts/loki-homelab-logging/
 [2]: https://grafana.com/docs/loki/latest/setup/upgrade/

@@ -33,6 +33,9 @@ build_and_verify:
     - npm run a11y
     # every amplify-redirects.json target must still be a page we build
     - npm run check:redirects
+    # internal links must not cost a redirect hop (missing trailing slash, or a
+    # link to a known amplify-redirects.json source instead of its target)
+    - npm run check:links
     # internal link integrity (lychee is a Rust binary; fetch the musl build
     # rather than running a second CI job to avoid duplicate npm ci cost)
     - wget -qO- https://github.com/lycheeverse/lychee/releases/latest/download/lychee-x86_64-unknown-linux-musl.tar.gz | tar xz --strip-components=1 lychee-x86_64-unknown-linux-musl/lychee

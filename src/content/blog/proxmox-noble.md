@@ -108,7 +108,7 @@ Further information or maybe more up to date information may be available on the
 The template can also be cloned using the Proxmox web UI instead of running `qm` commands.
 
 [1]: https://ubuntu.com/about/release-cycle
-[2]: /posts/creating-linux-virtual-machine-templates-with-packer
+[2]: /posts/creating-linux-virtual-machine-templates-with-packer/
 [3]: https://www.packer.io/
-[4]: /posts/terraform
+[4]: /posts/terraform/
 [5]: https://pve.proxmox.com/wiki/Cloud-Init_Support

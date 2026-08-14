@@ -339,7 +339,7 @@ Both can coexist in the same infrastructure; many organizations use Prometheus f
 
 _New disclaimer: I used an LLM to help create this post and then edited it for accuracy and style._
 
-[1]: /posts/telegraf
+[1]: /posts/telegraf/
 [2]: https://docs.influxdata.com/influxdb3/core/release-notes/#influxdb-docker-latest-tag-changing-to-influxdb-3-core
 [3]: https://github.com/influxdata/telegraf/releases/tag/v1.36.4
 [4]: https://docs.influxdata.com/influxdb/v1/write_protocols/line_protocol_reference/

@@ -422,6 +422,6 @@ Your home network deserves better than scattered notes and tribal knowledge. Giv
 _New disclaimer I am adding: I used an LLM to help create this post but afterwards I spent more than an hour editing it to the final form._
 
 [1]: netbox.com
-[2]: /posts/containers
+[2]: /posts/containers/
 [3]: https://docs.netbox.dev/
 [4]: https://github.com/netbox-community/devicetype-library

@@ -128,9 +128,9 @@ Here is a screenshot of my kanboard after creating a project, and creating issue
 ![kanboard_board](/images/kanboard_board.png)
 
 [1]: https://kanboard.org/
-[2]: /posts/containers
-[3]: /posts/getting-started-with-virtual-machines
-[4]: /posts/proxmox-installation
-[5]: /posts/docker-alternatives
-[6]: /posts/homelab-wildcard-cert
+[2]: /posts/containers/
+[3]: /posts/getting-started-with-virtual-machines/
+[4]: /posts/proxmox-installation/
+[5]: /posts/docker-alternatives/
+[6]: /posts/homelab-wildcard-cert/
 [7]: https://docs.kanboard.org/

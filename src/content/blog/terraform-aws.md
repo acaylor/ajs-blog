@@ -180,6 +180,6 @@ From here, you can start layering on more advanced resources like EC2 instances,
 
 _New disclaimer I am adding: I used an LLM to help create this post but afterwards I spent more than an hour editing it to the final form._
 
-[1]: /posts/terraform
+[1]: /posts/terraform/
 [2]: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 [3]: https://github.com/tfutils/tfenv

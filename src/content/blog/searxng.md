@@ -249,4 +249,4 @@ This may seem like just another self-hosted app but I am really getting a lot of
 [3]: https://docs.searxng.org/admin/installation-docker.html
 [4]: https://docs.searxng.org/admin/installation-searxng.html
 [5]: https://docs.searxng.org/admin/settings/settings_valkey.html
-[6]: /posts/argocd-app-of-apps
+[6]: /posts/argocd-app-of-apps/

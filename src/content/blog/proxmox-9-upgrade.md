@@ -169,4 +169,4 @@ UUID=B4A2-1121 /boot/efi vfat defaults 0 1
 
 Save any changes to the file and reboot. With luck that will allow the server to boot up again properly.
 
-[1]: /posts/proxmox-installation
+[1]: /posts/proxmox-installation/

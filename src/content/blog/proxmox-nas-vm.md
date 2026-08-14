@@ -481,8 +481,8 @@ I run this script in a cronjob. To set up a cronjob in Linux enter `crontab -e` 
 0 1 * * 5 /usr/local/sbin/backup.sh
 ```
 
-[1]: /posts/proxmox-installation
-[2]: /posts/proxmox-noble
-[3]: /posts/ubuntu-zfs
-[4]: /posts/ubuntu-nfs
-[5]: /posts/terraform
+[1]: /posts/proxmox-installation/
+[2]: /posts/proxmox-noble/
+[3]: /posts/ubuntu-zfs/
+[4]: /posts/ubuntu-nfs/
+[5]: /posts/terraform/

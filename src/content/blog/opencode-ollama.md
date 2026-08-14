@@ -242,6 +242,6 @@ I also strongly believe that AI coding should only be done at the level you have
 
 _New disclaimer I am adding: I used an LLM to help create this post but afterwards I spent more than an hour editing it to the final form._
 
-[1]: /posts/ollama-blog
+[1]: /posts/ollama-blog/
 [2]: https://opencode.ai/docs
-[3]: /posts/ghostty
+[3]: /posts/ghostty/

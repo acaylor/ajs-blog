@@ -197,4 +197,4 @@ At this time it has the ID `7587`.
 ![grafana_blackbox_exporter](/images/grafana_blackbox_exporter.png)
 
 [1]: https://github.com/prometheus/blackbox_exporter
-[2]: /posts/prometheus
+[2]: /posts/prometheus/

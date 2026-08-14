@@ -348,7 +348,7 @@ Now I can easily set up new apps with HTTPS and not worry about rotating the cer
 - [IAM Roles for Service Accounts][13]
 - [Helm][14]
 
-[1]: /posts/homelab-wildcard-cert
+[1]: /posts/homelab-wildcard-cert/
 [2]: https://cert-manager.io/
 [3]: https://letsencrypt.org/
 [4]: https://aws.amazon.com/route53/

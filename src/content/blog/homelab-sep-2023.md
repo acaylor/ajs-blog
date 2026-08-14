@@ -41,4 +41,4 @@ Here is the grafana dashboard that is on the lab tv 24/7
 ![grafana_sep2023](/images/grafana_sep2023.png)
 
 [1]: https://www.debian.org/
-[2]: /posts/homelab-april-2023
+[2]: /posts/homelab-april-2023/

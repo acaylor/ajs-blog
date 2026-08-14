@@ -256,6 +256,6 @@ The other details can stay in the compose file.
 
 I still like Python `diagrams` when I want an infrastructure architecture picture with recognizable icons. I am reaching for D2 more often when I need a visual explanation of how pieces of a project relate to each other.
 
-[1]: /posts/diagrams-as-code
+[1]: /posts/diagrams-as-code/
 [2]: https://d2lang.com/
 [3]: https://d2lang.com/tour/install/

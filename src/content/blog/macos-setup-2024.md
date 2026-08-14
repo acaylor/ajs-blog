@@ -399,7 +399,7 @@ Prometheus should now be able to scrape metrics from port `:9100` on your mac.
 [3]: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 [4]: https://brew.sh
 [5]: https://github.com/Homebrew/brew/releases/latest
-[6]: /posts/zshell
+[6]: /posts/zshell/
 [7]: https://www.vim.org/
-[8]: /posts/vim
+[8]: /posts/vim/
 [9]: https://neovim.io

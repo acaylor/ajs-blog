@@ -175,4 +175,4 @@ Here is an example cron job:
 This will run at midnight every day. You can edit your crontab with the command `crontab -e`. Editing the crontab is available on Linux and macOS.
 
 [1]: https://github.com/renovatebot/renovate
-[2]: /posts/gitea
+[2]: /posts/gitea/

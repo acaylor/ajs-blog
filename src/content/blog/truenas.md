@@ -126,8 +126,8 @@ Why are so many products based on BSD you ask? It has a very liberal open source
 [5]: https://en.wikipedia.org/wiki/Internet_SCSI
 [6]: https://linux.die.net/man/5/rsyncd.conf
 [7]: https://en.wikipedia.org/wiki/File_Transfer_Protocol
-[8]: /posts/creating-usb-installation-media
-[9]: /posts/getting-started-with-virtual-machines
-[10]: /posts/kvm-qemu
+[8]: /posts/creating-usb-installation-media/
+[9]: /posts/getting-started-with-virtual-machines/
+[10]: /posts/kvm-qemu/
 [11]: https://www.truenas.com/docs/core/sharing/nfs/nfsshare/
 [12]: https://www.truenas.com/docs/core/

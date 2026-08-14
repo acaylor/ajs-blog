@@ -50,4 +50,4 @@ Here is the grafana dashboard that is on the lab tv 24/7
 
 ![grafana_2022](/images/grafana_2022.png)
 
-[1]: /posts/dokuwiki
+[1]: /posts/dokuwiki/

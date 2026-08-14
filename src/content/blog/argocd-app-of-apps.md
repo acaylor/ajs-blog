@@ -292,5 +292,5 @@ If you are currently applying ArgoCD applications manually, moving to app-of-app
 
 _New disclaimer: I used an LLM to help create this post. Opinions expressed are likely from me and not the LLM._
 
-[1]: /posts/kubernetes
-[2]: /posts/argocd
+[1]: /posts/kubernetes/
+[2]: /posts/argocd/

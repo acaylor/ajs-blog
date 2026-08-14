@@ -148,5 +148,5 @@ The logs should indicate success.
 
 If the validation was a success, now other pods can be scheduled and use a GPU.
 
-[1]: /posts/kubernetes
+[1]: /posts/kubernetes/
 [2]: https://github.com/NVIDIA/nvidia-container-toolkit

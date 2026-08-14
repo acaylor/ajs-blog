@@ -141,4 +141,4 @@ Reboot to ensure everything is configured properly. If you see your login screen
 
 [1]: https://docs.fedoraproject.org/en-US/quick-docs/upgrading-fedora-offline/
 [2]: https://getfedora.org/security
-[3]: /posts/fedora-43-upgrade
+[3]: /posts/fedora-43-upgrade/

@@ -546,9 +546,9 @@ The utility of this Docker Compose approach is that you can iterate quickly, tes
 
 _New disclaimer I am adding: I used an LLM to help create this post but afterwards I spent more than an hour editing it to the final form._
 
-[1]: /posts/prometheus
-[2]: /posts/containers
-[3]: /posts/grafana-alloy-linux
+[1]: /posts/prometheus/
+[2]: /posts/containers/
+[3]: /posts/grafana-alloy-linux/
 [4]: https://grafana.com/docs/mimir/latest/
 [5]: https://grafana.com/docs/alloy/latest/
 [6]: https://prometheus.io/docs/concepts/remote_write_spec/

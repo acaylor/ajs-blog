@@ -166,9 +166,9 @@ Now you can use Longhorn to create [Kubernetes objects][7] `PersistentVolume` wh
 Stay tuned for future posts where I plan to deploy a wiki and a game server that leverage the Longhorn Persistent Volumes.
 
 [1]: https://longhorn.io/
-[2]: /posts/kubernetes
+[2]: /posts/kubernetes/
 [3]: https://github.com/helm/helm/releases
 [4]: https://brew.sh
-[5]: /posts/setting-up-windows
-[6]: /posts/argocd
+[5]: /posts/setting-up-windows/
+[6]: /posts/argocd/
 [7]: https://kubernetes.io/docs/concepts/storage/persistent-volumes/

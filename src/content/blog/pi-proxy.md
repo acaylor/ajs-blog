@@ -169,7 +169,7 @@ Now that the proxy manager is running, this system can be used to intercept and 
 [3]: https://letsencrypt.org/about/
 [4]: https://www.cloudflare.com/learning/cdn/glossary/reverse-proxy/
 [5]: https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html
-[6]: /posts/ansible
-[7]: /posts/portainer
+[6]: /posts/ansible/
+[7]: /posts/portainer/
 [8]: https://github.com/acaylor/docker_proxy_host
-[9]: /posts/containers
+[9]: /posts/containers/

@@ -292,6 +292,6 @@ curl -X GET "http://localhost:9200/my_index/_search?q=john"
 
 You can scale your data from one document to petabytes of data.
 
-[1]: /posts/containers
+[1]: /posts/containers/
 [2]: https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-deploy-eck.html
 [3]: https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-deploy-elasticsearch.html

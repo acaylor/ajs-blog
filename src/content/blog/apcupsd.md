@@ -166,7 +166,7 @@ I added this job to my Prometheus configuration to scrape the metrics:
 
 Now I will spend some time working on a new Grafana dashboard that uses these metrics.
 
-[1]: /posts/nut
+[1]: /posts/nut/
 [2]: /posts/
 [3]: https://github.com/mdlayher/apcupsd_exporter
 [4]: https://prometheus.io/docs/instrumenting/exporters/

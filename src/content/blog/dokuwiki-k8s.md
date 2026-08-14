@@ -241,9 +241,9 @@ These URLs are considered ugly and are not indexed well by some search engines. 
 
 For more details on configurations possible, check out the [Dokuwiki wiki][5].
 
-[1]: /posts/dokuwiki
-[2]: /posts/kubernetes
-[3]: /posts/longhorn
-[4]: /posts/homelab-wildcard-cert
+[1]: /posts/dokuwiki/
+[2]: /posts/kubernetes/
+[3]: /posts/longhorn/
+[4]: /posts/homelab-wildcard-cert/
 [5]: https://www.dokuwiki.org/dokuwiki/
-[6]: /posts/kubespray
+[6]: /posts/kubespray/

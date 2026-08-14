@@ -25,4 +25,4 @@ Here is Grafana dashboard I created for home data:
 
 ![grafana_home_2024](/images/grafana_home_2024.png)
 
-[1]: /posts/homelab-2024-stage-4-k8s
+[1]: /posts/homelab-2024-stage-4-k8s/

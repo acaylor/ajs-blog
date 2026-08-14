@@ -563,10 +563,10 @@ sudo rm /etc/apt/keyrings/grafana.gpg
 
 _New disclaimer I am adding: I used an LLM to help create this post but afterwards I spent more than an hour editing it to the final form. This one in particular took a while to tweak the Alloy config_
 
-[1]: /posts/promtail-to-alloy
-[2]: /posts/loki-3-container
+[1]: /posts/promtail-to-alloy/
+[2]: /posts/loki-3-container/
 [3]: /tags/prometheus/
-[4]: /posts/getting-started-with-virtual-machines
-[5]: /posts/loki-homelab-logging
+[4]: /posts/getting-started-with-virtual-machines/
+[5]: /posts/loki-homelab-logging/
 [6]: https://grafana.com/docs/alloy/latest/reference/components/
 [7]: https://github.com/grafana/alloy-scenarios/

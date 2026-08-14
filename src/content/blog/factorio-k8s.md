@@ -181,6 +181,6 @@ The logs of the factorio pod may also provide information as to what might be wr
 
 Replace with the name of your factorio pod: `kubectl get po -n factorio`.
 
-[1]: /posts/factorio
-[2]: /posts/kubernetes
-[3]: /posts/longhorn
+[1]: /posts/factorio/
+[2]: /posts/kubernetes/
+[3]: /posts/longhorn/

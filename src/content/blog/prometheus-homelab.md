@@ -481,9 +481,9 @@ ansible-playbook node_exporter.yml -i your_inventory.ini -K
 
 [1]: https://prometheus.io/docs/introduction/overview/
 [2]: https://grafana.com/
-[3]: /posts/containers
-[4]: /posts/pi-proxy
+[3]: /posts/containers/
+[4]: /posts/pi-proxy/
 [5]: https://pve.proxmox.com/pve-docs/pve-admin-guide.html#pveum_permission_management
 [6]: https://galaxy.ansible.com/prometheus/prometheus
-[7]: /posts/ansible
-[8]: /posts/prometheus
+[7]: /posts/ansible/
+[8]: /posts/prometheus/

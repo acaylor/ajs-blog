@@ -345,6 +345,36 @@
     "status": "301"
   },
   {
+    "source": "/tags/development-tools/",
+    "target": "/tags/developer-tools/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/postgresql/",
+    "target": "/tags/postgres/",
+    "status": "301"
+  },
+  {
+    "source": "/tags/windows-10/",
+    "target": "/tags/windows/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/rasperry-pi/",
+    "target": "/categories/raspberry-pi/",
+    "status": "301"
+  },
+  {
+    "source": "/categories/windows-10/",
+    "target": "/categories/windows/",
+    "status": "301"
+  },
+  {
+    "source": "/posts/ReaR-linux-backup/",
+    "target": "/posts/rear-linux-backup/",
+    "status": "301"
+  },
+  {
     "source": "/index.xml",
     "target": "/rss.xml",
     "status": "301"
@@ -355,13 +385,43 @@
     "status": "301"
   },
   {
+    "source": "/tags/index.xml",
+    "target": "/rss.xml",
+    "status": "301"
+  },
+  {
+    "source": "/categories/index.xml",
+    "target": "/rss.xml",
+    "status": "301"
+  },
+  {
+    "source": "/archive/index.xml",
+    "target": "/rss.xml",
+    "status": "301"
+  },
+  {
     "source": "</^\\/(tags|categories)\\/[^\\/]+\\/index\\.xml$/>",
     "target": "/rss.xml",
     "status": "301"
   },
   {
+    "source": "/sitemap.xml",
+    "target": "/sitemap-index.xml",
+    "status": "301"
+  },
+  {
+    "source": "/archive/",
+    "target": "/posts/",
+    "status": "301"
+  },
+  {
     "source": "/posts/page/<*>",
     "target": "/posts/",
+    "status": "301"
+  },
+  {
+    "source": "/page/<*>",
+    "target": "/",
     "status": "301"
   },
   {

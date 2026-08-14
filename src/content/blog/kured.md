@@ -227,6 +227,6 @@ You can configure `kured` to do this by uncommenting the following line in the `
 
 `- --reboot-sentinel-command='sh -c "! needs-restarting --reboothint"'`
 
-[1]: /posts/ansible
-[2]: /posts/kubernetes
+[1]: /posts/ansible/
+[2]: /posts/kubernetes/
 [3]: https://kured.dev/docs/installation/

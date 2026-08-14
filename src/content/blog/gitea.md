@@ -132,7 +132,7 @@ You now have a reverse proxy set up using Nginx that routes incoming requests to
 For more information about how to configure Gitea, check out the [official documentation][1].
 
 [1]: https://docs.gitea.com
-[2]: /posts/containers
+[2]: /posts/containers/
 [3]: https://www.sqlite.org
-[4]: /posts/nginx
-[5]: /posts/homelab-wildcard-cert
+[4]: /posts/nginx/
+[5]: /posts/homelab-wildcard-cert/

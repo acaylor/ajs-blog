@@ -326,5 +326,5 @@ You can view a basic debugging UI if you have access to port `12345` on the syst
 
 [1]: https://grafana.com/docs/alloy/latest/
 [2]: https://brew.sh
-[3]: /posts/containers
-[4]: /posts/loki-3-upgrade
+[3]: /posts/containers/
+[4]: /posts/loki-3-upgrade/

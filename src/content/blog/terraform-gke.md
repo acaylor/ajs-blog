@@ -415,13 +415,13 @@ Argo can deploy manifests and helm charts. I will dive into more detail in futur
 - To remove argo, delete the `argocd` namespace
 - To remove the gke cluster from your google account, run `terraform destroy` in the directory with your `terraform.tfstate` file
 
-[1]: /posts/terraform
+[1]: /posts/terraform/
 [2]: https://console.cloud.google.com/freetrial
 [3]: https://console.cloud.google.com/projectcreate
 [4]: https://console.developers.google.com/apis/library/compute.googleapis.com
 [5]: https://console.cloud.google.com/apis/credentials/serviceaccountkey
-[6]: /posts/kubernetes
-[7]: /posts/setting-up-windows
+[6]: /posts/kubernetes/
+[7]: /posts/setting-up-windows/
 [8]: https://brew.sh
 [9]: https://cloud.google.com/sdk/docs/install-sdk#linux
 [10]: https://argo-cd.readthedocs.io/en/stable/getting_started/

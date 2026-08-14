@@ -86,5 +86,5 @@ Navigate to `http://localhost:9090` in your browser to view the UI.
 Now that Prometheus is running, you can start using it with other systems and applications. A popular tool for visualizing metrics is Grafana. Check out a [previous post][3] for an example of how I set up Grafana for my homelab in the past.
 
 [1]: https://prometheus.io/download/
-[2]: /posts/prometheus-macos
-[3]: /posts/prometheus-homelab
+[2]: /posts/prometheus-macos/
+[3]: /posts/prometheus-homelab/

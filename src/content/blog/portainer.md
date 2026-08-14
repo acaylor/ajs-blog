@@ -97,4 +97,4 @@ Now you can manage containers, images, networks, and volumes from the web. When 
 [1]: https://www.portainer.io/
 [2]: https://www.docker.com/
 [3]: https://docs.docker.com/compose/
-[4]: /posts/containers
+[4]: /posts/containers/

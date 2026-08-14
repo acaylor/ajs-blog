@@ -124,5 +124,5 @@ The Rancher desktop application allows you to manage container images, adjust th
 The desktop application will also prompt and guide the process of updating to the latest version.
 
 [1]: https://rancherdesktop.io/
-[2]: /posts/rancher-desktop
-[3]: /posts/kubernetes
+[2]: /posts/rancher-desktop/
+[3]: /posts/kubernetes/

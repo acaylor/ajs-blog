@@ -383,7 +383,7 @@ Once the alloy container is running, logs and optionally metrics are being sent 
 
 This project did not turn out how I imagined. I found a few ways to get Logs (and metrics) for Docker containers reliably but only for Linux systems. The Mac + Docker setup continues to frustrate me with an otherwise very stable Mac mini. I think I may switch to a Linux VM on the Mac but I have had a lot of issues with Colima which is a lightweight VM so I do not think there is an ideal solution. The Mac is a great desktop but a horrible server for me.
 
-[1]: /posts/loki-homelab-logging
-[2]: /posts/containers
+[1]: /posts/loki-homelab-logging/
+[2]: /posts/containers/
 [3]: https://grafana.com/docs/loki/latest/setup/install/
-[4]: /posts/promtail-to-alloy
+[4]: /posts/promtail-to-alloy/

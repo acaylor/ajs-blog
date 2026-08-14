@@ -38,5 +38,5 @@ Your experience may vary but for both of my servers, that was all I had to do. A
 I don't really have much else to cover here. All of my NFS, SMB, and WebDAV shares simply work as before although for some reason I had to reboot my Proxmox servers to remount the NFS shares.
 
 [1]: https://www.truenas.com/
-[2]: /posts/truenas
+[2]: /posts/truenas/
 [3]: https://www.truenas.com/docs/truenasupgrades/

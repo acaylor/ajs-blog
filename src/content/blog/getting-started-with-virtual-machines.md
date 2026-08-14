@@ -83,6 +83,6 @@ In the popup window, select "Delete all files" to remove everything including th
 [1]: https://azurecomcdn.azureedge.net/cvt-684dca82451b89f673b8914c34175e4b73e7a59a71a9bd53c476eb9c256e5e6d/images/page/overview/what-is-a-virtual-machine/overview-img.png
 [2]: https://www.bleepingcomputer.com/tutorials/how-to-enable-cpu-virtualization-in-your-computer-bios/
 [3]: https://www.virtualbox.org/wiki/Downloads
-[4]: /posts/setting-up-windows
+[4]: /posts/setting-up-windows/
 [5]: https://docs.brew.sh/Installation
 [6]: https://mxlinux.org/wiki/system/iso-download-mirrors/

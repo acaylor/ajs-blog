@@ -127,8 +127,8 @@ The GitLab CI file uses variables recognized by the CI system so this can be use
 [3]: https://docs.gitlab.com/ee/ci/introduction/index.html#continuous-integration
 [4]: https://docs.gitlab.com/ee/ci/introduction/index.html#continuous-delivery
 [5]: https://docs.gitlab.com/ee/ci/introduction/index.html#continuous-deployment
-[6]: /posts/containers
-[7]: /posts/building-this-blog
+[6]: /posts/containers/
+[7]: /posts/building-this-blog/
 [8]: https://docs.nginx.com/nginx/admin-guide/web-server/
 [9]: https://hub.docker.com/
 [10]: https://github.com/GoogleContainerTools/kaniko

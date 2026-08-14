@@ -107,5 +107,5 @@ displayip="Your_server_ip"
 [1]: https://linuxcontainers.org/
 [2]: https://linuxgsm.com/lgsm/vhserver/
 [3]: https://portforward.com/valheim/
-[4]: /posts/proxmox-installation
+[4]: /posts/proxmox-installation/
 [5]: https://docs.linuxgsm.com/configuration/linuxgsm-config

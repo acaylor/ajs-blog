@@ -188,7 +188,7 @@ docker rm $(docker ps -a -q)
 In the Orbstack UI, a container can be deleted with the icon that looks like a trash bin.
 
 [1]: https://hub.docker.com
-[2]: /posts/containers
-[3]: /posts/colima
+[2]: /posts/containers/
+[3]: /posts/colima/
 [4]: https://orbstack.dev/download
 [5]: https://brew.sh

@@ -311,5 +311,5 @@ The cluster never holds long-lived API credentials in YAML. The only secret in t
 [11]: https://external-secrets.io/main/api/spec/
 [12]: https://github.com/external-secrets/bitwarden-sdk-server
 [13]: https://argo-cd.readthedocs.io/en/stable/user-guide/multiple_sources/
-[14]: /posts/argocd-app-of-apps
-[15]: /posts/kubernetes-automated-certs
+[14]: /posts/argocd-app-of-apps/
+[15]: /posts/kubernetes-automated-certs/

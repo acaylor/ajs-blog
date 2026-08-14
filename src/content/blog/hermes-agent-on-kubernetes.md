@@ -462,8 +462,8 @@ For now, the useful outcome is straightforward: a Telegram message reaches a sin
 [7]: https://hermes-agent.nousresearch.com/docs/guides/local-ollama-setup
 [8]: https://docs.ollama.com/faq#how-can-i-enable-flash-attention
 [9]: https://t.me/BotFather
-[10]: /posts/private-ai-k8s-stack
-[11]: /posts/kubernetes-external-secrets
+[10]: /posts/private-ai-k8s-stack/
+[11]: /posts/kubernetes-external-secrets/
 [12]: https://hermes-agent.nousresearch.com/docs/user-guide/features/web-search
 [13]: https://docs.searxng.org/admin/searx.limiter
-[14]: /posts/searxng
+[14]: /posts/searxng/

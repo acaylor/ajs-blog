@@ -123,4 +123,4 @@ _I used Fable 5 to help write this post about its own work._
 [1]: https://github.com/agentsmill/age-of-agents
 [2]: https://github.com/acaylor/agent-hollow
 [3]: https://acaylor.github.io/agent-hollow/
-[4]: /posts/fable-5-access-restored
+[4]: /posts/fable-5-access-restored/

@@ -23,5 +23,5 @@ This dashboard along with others I maintain are available on [GitHub][2].
 
 _Link updated: 2025-10-12_
 
-[1]: /posts/apcupsd
+[1]: /posts/apcupsd/
 [2]: https://raw.githubusercontent.com/acaylor/grafana/refs/heads/main/grafana/provisioning/dashboards/prometheus-ups-metrics.json

@@ -395,4 +395,4 @@ At this time it has the ID `14371`
 ![grafana_NUT_exporter](/images/grafana_NUT_exporter.png)
 
 [1]: https://github.com/HON95/prometheus-nut-exporter
-[2]: /posts/prometheus
+[2]: /posts/prometheus/

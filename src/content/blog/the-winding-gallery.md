@@ -119,7 +119,7 @@ If you have a folder of photos and a spare evening, [load up the Winding Gallery
 
 _I used Fable 5 to help write this post about its own work. A new Anthropic model, Opus 5, came out right before I finished this post._
 
-[1]: /posts/agent-hollow
+[1]: /posts/agent-hollow/
 [2]: https://github.com/acaylor/the-winding-gallery
 [3]: https://acaylor.github.io/the-winding-gallery/
 [4]: https://ambientcg.com

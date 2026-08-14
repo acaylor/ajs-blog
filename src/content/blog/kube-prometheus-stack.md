@@ -294,8 +294,8 @@ There should also be a node exporter dashboard:
 
 ![grafana_k8s_node](/images/grafana_k8s_node.png)
 
-[1]: /posts/prometheus
+[1]: /posts/prometheus/
 [2]: https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack
-[3]: /posts/loki-homelab-logging
-[4]: /posts/argocd
-[5]: /posts/kubernetes
+[3]: /posts/loki-homelab-logging/
+[4]: /posts/argocd/
+[5]: /posts/kubernetes/

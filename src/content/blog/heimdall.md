@@ -93,10 +93,10 @@ The `/settings` menu also allows you to enable a search engine for your dashboar
 ![heimdall](/images/heimdall.png)
 
 [1]: https://apps.heimdall.site
-[3]: /posts/containers
-[4]: /posts/getting-started-with-virtual-machines
-[5]: /posts/proxmox-installation
+[3]: /posts/containers/
+[4]: /posts/getting-started-with-virtual-machines/
+[5]: /posts/proxmox-installation/
 [6]: https://linuxserver.io
 [7]: https://portforward.com/
-[8]: /posts/pi-proxy
+[8]: /posts/pi-proxy/
 [9]: https://pve.proxmox.com/pve-docs/pveum-plain.html
