@@ -3,18 +3,18 @@
 ## Prerequisites
 
 - Node.js 24 (see `.nvmrc`)
-- npm
+- pnpm 12.4.2 (pinned in `package.json`)
 
 ## Setup
 
 ```bash
-npm install
+pnpm install
 ```
 
 ## Local Dev Server
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 The site will be available at `http://localhost:4321` and by IP on port 4321 from other devices on the network.
@@ -22,17 +22,17 @@ The site will be available at `http://localhost:4321` and by IP on port 4321 fro
 ## Build
 
 ```bash
-npm run build    # production build to dist/
-npm run preview  # preview the build locally
+pnpm run build    # production build to dist/
+pnpm run preview  # preview the build locally
 ```
 
 ## Linting, Type-checking, Formatting
 
 ```bash
-npm run lint          # eslint
-npm run check         # astro check (TypeScript + Astro diagnostics)
-npm run format:check  # prettier check
-npm run format        # prettier fix
+pnpm run lint          # eslint
+pnpm run check         # astro check (TypeScript + Astro diagnostics)
+pnpm run format:check  # prettier check
+pnpm run format        # prettier fix
 ```
 
 ## HTML / Accessibility / Link Checks
@@ -40,8 +40,8 @@ npm run format        # prettier fix
 These run against the built `dist/` output and mirror what CI runs:
 
 ```bash
-npm run build         # produce dist/
-npm run a11y          # html-validate against dist/**/*.html
+pnpm run build         # produce dist/
+pnpm run a11y          # html-validate against dist/**/*.html
 ```
 
 Internal link integrity uses [lychee](https://github.com/lycheeverse/lychee). In CI it's fetched as a static binary; locally, install it however you prefer (`brew install lychee`) and run:

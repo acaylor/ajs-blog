@@ -16,7 +16,7 @@
  * report it too since it's the same class of problem for this script's purposes (lychee will
  * catch it too, but this is cheaper to run and gives clearer file attribution).
  *
- * Run after `npm run build`.
+ * Run after `pnpm run build`.
  */
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -26,7 +26,7 @@ const REDIRECTS = 'amplify-redirects.json';
 const MAX_FILES_SHOWN = 5;
 
 if (!existsSync(DIST)) {
-  console.error(`\n${DIST}/ not found. Run \`npm run build\` first.\n`);
+  console.error(`\n${DIST}/ not found. Run \`pnpm run build\` first.\n`);
   process.exit(1);
 }
 

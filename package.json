@@ -21,11 +21,6 @@
     "@fontsource/dm-mono": "^5.2.7",
     "astro": "^7.2.0"
   },
-  "overrides": {
-    "yaml-language-server": {
-      "yaml": "2.9.0"
-    }
-  },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
     "@typescript-eslint/eslint-plugin": "^8.58.1",
@@ -36,5 +31,6 @@
     "prettier": "^3.8.2",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^6.0.3"
-  }
+  },
+  "packageManager": "pnpm@12.4.2"
 }
