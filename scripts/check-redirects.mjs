@@ -12,7 +12,7 @@
  * a term is renamed or removed in frontmatter. Search Console is a terrible place to
  * find that out three months later, so check it at build time instead.
  *
- * Run after `npm run build`.
+ * Run after `pnpm run build`.
  */
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';

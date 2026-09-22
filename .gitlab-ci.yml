@@ -14,10 +14,11 @@ lint:
     paths:
       - node_modules/
   script:
-    - npm ci
-    - npm run lint
-    - npm run check
-    - npm run format:check
+    - corepack enable
+    - pnpm install --frozen-lockfile
+    - pnpm run lint
+    - pnpm run check
+    - pnpm run format:check
 
 build_and_verify:
   stage: test
@@ -27,17 +28,18 @@ build_and_verify:
     paths:
       - node_modules/
   script:
-    - npm ci
-    - npm run build
+    - corepack enable
+    - pnpm install --frozen-lockfile
+    - pnpm run build
     # static a11y / HTML structure check on the rendered output
-    - npm run a11y
+    - pnpm run a11y
     # every amplify-redirects.json target must still be a page we build
-    - npm run check:redirects
+    - pnpm run check:redirects
     # internal links must not cost a redirect hop (missing trailing slash, or a
     # link to a known amplify-redirects.json source instead of its target)
-    - npm run check:links
+    - pnpm run check:links
     # internal link integrity (lychee is a Rust binary; fetch the musl build
-    # rather than running a second CI job to avoid duplicate npm ci cost)
+    # in this job to avoid installing the dependencies a second time)
     - wget -qO- https://github.com/lycheeverse/lychee/releases/latest/download/lychee-x86_64-unknown-linux-musl.tar.gz | tar xz --strip-components=1 lychee-x86_64-unknown-linux-musl/lychee
     - ./lychee --offline --root-dir "$CI_PROJECT_DIR/dist" --config lychee.toml 'dist/**/*.html'
   artifacts:

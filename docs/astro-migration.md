@@ -88,16 +88,16 @@ The `[...page].astro` rest parameter pattern gives clean URLs (`/posts/2` instea
 
 ### Infrastructure
 
-| Component           | Before (Hugo)                      | After (Astro)                                       |
-| ------------------- | ---------------------------------- | --------------------------------------------------- |
-| Runtime             | Hugo binary                        | Node 24 (build), nginx (serve)                      |
-| Theme               | Git submodule (`themes/ajsTheme`)  | Components in `src/`                                |
-| Dockerfile          | Hugo build stage → nginx           | `node:24-alpine` build → `nginx:alpine`             |
-| CI lint             | None                               | ESLint + `astro check` + Prettier                   |
-| CI verify           | None                               | `npm run build` + html-validate + lychee link check |
-| CI docker           | BuildKit multi-arch (amd64, arm64) | BuildKit amd64 only                                 |
-| Syntax highlighting | Hugo/Chroma (`github-dark`)        | Shiki dual themes (`solarized-light` / `monokai`)   |
-| Dependency updates  | Renovate (Hugo + submodule)        | Renovate (npm)                                      |
+| Component           | Before (Hugo)                      | After (Astro)                                        |
+| ------------------- | ---------------------------------- | ---------------------------------------------------- |
+| Runtime             | Hugo binary                        | Node 24 (build), nginx (serve)                       |
+| Theme               | Git submodule (`themes/ajsTheme`)  | Components in `src/`                                 |
+| Dockerfile          | Hugo build stage → nginx           | `node:24-alpine` build → `nginx:alpine`              |
+| CI lint             | None                               | ESLint + `astro check` + Prettier                    |
+| CI verify           | None                               | `pnpm run build` + html-validate + lychee link check |
+| CI docker           | BuildKit multi-arch (amd64, arm64) | BuildKit amd64 only                                  |
+| Syntax highlighting | Hugo/Chroma (`github-dark`)        | Shiki dual themes (`solarized-light` / `monokai`)    |
+| Dependency updates  | Renovate (Hugo + submodule)        | Renovate (pnpm)                                      |
 
 ### Removed Hugo Artifacts
 
@@ -111,15 +111,15 @@ The `[...page].astro` rest parameter pattern gives clean URLs (`/posts/2` instea
 ## Development
 
 ```bash
-npm install          # install dependencies
-npm run dev          # start dev server (localhost:4321, also accessible by IP)
-npm run build        # production build to dist/
-npm run preview      # preview production build locally
-npm run lint         # eslint
-npm run check        # astro check (TypeScript + Astro diagnostics)
-npm run a11y         # html-validate against dist/**/*.html (run after build)
-npm run format:check # prettier check
-npm run format       # prettier fix
+pnpm install          # install dependencies
+pnpm run dev          # start dev server (localhost:4321, also accessible by IP)
+pnpm run build        # production build to dist/
+pnpm run preview      # preview production build locally
+pnpm run lint         # eslint
+pnpm run check        # astro check (TypeScript + Astro diagnostics)
+pnpm run a11y         # html-validate against dist/**/*.html (run after build)
+pnpm run format:check # prettier check
+pnpm run format       # prettier fix
 ```
 
 ## Visual Refactor (May 2026)
