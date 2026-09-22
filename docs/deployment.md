@@ -7,7 +7,7 @@ the two need to be changed together.
 
 ## AWS Amplify (production)
 
-`amplify.yml` covers the build (`npm ci`, `npm run build`, publish `dist/`). It cannot express
+`amplify.yml` covers the build (`pnpm install --frozen-lockfile`, `pnpm run build`, publish `dist/`). It cannot express
 redirects — Amplify keeps those as app-level "Rewrites and redirects", outside the repo. To stop
 them drifting, the intended rule set is committed to `amplify-redirects.json` and applied with:
 
@@ -66,7 +66,7 @@ publishing:
 - **Deleting or drafting posts** such that a term drops below a pagination boundary, which removes
   a `/N/` page that a rule points at.
 
-`npm run check:redirects` catches both, against the freshly built `dist/`. It runs in the
+`pnpm run check:redirects` catches both, against the freshly built `dist/`. It runs in the
 `build_and_verify` CI job and fails the build on a dead non-paginated target, a source that shadows
 a real page, a self-redirect, a literal space in a source, or a catch-all that isn't `404-200`.
 Missing _pagination_ targets only warn, since a term sitting just under a boundary is a normal
@@ -116,8 +116,8 @@ GitLab CI is configured in `.gitlab-ci.yml` with two stages:
 
 ### Test Stage
 
-- **lint** — `npm ci`, then `npm run lint` (ESLint), `npm run check` (astro check), `npm run format:check` (Prettier)
-- **build_and_verify** — `npm run build`, then `npm run a11y` (html-validate on rendered HTML), then a `lychee` offline link check against `dist/`. Saves `dist/` as a 1-week artifact. The lychee binary is fetched at runtime from GitHub releases to avoid the cost of a second `npm ci`.
+- **lint** — `pnpm install --frozen-lockfile`, then `pnpm run lint` (ESLint), `pnpm run check` (astro check), `pnpm run format:check` (Prettier)
+- **build_and_verify** — `pnpm run build`, then `pnpm run a11y` (html-validate on rendered HTML), then a `lychee` offline link check against `dist/`. Saves `dist/` as a 1-week artifact. The lychee binary is fetched at runtime from GitHub releases to avoid the cost of a second `pnpm install --frozen-lockfile`.
 
 ### Build Stage
 

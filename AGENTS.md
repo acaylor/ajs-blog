@@ -15,17 +15,17 @@ A personal blog. Astro 6 + TypeScript, static content collections under `src/con
 ## Toolchain
 
 - Node 24 (`.nvmrc`)
-- npm (lockfile committed)
+- pnpm 12.4.2 (pinned in `package.json`)
 - git LFS (required — see "Git LFS" below)
 - lychee (Rust binary; install locally for link checks: `brew install lychee`)
 
 ## Running locally
 
 ```bash
-npm install                # one-time
-npm run dev                # http://localhost:4321 (and on LAN)
-npm run build              # static build to dist/
-npm run preview            # serves dist/ at 4321 (no dev toolbar)
+pnpm install                # one-time
+pnpm run dev                # http://localhost:4321 (and on LAN)
+pnpm run build              # static build to dist/
+pnpm run preview            # serves dist/ at 4321 (no dev toolbar)
 ```
 
 ## CI parity — run these before opening an MR
@@ -34,14 +34,14 @@ CI is split across two jobs. The exact commands you should run locally to match:
 
 ```bash
 # what the `lint` CI job does
-npm run lint               # eslint
-npm run check              # astro check (TS + Astro diagnostics)
-npm run format:check       # prettier
+pnpm run lint               # eslint
+pnpm run check              # astro check (TS + Astro diagnostics)
+pnpm run format:check       # prettier
 
 # what the `build_and_verify` CI job does
-npm run build              # produces dist/
-npm run a11y               # html-validate against dist/**/*.html
-npm run check:links        # no internal link costs a redirect hop, or points nowhere
+pnpm run build              # produces dist/
+pnpm run a11y               # html-validate against dist/**/*.html
+pnpm run check:links        # no internal link costs a redirect hop, or points nowhere
 lychee --offline --root-dir "$PWD/dist" --config lychee.toml 'dist/**/*.html'
 ```
 
@@ -140,7 +140,7 @@ Useful for the dmesg-refactor post and for any future visual-comparison work. Th
 # in a separate temp dir, not in the repo
 mkdir /tmp/screenshot-script && cd /tmp/screenshot-script
 npm init -y > /dev/null
-npm install playwright
+pnpm install playwright
 /tmp/screenshot-script/node_modules/.bin/playwright install chromium
 # write a node script that imports `playwright`, see below
 ```
@@ -171,7 +171,7 @@ await page.addStyleTag({ content: '.prompt .cursor { animation: none !important;
 await page.screenshot({ path: 'out.png' });
 ```
 
-Run against `npm run preview` (production-style serve from `dist/`), not `npm run dev` — the dev server injects an Astro toolbar.
+Run against `pnpm run preview` (production-style serve from `dist/`), not `pnpm run dev` — the dev server injects an Astro toolbar.
 
 Output PNGs go to `public/images/<slug>/` (LFS picks them up automatically; verify with `git lfs ls-files`).
 
