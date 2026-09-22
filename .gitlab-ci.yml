@@ -14,7 +14,7 @@ lint:
     paths:
       - node_modules/
   script:
-    - npm install -g pnpm@12.4.2
+    - corepack enable
     - pnpm install --frozen-lockfile
     - pnpm run lint
     - pnpm run check
@@ -28,7 +28,7 @@ build_and_verify:
     paths:
       - node_modules/
   script:
-    - npm install -g pnpm@12.4.2
+    - corepack enable
     - pnpm install --frozen-lockfile
     - pnpm run build
     # static a11y / HTML structure check on the rendered output
