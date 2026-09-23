@@ -1,3 +1,11 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json"
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "minimumReleaseAge": "1 day",
+  "packageRules": [
+    {
+      "matchPackageNames": ["typescript", "node"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    }
+  ]
 }
