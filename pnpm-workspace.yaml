@@ -1,4 +1,6 @@
 allowBuilds:
   esbuild: true
+minimumReleaseAge: 1440
+minimumReleaseAgeStrict: true
 overrides:
   'yaml-language-server>yaml': '2.9.0'
