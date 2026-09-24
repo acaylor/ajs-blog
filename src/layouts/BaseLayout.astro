@@ -5,6 +5,7 @@ import '../styles/global.css';
 import '../styles/patterns.css';
 import dmMono400 from '@fontsource/dm-mono/files/dm-mono-latin-400-normal.woff2?url';
 import dmMono500 from '@fontsource/dm-mono/files/dm-mono-latin-500-normal.woff2?url';
+import literata from '@fontsource-variable/literata/files/literata-latin-opsz-normal.woff2?url';
 
 interface Props {
   title: string;
@@ -49,6 +50,7 @@ const canonical = noindex ? null : new URL(path, Astro.site).href;
     <link rel="alternate" type="application/rss+xml" title="AJ's Blog" href="/rss.xml" />
     <link rel="preload" as="font" type="font/woff2" href={dmMono400} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={dmMono500} crossorigin />
+    {isPost && <link rel="preload" as="font" type="font/woff2" href={literata} crossorigin />}
     <title>{title} | AJ's Blog</title>
     <script is:inline>
       (function () {
@@ -64,19 +66,16 @@ const canonical = noindex ? null : new URL(path, Astro.site).href;
       })();
     </script>
   </head>
-  <body>
+  <body class={isPost ? 'is-post' : undefined}>
     <header class="term-head">
       <div class="inner">
         <a href="/" class="brand">aj@blog</a>
         <nav class="crumb" aria-label="Primary">
           <a href="/posts/" class={isCurrent('/posts') ? 'current' : undefined}>posts</a>
-          <span class="sep" aria-hidden="true">·</span>
           <a href="/tags/" class={isCurrent('/tags') ? 'current' : undefined}>tags</a>
-          <span class="sep" aria-hidden="true">·</span>
           <a href="/categories/" class={isCurrent('/categories') ? 'current' : undefined}
             >categories</a
           >
-          <span class="sep" aria-hidden="true">·</span>
           <a href="/about/" class={isCurrent('/about') ? 'current' : undefined}>about</a>
         </nav>
         <span class="spacer"></span>

@@ -70,7 +70,9 @@ docs/                  # contributor docs (development, deployment, migration)
 The site uses a "Linux boot log" visual direction. Tokens live in `src/styles/global.css`; primitives in `src/styles/patterns.css`. The contract:
 
 - **Sharp corners everywhere.** No `border-radius` tokens. Adding rounded corners breaks the visual conceit.
-- **DM Mono for the entire UI**, not just code. Loaded via `@fontsource/dm-mono`; preloaded in `BaseLayout.astro`. Ligatures off (`font-feature-settings: 'liga' 0`) so arrows in code render as literal `->` rather than the `→` glyph.
+- **Two typefaces, split by job.** DM Mono (`--font-mono`) is the chrome: header, banner, headings, metadata, tags, tables, code. Literata (`--font-read`, `@fontsource-variable/literata`) is running text inside `.prose` only — paragraphs, lists, blockquotes. Long posts in monospace were tiring to read; keep the serif confined to post body text and don't spread it into the chrome. Both are preloaded in `BaseLayout.astro` (Literata only on post pages). DM Mono ligatures are off (`font-feature-settings: 'liga' 0`) so arrows in code render as literal `->` rather than the `→` glyph.
+- **Text measure.** `.prose` text blocks are capped at `38em`; code blocks, tables and images use the full column. Page width is one token, `--page-width` (rem, not `ch` — `ch` resolves per element font-size, which previously made the header and content different widths). Post pages widen it via `body.is-post`.
+- **Terminal devices must carry information.** The boot banner is the one decorative flourish. Don't add fake timestamps to section dividers, `[INFO]`-style lines that restate what's on screen, all-caps labels, `→` prefixes on links, `·` separators between nav or meta items (use spacing), or bordered chips for tags (tags render as plain `#slug` text).
 - **Amber accent with a WCAG split.** `--amber` (`#b56b00`) measures 3.85:1 on the light `--bg` — OK for status tags, hero prefixes, chip borders (3:1 large-text / UI threshold) but **not** for body text. `.prose a` uses `--amber-strong` (`#8a5300`, 5.81:1). When adding new amber-colored elements, ask: is this body text? If yes, use `--amber-strong`.
 - **Short-form CSS variables.** `--bg`, `--fg`, `--amber`, `--rule`, `--ok`, `--warn`, `--note`. Do not introduce parallel long-form tokens.
 - **Shiki dual themes**: `solarized-light` / `monokai`, controlled by `[data-theme='dark']` in `global.css`. No client-side theme-swap logic.
@@ -78,7 +80,7 @@ The site uses a "Linux boot log" visual direction. Tokens live in `src/styles/gl
 ### Components
 
 - `Banner.astro` — boot banner at the top of every page. Props: `command`, `status`, `showPreamble`.
-- `Module.astro` — section divider `── name ──────`. Props: `name`, optional `ts`, optional `id`.
+- `Module.astro` — section divider `── name ──────`. Props: `name`, optional `id`.
 - `Prompt.astro` — trailing prompt at the bottom of every page. Types out a rotating list of fake commands (`tail -f /var/log/blog.log`, `journalctl -u aj-blog.service`, …). The message list is a JS array at the top of the component — edit there. Respects `prefers-reduced-motion`.
 - `PostCard.astro` — `.unit` block, used on home.
 - `PostEntry.astro` — compact `.entry` row, used on `/posts` and all paginated list pages.

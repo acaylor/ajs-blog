@@ -6,9 +6,18 @@
 
 @import '@fontsource/dm-mono/400.css';
 @import '@fontsource/dm-mono/500.css';
+@import '@fontsource-variable/literata/opsz.css';
+@import '@fontsource-variable/literata/opsz-italic.css';
 
 :root {
   --font-mono: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  /* Post body text only. The chrome, headings, metadata and code stay mono. */
+  --font-read: 'Literata Variable', Georgia, 'Times New Roman', serif;
+
+  /* One width for header, main and footer. A rem value, not ch: ch scales with
+     each element's font-size, so the 11.5px header and 14.5px body resolved
+     96ch to different widths and the nav sat inset from the content. */
+  --page-width: 52rem;
 
   --bg: #faf6ee;
   --bg-deep: #f1ead9;
@@ -69,10 +78,6 @@ body {
   flex-direction: column;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-[data-theme='dark'] body {
-  background-image: radial-gradient(ellipse at top, rgba(255, 176, 0, 0.04), transparent 70%);
 }
 
 html.theme-loaded body {

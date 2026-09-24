@@ -6,7 +6,7 @@
 /* ===== Main column ===== */
 main {
   flex: 1;
-  max-width: 96ch;
+  max-width: var(--page-width);
   width: 100%;
   margin: 0 auto;
   padding: 1.5rem 1.25rem 3rem;
@@ -24,7 +24,7 @@ main {
   color: var(--fg-faint);
 }
 .term-head .inner {
-  max-width: 96ch;
+  max-width: var(--page-width);
   margin: 0 auto;
   padding: 0.5rem 1.25rem;
   display: flex;
@@ -48,7 +48,7 @@ main {
 .term-head .crumb {
   display: inline-flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 0.9rem;
   align-items: baseline;
 }
 .term-head .crumb a {
@@ -62,10 +62,6 @@ main {
 .term-head .crumb a.current {
   color: var(--fg);
 }
-.term-head .crumb .sep {
-  color: var(--fg-faint);
-  user-select: none;
-}
 .term-head .spacer {
   flex: 1;
 }
@@ -77,8 +73,6 @@ main {
   font-size: 11px;
   padding: 0.15rem 0.6rem;
   cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
   transition:
     color 120ms,
     border-color 120ms,
@@ -169,9 +163,6 @@ main {
   gap: 0.5rem;
   flex-wrap: wrap;
 }
-.module .ts {
-  font-size: 11px;
-}
 .module .name {
   color: var(--amber);
   font-weight: 500;
@@ -199,10 +190,6 @@ h1.title {
   word-break: break-word;
   line-height: 1.3;
 }
-h1.title::before {
-  content: '> ';
-  color: var(--amber);
-}
 .title-sub {
   color: var(--fg-soft);
   font-size: 13px;
@@ -217,75 +204,47 @@ p.log {
 p.log + p.log {
   margin-top: 0.5rem;
 }
+p.log.more {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 3ch;
+}
 
 /* ===== Hero (home page) ===== */
-.hero-eyebrow {
-  margin-top: 1.5rem;
-  font-size: 11px;
-  color: var(--fg-faint);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-.hero-eyebrow::before {
-  content: '$ ';
-  color: var(--ok);
-  text-transform: none;
-  letter-spacing: 0;
-}
 h1.hero {
   font-family: var(--font-mono);
   font-size: 2rem;
   font-weight: 500;
   letter-spacing: -0.01em;
   line-height: 1.1;
-  margin: 0.4rem 0 0.75rem;
+  margin: 2rem 0 0.75rem;
   color: var(--fg);
 }
 .hero-sub {
   color: var(--fg-soft);
   font-size: 14px;
   max-width: 56ch;
-  margin-bottom: 1rem;
-}
-.hero-cta {
   margin-bottom: 2rem;
-  font-size: 13px;
-}
-.hero-cta a {
-  text-decoration: none;
-}
-.hero-cta a::before {
-  content: '→ ';
-  color: var(--amber);
+  text-wrap: pretty;
 }
 
-/* ===== Bordered-pill link (tag chips, share buttons) ===== */
+/* ===== Tag link — plain #tag text ===== */
 .tag-link {
-  display: inline-block;
-  border: 1px solid var(--rule);
-  color: var(--fg-soft);
-  background: var(--bg);
-  padding: 0.05rem 0.5rem;
-  font-size: 11px;
+  color: var(--fg-faint);
+  font-size: 12px;
   text-decoration: none;
   text-transform: lowercase;
-  letter-spacing: 0.04em;
-  margin: 0 0.25rem 0.25rem 0;
-  line-height: 1.6;
-  transition:
-    color 120ms,
-    border-color 120ms,
-    background 120ms;
+  margin-right: 1ch;
+  white-space: nowrap;
 }
-.tag-link:hover {
+.tag-link::before {
+  content: '#';
+}
+a.tag-link:hover {
   color: var(--amber);
-  border-color: var(--amber);
-  background: var(--amber-soft);
-  text-decoration: none;
-}
-.tag-link.large {
-  font-size: 12px;
-  padding: 0.15rem 0.6rem;
+  background: none;
+  text-decoration: underline;
 }
 
 /* ===== /proc-style table (about → hardware) ===== */
@@ -307,8 +266,6 @@ table.proc th {
   color: var(--fg-faint);
   font-weight: 500;
   font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
 }
 table.proc td:first-child {
   color: var(--amber);
@@ -340,12 +297,6 @@ table.proc a:hover {
   align-items: baseline;
   flex-wrap: wrap;
 }
-.unit .dot {
-  color: var(--ok);
-}
-.unit .dot.draft {
-  color: var(--warn);
-}
 .unit .name {
   color: var(--fg);
   font-weight: 500;
@@ -360,6 +311,9 @@ table.proc a:hover {
   color: var(--amber);
 }
 .unit .meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 2ch;
   color: var(--fg-faint);
   font-size: 12px;
   margin-top: 0.15rem;
@@ -372,11 +326,10 @@ table.proc a:hover {
   max-width: 64ch;
 }
 .unit .tags {
-  margin-top: 0.45rem;
+  margin-top: 0.35rem;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 0;
+  align-items: baseline;
 }
 .unit.has-thumb {
   display: grid;
@@ -393,10 +346,10 @@ table.proc a:hover {
 }
 .unit .thumb img {
   display: block;
-  width: 5.5rem;
-  height: 5.5rem;
+  width: 9rem;
+  height: 6rem;
   object-fit: contain;
-  padding: 0.45rem;
+  padding: 0.35rem;
   background: var(--bg-card);
   border: 1px solid var(--rule);
   filter: grayscale(0.7) contrast(1.05) sepia(0.35);
@@ -418,11 +371,6 @@ table.proc a:hover {
   .unit .thumb img {
     transition: none;
   }
-}
-.unit .tags .label {
-  color: var(--fg-faint);
-  font-size: 11.5px;
-  margin-right: 0.4rem;
 }
 
 /* ===== Compact journalctl-style row (posts list, tag/category pages) ===== */
@@ -468,7 +416,6 @@ table.proc a:hover {
   grid-column: 2 / span 2;
   display: flex;
   flex-wrap: wrap;
-  margin-top: 0.15rem;
 }
 
 /* ===== top-style frequency table (tags / categories index) ===== */
@@ -482,8 +429,6 @@ table.stat thead th {
   font-size: 11px;
   font-weight: 500;
   color: var(--fg-faint);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
   padding: 0.35rem 0.75rem 0.35rem 0;
   border-bottom: 1px solid var(--rule);
 }
@@ -495,25 +440,19 @@ table.stat tbody td {
 table.stat tbody tr:last-child td {
   border-bottom: none;
 }
+table.stat .name {
+  white-space: nowrap;
+}
 table.stat .name a {
-  display: inline-block;
-  border: 1px solid var(--rule);
-  background: var(--bg);
-  padding: 0.1rem 0.6rem;
   color: var(--fg);
   text-decoration: none;
   font-weight: 500;
-  font-size: 12.5px;
   text-transform: lowercase;
-  transition:
-    color 120ms,
-    border-color 120ms,
-    background 120ms;
 }
 table.stat .name a:hover {
   color: var(--amber);
-  border-color: var(--amber);
-  background: var(--amber-soft);
+  background: none;
+  text-decoration: underline;
 }
 table.stat .count {
   color: var(--amber);
@@ -626,23 +565,15 @@ table.stat .pct {
 [data-theme='dark'] .figure img {
   filter: grayscale(1) contrast(1.05) brightness(0.85) sepia(0.5) hue-rotate(-10deg);
 }
-.figcap {
-  font-size: 12px;
-  color: var(--fg-soft);
-  max-width: 50ch;
-  line-height: 1.6;
-}
-.figcap b {
-  color: var(--fg);
-  font-weight: 500;
-  display: block;
-  margin-bottom: 0.25rem;
+.figure p.log {
+  margin: 0;
 }
 
 /* ===== Contact channels grid (about) ===== */
 .channels {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 68ch;
   gap: 0.25rem 1.5rem;
   margin-top: 0.5rem;
 }
@@ -670,10 +601,12 @@ table.stat .pct {
    Post layout (PostLayout.astro)
    =========================================================== */
 
+body.is-post {
+  --page-width: 68rem;
+}
 main.post {
-  max-width: 120ch;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 23ch;
+  grid-template-columns: minmax(0, 1fr) 15rem;
   gap: 2.25rem;
 }
 main.post > article {
@@ -695,15 +628,12 @@ main.post > article {
   font-size: 12px;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 0.75rem;
+  gap: 0.25rem 2ch;
   margin-top: 1.25rem;
   font-variant-numeric: tabular-nums;
 }
-.post-meta .dot {
-  color: var(--rule);
-}
 .post-meta .cat {
-  color: var(--note);
+  color: var(--fg-soft);
   text-decoration: none;
 }
 .post-meta .cat:hover {
@@ -721,10 +651,6 @@ h1.post-title {
   color: var(--fg);
   word-break: break-word;
 }
-h1.post-title::before {
-  content: '> ';
-  color: var(--amber);
-}
 
 .post-tags-row {
   display: flex;
@@ -732,26 +658,42 @@ h1.post-title::before {
   align-items: center;
   margin-bottom: 1.5rem;
 }
-.post-tags-row .label {
-  color: var(--fg-faint);
-  font-size: 11.5px;
-  margin-right: 0.4rem;
-}
 
 /* ===== Prose (rendered markdown body) ===== */
+/* Running text is set in --font-read; headings, code, tables and captions
+   stay in the mono chrome. Text blocks are held to a readable measure while
+   code, tables and images keep the full column. */
 .prose {
-  font-size: 15.5px;
-  line-height: 1.75;
+  font-family: var(--font-read);
+  font-size: 18px;
+  line-height: 1.65;
   color: var(--fg);
   min-width: 0;
+  font-optical-sizing: auto;
+}
+.prose p,
+.prose ul,
+.prose ol,
+.prose blockquote,
+.prose h2,
+.prose h3,
+.prose h4 {
+  max-width: 38em;
 }
 .prose p {
-  margin-bottom: 1rem;
+  margin-bottom: 1.1em;
+  text-wrap: pretty;
+}
+.prose table,
+.prose figcaption,
+.prose kbd {
+  font-family: var(--font-mono);
 }
 .prose h2 {
   font-family: var(--font-mono);
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 500;
+  line-height: 1.4;
   margin-top: 2.5rem;
   margin-bottom: 0.5rem;
   color: var(--fg);
@@ -820,10 +762,10 @@ h1.post-title::before {
 }
 .prose :not(pre) > code {
   background: var(--bg-card);
-  padding: 0.05em 0.4em;
+  padding: 0.05em 0.35em;
   border: 1px solid var(--rule);
   color: var(--amber-strong);
-  font-size: 0.9em;
+  font-size: 0.8em;
 }
 [data-theme='dark'] .prose :not(pre) > code {
   color: var(--amber);
@@ -901,29 +843,26 @@ aside.toc {
   padding-top: 1.5rem;
 }
 aside.toc .toc-title {
-  font-size: 10.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-size: 11px;
   color: var(--fg-faint);
   margin-bottom: 0.5rem;
 }
 aside.toc .toc-title::before {
   content: '$ tree ';
   color: var(--ok);
-  text-transform: none;
-  letter-spacing: 0;
 }
 aside.toc ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
+/* glyph in its own column so long headings wrap under their text, not the tree */
 aside.toc li {
   font-family: var(--font-mono);
-  line-height: 1.7;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.5;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  padding: 0.15rem 0;
 }
 aside.toc li.depth-3,
 aside.toc li.depth-4 {
@@ -1077,7 +1016,7 @@ aside.toc .tree {
   background: var(--bg-deep);
 }
 .term-foot .inner {
-  max-width: 96ch;
+  max-width: var(--page-width);
   margin: 0 auto;
   padding: 1.25rem;
   display: flex;
@@ -1134,6 +1073,18 @@ aside.toc .tree {
     padding: 0.5rem 0.9rem;
   }
   /* keep the header to one row on phones — percentage only */
+  .term-head .inner {
+    gap: 0.5rem;
+  }
+  .term-head .crumb {
+    gap: 0.5rem;
+  }
+  .term-head .toggle {
+    padding: 0.15rem 0.45rem;
+  }
+  .term-head .brand::before {
+    content: none;
+  }
   .term-head .progress .cells {
     display: none;
   }
@@ -1174,10 +1125,13 @@ aside.toc .tree {
   .unit .name {
     font-size: 13px;
   }
+  .channels {
+    grid-template-columns: minmax(0, 1fr);
+  }
   .unit .thumb img {
-    width: 4rem;
-    height: 4rem;
-    padding: 0.3rem;
+    width: 4.5rem;
+    height: 4.5rem;
+    padding: 0.25rem;
   }
 
   .entry {
@@ -1200,8 +1154,8 @@ aside.toc .tree {
     font-size: 1.25rem;
   }
   .prose {
-    font-size: 13.5px;
-    line-height: 1.7;
+    font-size: 16.5px;
+    line-height: 1.6;
   }
   .prose h2 {
     font-size: 1.05rem;
@@ -1212,5 +1166,12 @@ aside.toc .tree {
   }
   .navnext {
     grid-template-columns: 1fr;
+  }
+}
+
+/* narrowest phones: the header can't fit the progress gauge on one row */
+@media (max-width: 380px) {
+  .term-head .progress {
+    display: none;
   }
 }

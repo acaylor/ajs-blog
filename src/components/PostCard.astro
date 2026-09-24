@@ -10,7 +10,6 @@ interface Props {
   href: string;
   image?: string;
   categories?: string[];
-  draft?: boolean;
 }
 
 const {
@@ -22,34 +21,29 @@ const {
   href,
   image,
   categories = [],
-  draft = false,
 } = Astro.props;
 
 const isoDate = date.toISOString();
 const ymd = isoDate.slice(0, 10);
 const metaCategory = categories.slice(0, 2).join(' / ');
+const metaParts = [readingTime, metaCategory].filter(Boolean);
 ---
 
 <div class="unit" class:list={[{ 'has-thumb': Boolean(image) }]}>
   <div class="unit-body">
     <div class="head">
-      <span class="dot" class:list={[{ draft }]} aria-hidden="true">●</span>
       <span class="name"><a href={href}>{title}</a></span>
     </div>
     <div class="meta">
-      <time datetime={isoDate}>{ymd}</time> &middot; {readingTime}{
-        metaCategory && <> &middot; {metaCategory}</>
-      }
+      <time datetime={isoDate}>{ymd}</time>
+      {metaParts.map((part) => <span>{part}</span>)}
     </div>
     {description && <div class="desc">{description}</div>}
     {
       tags.length > 0 && (
         <div class="tags">
-          <span class="label">tags</span>
           {tags.slice(0, 4).map((tag) => (
-            <a href={`/tags/${slugify(tag)}/`} class="tag-link">
-              {tag}
-            </a>
+            <a href={`/tags/${slugify(tag)}/`} class="tag-link" set:text={slugify(tag)} />
           ))}
         </div>
       )

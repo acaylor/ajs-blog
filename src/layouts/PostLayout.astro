@@ -1,7 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import Banner from '../components/Banner.astro';
-import Module from '../components/Module.astro';
 import Prompt from '../components/Prompt.astro';
 import ShareButtons from '../components/ShareButtons.astro';
 import TableOfContents from '../components/TableOfContents.astro';
@@ -70,14 +69,10 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://blog.ayjc.net
 
     <div class="post-meta">
       <time datetime={isoDate}>{ymd}</time>
-      <span class="dot" aria-hidden="true">&middot;</span>
       <span>{readingTime}</span>
       {
         author && (
           <>
-            <span class="dot" aria-hidden="true">
-              &middot;
-            </span>
             <span>by {author}</span>
           </>
         )
@@ -85,9 +80,6 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://blog.ayjc.net
       {
         categories.length > 0 && (
           <>
-            <span class="dot" aria-hidden="true">
-              &middot;
-            </span>
             <span>
               {categories.map((cat, i) => (
                 <>
@@ -104,9 +96,6 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://blog.ayjc.net
       {
         updatedYmd && (
           <>
-            <span class="dot" aria-hidden="true">
-              &middot;
-            </span>
             <span>updated {updatedYmd}</span>
           </>
         )
@@ -118,11 +107,8 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://blog.ayjc.net
     {
       tags.length > 0 && (
         <div class="post-tags-row">
-          <span class="label">tags</span>
           {tags.map((tag) => (
-            <a href={`/tags/${slugify(tag)}/`} class="tag-link">
-              {tag}
-            </a>
+            <a href={`/tags/${slugify(tag)}/`} class="tag-link" set:text={slugify(tag)} />
           ))}
         </div>
       )
@@ -136,13 +122,10 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://blog.ayjc.net
       )
     }
 
-    <Module name="body" />
-
     <div class="prose">
       <slot />
     </div>
 
-    <Module name="share" />
     <ShareButtons title={title} url={pageUrl} />
 
     {

@@ -25,20 +25,13 @@ const totalPosts = posts.length;
     }}
   />
 
-  <p class="hero-eyebrow">welcome</p>
   <h1 class="hero">aj's blog</h1>
   <p class="hero-sub">
     A personal blog focused on software, technology, and the cloud. Sharing what I'm working with at
     home — what broke, what stayed up, and what I learned getting it there.
   </p>
-  <p class="hero-cta"><a href="/posts/">browse all posts</a></p>
 
   <Module name="recent" />
-  <p class="log">
-    <span class="tag-info">[INFO]</span>
-    {recent.length} most recent ·
-    <span style="color: var(--fg-faint)">sorted by date desc</span>
-  </p>
 
   {
     recent.map((post) => (
@@ -51,14 +44,13 @@ const totalPosts = posts.length;
         image={post.data.image}
         readingTime={getReadingTime(post.body || '')}
         href={`/posts/${post.id}/`}
-        draft={post.data.draft}
       />
     ))
   }
 
-  <p class="log" style="margin-top: 1.5rem">
-    <span class="tag-note">[NOTE]</span>
-    <a href="/posts/">view all {totalPosts} posts</a> · feed at <a href="/rss.xml">/rss.xml</a>
+  <p class="log more">
+    <a href="/posts/">all {totalPosts} posts</a>
+    <a href="/rss.xml">rss feed</a>
   </p>
 
   <Prompt />

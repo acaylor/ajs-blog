@@ -61,25 +61,18 @@ const hardware: HardwareRow[] = [
   />
 
   <h1 class="title">whoami</h1>
-  <p class="title-sub">acaylor &middot; senior platform engineer</p>
+  <p class="title-sub">acaylor, senior platform engineer</p>
 
   <Module name="intro" />
-  <p class="log">
-    This site is a personal blog focused on software, technology, and the cloud. The main purpose is
-    to share what I'm running at home and what I learned getting it to stay up.
-  </p>
   <div class="figure avatar">
     <img src="/images/whoami/whoami.png" alt="Profile photo" />
-    <div class="figcap">
-      <b>fig. 0 — operator portrait</b>github.com/acaylor &middot; gitlab.com/acaylor
-    </div>
+    <p class="log">
+      This site is a personal blog focused on software, technology, and the cloud. The main purpose
+      is to share what I'm running at home and what I learned getting it to stay up. I'm currently a
+      Senior Platform Engineer, and I enjoy working with the latest technology in my homelab and
+      writing posts that survive past the first edit.
+    </p>
   </div>
-
-  <Module name="author" />
-  <p class="log">
-    <span class="tag-info">[INFO]</span> Currently a Senior Platform Engineer. I enjoy working with the
-    latest technology in my homelab and writing posts that survive past the first edit.
-  </p>
 
   <Module name="contact" id="contact" />
   <p class="log">
@@ -129,7 +122,6 @@ const hardware: HardwareRow[] = [
   </p>
 
   <Module name="hardware" />
-  <p class="log"><span class="tag-info">[INFO]</span> scanning hardware ...</p>
   <table class="proc" aria-label="Hardware inventory">
     <thead>
       <tr>
@@ -158,21 +150,12 @@ const hardware: HardwareRow[] = [
   </p>
 
   <Module name="projects" />
-  <p class="log">
-    <span class="tag-info">[INFO]</span> active units &middot;
-    <span style="color: var(--fg-faint)">
-      use <a href="/posts/">posts</a> for more
-    </span>
-  </p>
   {
     projects.map((project) => {
       const isExternal = project.url.startsWith('http');
       return (
         <div class="unit">
           <div class="head">
-            <span class="dot" aria-hidden="true">
-              ●
-            </span>
             <span class="name">
               <a
                 href={project.url}
@@ -185,7 +168,6 @@ const hardware: HardwareRow[] = [
           <div class="desc">{project.description}</div>
           {project.tags.length > 0 && (
             <div class="tags">
-              <span class="label">tags</span>
               {project.tags.map((tag) => (
                 <span class="tag-link">{tag}</span>
               ))}
