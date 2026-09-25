@@ -56,7 +56,7 @@ const hardware: HardwareRow[] = [
     status={{
       tag: 'ok',
       label: '[ OK ]',
-      text: 'loading runtime: astro · nginx · static',
+      text: 'loading runtime: astro · aws amplify · static',
     }}
   />
 
@@ -121,7 +121,7 @@ const hardware: HardwareRow[] = [
     VMs running k8s clusters. Now I am running a mix of Raspberry Pis and Proxmox VMs with k3s.
   </p>
 
-  <Module name="hardware" />
+  <Module name="hardware" count={`${hardware.length} nodes`} />
   <table class="proc" aria-label="Hardware inventory">
     <thead>
       <tr>
@@ -149,7 +149,7 @@ const hardware: HardwareRow[] = [
     password manager for secrets
   </p>
 
-  <Module name="projects" />
+  <Module name="projects" count={`${projects.length} units`} />
   {
     projects.map((project) => {
       const isExternal = project.url.startsWith('http');

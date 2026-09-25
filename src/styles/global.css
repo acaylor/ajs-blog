@@ -24,15 +24,18 @@
   --bg-card: #f6f1e2;
   --fg: #1c1b18;
   --fg-soft: #4a463d;
-  --fg-faint: #8a8474;
+  --fg-faint: #6c685b;
   --rule: #d8cfb8;
-  --amber: #b56b00;
-  --amber-soft: #b56b0015;
+  --amber: #985a00;
+  --amber-soft: #985a0015;
   --amber-strong: #8a5300;
-  --ok: #2c7a4a;
-  --warn: #b85c2e;
+  --ok: #2a7447;
+  --warn: #a1522b;
   --note: #5a4eb8;
 
+  /* Every text token clears WCAG AA (4.5:1) on --bg, --bg-deep and --bg-card
+     in both themes. The dmesg look leans on --fg-faint for small log text, so
+     it sits just past the threshold rather than below it. */
   color-scheme: light dark;
 }
 
@@ -42,7 +45,7 @@
   --bg-card: #16140e;
   --fg: #e8dfc4;
   --fg-soft: #b8ad8b;
-  --fg-faint: #6e6852;
+  --fg-faint: #868069;
   --rule: #2a2620;
   --amber: #ffb000;
   --amber-soft: #ffb00018;

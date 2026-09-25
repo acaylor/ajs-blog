@@ -12,86 +12,130 @@ main {
   padding: 1.5rem 1.25rem 3rem;
   min-width: 0;
 }
+/* focused programmatically by the skip link; no ring around the whole page */
+main:focus {
+  outline: none;
+}
 
-/* ===== Terminal header ===== */
+/* ===== Skip link: first tab stop, visible only when focused ===== */
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -3rem;
+  z-index: 30;
+  padding: 0.25rem 0.6rem;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 12px;
+}
+.skip-link:focus {
+  top: 0.35rem;
+}
+
+/* ===== Terminal header: a tmux status line =====
+   A quiet status line rather than tmux's default green bar: it sits on
+   --bg-deep with a hairline rule, in faint text, so it reads as chrome and
+   not as the loudest thing on the page. Left: session name (the one green
+   accent) and window list, current window flagged with "*". Right: the
+   reading gauge on posts, the build clock (tmux's status-right format), and
+   the theme toggle. */
 .term-head {
   position: sticky;
   top: 0;
   z-index: 20;
   background: var(--bg-deep);
   border-bottom: 1px solid var(--rule);
-  font-size: 11.5px;
   color: var(--fg-faint);
+  font-size: 12px;
 }
 .term-head .inner {
   max-width: var(--page-width);
   margin: 0 auto;
-  padding: 0.5rem 1.25rem;
+  padding: 0 1.25rem;
   display: flex;
-  gap: 1rem;
+  gap: 1ch;
   align-items: center;
-  flex-wrap: wrap;
+  min-height: 1.9rem;
 }
-.term-head .brand {
+.term-head a {
+  color: var(--fg-soft);
+  text-decoration: none;
+}
+.term-head a:hover {
+  background: none;
+  color: var(--fg);
+  text-decoration: underline;
+}
+.term-head .session {
+  color: var(--ok);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.term-head .windows {
+  display: flex;
+  gap: 1ch;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  white-space: nowrap;
+}
+/* 24px-tall hit areas (WCAG 2.5.8) without making the bar look taller */
+.term-head .windows a,
+.term-head .session,
+.term-head .toggle {
+  display: inline-block;
+  line-height: 24px;
+}
+.term-head .windows a {
+  padding: 0 0.1ch;
+}
+.term-head .windows .idx {
+  color: var(--fg-faint);
+}
+.term-head .windows a[aria-current='page'] {
   color: var(--fg);
   font-weight: 500;
-  text-decoration: none;
 }
-.term-head .brand::before {
-  content: '◉ ';
-  color: var(--ok);
+.term-head .right {
+  margin-left: auto;
+  display: flex;
+  gap: 1ch;
+  align-items: center;
 }
-.term-head .brand:hover {
-  background: none;
-  color: var(--amber);
-}
-.term-head .crumb {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 0.9rem;
-  align-items: baseline;
-}
-.term-head .crumb a {
-  color: var(--fg-faint);
-  text-decoration: none;
-}
-.term-head .crumb a:hover {
-  color: var(--amber);
-  background: none;
-}
-.term-head .crumb a.current {
-  color: var(--fg);
-}
-.term-head .spacer {
-  flex: 1;
+.term-head .status-right {
+  white-space: nowrap;
 }
 .term-head .toggle {
   background: none;
-  border: 1px solid var(--rule);
-  color: var(--fg-faint);
+  border: 0;
+  color: var(--fg-soft);
   font: inherit;
-  font-size: 11px;
-  padding: 0.15rem 0.6rem;
+  line-height: 24px;
+  padding: 0;
   cursor: pointer;
-  transition:
-    color 120ms,
-    border-color 120ms,
-    background 120ms;
+  white-space: nowrap;
 }
 .term-head .toggle:hover {
-  color: var(--amber);
-  border-color: var(--amber);
+  color: var(--fg);
+  text-decoration: underline;
 }
 .term-head .progress {
   display: inline-flex;
   gap: 0.5ch;
-  font-size: 11px;
-  color: var(--fg-faint);
   font-variant-numeric: tabular-nums;
   white-space: pre;
 }
-.term-head .progress .cells {
-  color: var(--amber);
+.term-head .progress.done {
+  color: var(--ok);
+}
+/* phones hide .cells; this selector outranks that rule so the [ OK ] still shows */
+.term-head .progress.done .cells {
+  display: inline;
+  font-weight: 500;
+}
+.term-head :focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 1px;
 }
 
 /* ===== Status tags ([ OK ] / [INFO] / [WARN] / [NOTE]) ===== */
@@ -163,6 +207,13 @@ main {
   gap: 0.5rem;
   flex-wrap: wrap;
 }
+.module .ts {
+  font-size: 11px;
+}
+.module .count {
+  color: var(--fg-faint);
+  font-weight: 400;
+}
 .module .name {
   color: var(--amber);
   font-weight: 500;
@@ -222,11 +273,40 @@ p.log.read code {
   font-family: var(--font-mono);
   font-size: 0.8em;
 }
+/* systemctl-style list footer: "6 of 177 post units listed. Pass --all …" */
 p.log.more {
-  margin-top: 1.5rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 3ch;
+  margin-top: 1.25rem;
+  color: var(--fg-soft);
+  font-size: 13px;
+}
+
+/* ===== Home boot reveal =====
+   BaseLayout adds html.booting on the first home visit per session. Banner rows
+   (--i) and later .boot-step blocks (--d) appear one after another like streaming
+   log output: no fades, each line just arrives. */
+@keyframes boot-line {
+  from {
+    visibility: hidden;
+  }
+  to {
+    visibility: visible;
+  }
+}
+html.booting .banner .row,
+html.booting .boot-step {
+  animation: boot-line 1ms steps(1, end) both;
+}
+html.booting .banner .row {
+  animation-delay: calc(var(--i, 0) * 110ms);
+}
+html.booting .boot-step {
+  animation-delay: var(--d, 0ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  html.booting .banner .row,
+  html.booting .boot-step {
+    animation: none;
+  }
 }
 
 /* ===== Hero (home page) ===== */
@@ -349,6 +429,72 @@ table.proc a:hover {
   flex-wrap: wrap;
   align-items: baseline;
 }
+/* PostCard: `systemctl status` layout. Column 1 holds the state marker and the
+   right-aligned field labels ("Active:", "CGroup:", "Tags:"); column 2 the values. */
+.unit .unit-body {
+  display: grid;
+  grid-template-columns: 7ch minmax(0, 1fr);
+  column-gap: 1ch;
+  align-items: baseline;
+}
+.unit-body > .k {
+  grid-column: 1;
+  justify-self: end;
+}
+.unit-body > :not(.k) {
+  grid-column: 2;
+}
+/* the "● title" line and the description run full width, like systemctl's header line */
+.unit-body > .name,
+.unit-body > .desc {
+  grid-column: 1 / -1;
+}
+.unit-body .dot {
+  margin-right: 1ch;
+}
+.unit-body > .k {
+  color: var(--fg-faint);
+  font-size: 12px;
+}
+.unit-body > .desc {
+  margin: 0.2rem 0 0.35rem;
+}
+.unit-body > .meta {
+  display: block;
+  margin-top: 0;
+}
+.unit-body > .meta a {
+  color: var(--fg-soft);
+  text-decoration: none;
+}
+.unit-body > .meta a + a {
+  margin-left: 1ch;
+}
+.unit-body > .meta a:hover {
+  color: var(--amber);
+  text-decoration: underline;
+  background: none;
+}
+.unit-body > .tags {
+  margin-top: 0;
+}
+/* state markers: green = new, amber = recently updated, grey = older */
+.state-running {
+  color: var(--ok);
+}
+.state-reloaded {
+  color: var(--amber);
+}
+.state-idle {
+  color: var(--fg-faint);
+}
+.unit-body .state {
+  font-weight: 500;
+}
+.unit-body .state-idle.state {
+  color: var(--fg-soft);
+  font-weight: 400;
+}
 .unit.has-thumb {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -389,6 +535,59 @@ table.proc a:hover {
   .unit .thumb img {
     transition: none;
   }
+}
+
+/* ===== Touch targets =====
+   Tag and category links are small inline text; on touch screens give them
+   24px of height so neighbouring rows' targets don't overlap. */
+@media (pointer: coarse) {
+  .tag-link,
+  .unit-body > .meta a,
+  .post-meta a {
+    display: inline-block;
+    padding-block: 3px;
+  }
+}
+
+/* ===== Row cursor on index pages =====
+   Hovering (or tabbing into) a row puts a block cursor in the gutter, like the
+   selected line in `less` or a TUI list. */
+.entry,
+.unit {
+  position: relative;
+}
+.entry:is(:hover, :focus-within)::before,
+.unit:is(:hover, :focus-within)::before {
+  content: '▌';
+  position: absolute;
+  left: -1.6ch;
+  color: var(--amber);
+}
+.entry::before {
+  top: 0.6rem;
+}
+.unit::before {
+  top: 0.75rem;
+}
+table.stat tbody tr:is(:hover, :focus-within) td:first-child {
+  box-shadow: inset 3px 0 0 var(--amber);
+  padding-left: 0.6rem;
+}
+
+/* ===== journalctl markers: "-- Journal begins at … --", "-- Reboot: 2025 … --" ===== */
+.journal-marker {
+  color: var(--fg-faint);
+  font-size: 12px;
+  margin: 0.9rem 0 0.2rem;
+  font-variant-numeric: tabular-nums;
+}
+.journal > .journal-marker {
+  margin-top: 1.1rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--rule);
+}
+.journal > .entry:has(+ .journal-marker) {
+  border-bottom: none;
 }
 
 /* ===== Compact journalctl-style row (posts list, tag/category pages) ===== */
@@ -434,6 +633,23 @@ table.proc a:hover {
   grid-column: 2 / span 2;
   display: flex;
   flex-wrap: wrap;
+}
+
+/* ===== `top` summary header above the /tags table ===== */
+pre.top-head {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0 0 1rem;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--fg-soft);
+  white-space: pre-wrap;
+}
+pre.top-head span[title] {
+  text-decoration: underline dotted var(--fg-faint);
+  text-underline-offset: 3px;
+  cursor: help;
 }
 
 /* ===== top-style frequency table (tags / categories index) ===== */
@@ -498,6 +714,24 @@ table.stat .bar {
 }
 [data-theme='dark'] .bar-fill {
   opacity: 0.75;
+}
+table.stat .num {
+  text-align: right;
+}
+table.df .fs {
+  color: var(--fg);
+  white-space: nowrap;
+}
+table.df .bar {
+  min-width: 8ch;
+}
+table.df .fs a {
+  font-weight: 400;
+  text-transform: none;
+}
+table.df .mnt {
+  color: var(--fg-faint);
+  white-space: nowrap;
 }
 table.stat .pct {
   color: var(--fg-faint);
@@ -1094,25 +1328,32 @@ aside.toc .tree {
   main {
     padding: 1rem 0.9rem 2rem;
   }
-  .term-head .inner,
+  .term-head .inner {
+    padding: 0 0.9rem;
+  }
   .term-foot .inner {
     padding: 0.5rem 0.9rem;
   }
-  /* keep the header to one row on phones — percentage only */
-  .term-head .inner {
-    gap: 0.5rem;
-  }
-  .term-head .crumb {
-    gap: 0.5rem;
-  }
-  .term-head .toggle {
-    padding: 0.15rem 0.45rem;
-  }
-  .term-head .brand::before {
-    content: none;
-  }
-  .term-head .progress .cells {
+  /* phones: one status line. Session, clock and window numbers drop out, and
+     the reading gauge becomes a hairline along the header's bottom edge. */
+  .term-head .session,
+  .term-head .status-right,
+  .term-head .progress,
+  .term-head .windows .idx,
+  .term-head .toggle .set {
     display: none;
+  }
+  .term-head .windows {
+    gap: 1.5ch;
+  }
+  body.is-post .term-head::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    height: 2px;
+    width: calc(var(--read, 0) * 100%);
+    background: var(--amber);
   }
 
   h1.title {
@@ -1144,7 +1385,8 @@ aside.toc .tree {
   table.stat {
     font-size: 12px;
   }
-  table.stat .bar {
+  table.stat .bar,
+  table.df .mnt {
     display: none;
   }
 
@@ -1160,13 +1402,25 @@ aside.toc .tree {
     padding: 0.25rem;
   }
 
+  /* two columns: date on its own line, then title | read time, then tags.
+     Every child is placed explicitly; the desktop "2 / span 2" on .tags would
+     otherwise create an implicit third column and stagger the titles. */
   .entry {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     column-gap: 0.5rem;
   }
   .entry .date {
-    grid-column: 1 / span 2;
+    grid-column: 1 / -1;
     font-size: 11px;
+  }
+  .entry .title {
+    grid-column: 1;
+  }
+  .entry .read {
+    grid-column: 2;
+  }
+  .entry .tags {
+    grid-column: 1 / -1;
   }
 
   /* mobile pager cap: prev · current · next · … · last (5 max) */
@@ -1190,12 +1444,5 @@ aside.toc .tree {
   }
   .navnext {
     grid-template-columns: 1fr;
-  }
-}
-
-/* narrowest phones: the header can't fit the progress gauge on one row */
-@media (max-width: 380px) {
-  .term-head .progress {
-    display: none;
   }
 }

@@ -54,18 +54,31 @@ const wordsText = wordCount
   ? `${wordCount >= 1000 ? `${(wordCount / 1000).toFixed(1)}k` : wordCount} words`
   : null;
 
-const bannerStatus = {
-  tag: 'ok' as const,
-  label: '[ OK ]',
-  text: [wordsText, readingTime, ymd].filter(Boolean).join(' · '),
-};
+// Banner status lines state real facts about the post. [WARN] fires when the
+// post hasn't been touched in over two years (as of the build), because
+// commands and versions in older homelab posts do go stale.
+const STALE_YEARS = 2;
+const lastTouched = updated ?? date;
+const isStale = Date.now() - lastTouched.valueOf() > STALE_YEARS * 365.25 * 86_400_000;
+const bannerLines = [
+  { tag: 'ok' as const, text: [wordsText, readingTime, ymd].filter(Boolean).join(' · ') },
+  ...(updatedYmd ? [{ tag: 'note' as const, text: `updated ${updatedYmd}` }] : []),
+  ...(isStale
+    ? [
+        {
+          tag: 'warn' as const,
+          text: `last touched ${lastTouched.toISOString().slice(0, 10)}, over ${STALE_YEARS} years ago; commands and versions may be stale`,
+        },
+      ]
+    : []),
+];
 
 const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://blog.ayjc.net').toString();
 ---
 
 <BaseLayout title={title} description={description} mainClass="post">
   <article>
-    <Banner command={`cat /posts/${postId}.md`} status={bannerStatus} />
+    <Banner command={`cat /posts/${postId}.md`} lines={bannerLines} />
 
     <div class="post-meta">
       <time datetime={isoDate}>{ymd}</time>

@@ -1,12 +1,19 @@
 ---
+import { nextTs } from '../utils/log-clock';
+
 interface Props {
   name: string;
+  /** A real figure about the section, e.g. "6/177". Shown after the name. */
+  count?: string;
   id?: string;
 }
 
-const { name, id } = Astro.props;
+const { name, count, id } = Astro.props;
+// Real elapsed render time since the page's Banner started the clock.
+const stamp = nextTs(Astro.url.pathname);
 ---
 
 <div class="module" id={id}>
-  <span class="name">{name}</span>
+  <span class="ts" aria-hidden="true">{stamp}</span>
+  <span class="name">{name}{count && <span class="count"> ({count})</span>}</span>
 </div>
