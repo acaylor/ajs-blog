@@ -204,6 +204,24 @@ p.log {
 p.log + p.log {
   margin-top: 0.5rem;
 }
+/* Reading-text paragraphs outside posts (about page). Matches .prose body
+   text; inline status tags and code stay in the mono chrome. */
+p.log.read {
+  font-family: var(--font-read);
+  font-size: 18px;
+  line-height: 1.65;
+  max-width: 38em;
+  text-wrap: pretty;
+  font-optical-sizing: auto;
+}
+p.log.read + p.log.read {
+  margin-top: 1.1em;
+}
+p.log.read [class^='tag-'],
+p.log.read code {
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+}
 p.log.more {
   margin-top: 1.5rem;
   display: flex;
@@ -568,6 +586,10 @@ table.stat .pct {
 .figure p.log {
   margin: 0;
 }
+/* keep the avatar + text row to the same right edge as p.log.read (38em at 18px) */
+.figure.avatar {
+  max-width: 42.75rem;
+}
 
 /* ===== Contact channels grid (about) ===== */
 .channels {
@@ -642,11 +664,12 @@ main.post > article {
 }
 
 h1.post-title {
-  font-family: var(--font-mono);
-  font-size: 1.5rem;
-  font-weight: 500;
-  letter-spacing: -0.005em;
-  line-height: 1.2;
+  font-family: var(--font-read);
+  font-size: 2.25rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  text-wrap: balance;
   margin: 0.5rem 0 0.85rem;
   color: var(--fg);
   word-break: break-word;
@@ -660,8 +683,8 @@ h1.post-title {
 }
 
 /* ===== Prose (rendered markdown body) ===== */
-/* Running text is set in --font-read; headings, code, tables and captions
-   stay in the mono chrome. Text blocks are held to a readable measure while
+/* Running text and headings are set in --font-read; code, tables, captions
+   and the heading-level markers stay in the mono chrome. Text blocks are held to a readable measure while
    code, tables and images keep the full column. */
 .prose {
   font-family: var(--font-read);
@@ -684,51 +707,54 @@ h1.post-title {
   margin-bottom: 1.1em;
   text-wrap: pretty;
 }
+/* .code-block is CopyCode's wrapper; its button uses font: inherit */
 .prose table,
 .prose figcaption,
-.prose kbd {
+.prose kbd,
+.prose pre,
+.prose .code-block {
   font-family: var(--font-mono);
 }
-.prose h2 {
-  font-family: var(--font-mono);
-  font-size: 1.1rem;
-  font-weight: 500;
-  line-height: 1.4;
-  margin-top: 2.5rem;
-  margin-bottom: 0.5rem;
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-family: var(--font-read);
+  font-weight: 650;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
   color: var(--fg);
-  letter-spacing: 0;
+  text-wrap: balance;
   scroll-margin-top: 4rem;
+}
+/* markdown-style level markers, kept in the mono chrome */
+.prose h2::before,
+.prose h3::before,
+.prose h4::before {
+  font-family: var(--font-mono);
+  font-size: 0.75em;
+  font-weight: 400;
+  color: var(--amber);
+}
+.prose h2 {
+  font-size: 1.5em;
+  margin: 2.25em 0 0.5em;
 }
 .prose h2::before {
   content: '## ';
-  color: var(--amber);
 }
 .prose h3 {
-  font-family: var(--font-mono);
-  font-size: 1rem;
-  font-weight: 500;
-  margin-top: 1.75rem;
-  margin-bottom: 0.5rem;
-  color: var(--fg);
-  scroll-margin-top: 4rem;
+  font-size: 1.22em;
+  margin: 1.75em 0 0.45em;
 }
 .prose h3::before {
   content: '### ';
-  color: var(--amber);
 }
 .prose h4 {
-  font-family: var(--font-mono);
-  font-size: 0.95rem;
-  font-weight: 500;
-  margin-top: 1.5rem;
-  margin-bottom: 0.4rem;
-  color: var(--fg);
-  scroll-margin-top: 4rem;
+  font-size: 1.05em;
+  margin: 1.5em 0 0.4em;
 }
 .prose h4::before {
   content: '#### ';
-  color: var(--amber);
 }
 /* amber-strong instead of amber so body link text clears WCAG AA 4.5:1
    against the cream bg (regular amber on cream is ~3.85:1). The token
@@ -1151,14 +1177,12 @@ aside.toc .tree {
 
   /* post layout — tighter type on small screens */
   h1.post-title {
-    font-size: 1.25rem;
+    font-size: 1.75rem;
   }
-  .prose {
+  .prose,
+  p.log.read {
     font-size: 16.5px;
     line-height: 1.6;
-  }
-  .prose h2 {
-    font-size: 1.05rem;
   }
   .prose pre {
     font-size: 11.5px;

@@ -13,6 +13,8 @@ interface Props {
   mainClass?: string;
   /** Keep the page out of the index. Set on pages that are not real destinations. */
   noindex?: boolean;
+  /** Preload Literata. Set on pages whose body text uses --font-read; posts get it automatically. */
+  readingFont?: boolean;
 }
 
 const {
@@ -20,6 +22,7 @@ const {
   description = 'A personal blog focused on software, technology, and the cloud',
   mainClass,
   noindex = false,
+  readingFont = false,
 } = Astro.props;
 
 const path = Astro.url.pathname;
@@ -28,6 +31,7 @@ const isCurrent = (prefix: string) =>
 
 const year = new Date().getFullYear();
 const isPost = mainClass === 'post';
+const preloadReading = isPost || readingFont;
 const { postCount, uptimeDays } = await getBlogStats();
 
 // Self-referencing canonical. Astro.site is the production origin, so this stays
@@ -50,7 +54,11 @@ const canonical = noindex ? null : new URL(path, Astro.site).href;
     <link rel="alternate" type="application/rss+xml" title="AJ's Blog" href="/rss.xml" />
     <link rel="preload" as="font" type="font/woff2" href={dmMono400} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={dmMono500} crossorigin />
-    {isPost && <link rel="preload" as="font" type="font/woff2" href={literata} crossorigin />}
+    {
+      preloadReading && (
+        <link rel="preload" as="font" type="font/woff2" href={literata} crossorigin />
+      )
+    }
     <title>{title} | AJ's Blog</title>
     <script is:inline>
       (function () {
