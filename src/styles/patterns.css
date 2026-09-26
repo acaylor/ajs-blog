@@ -283,18 +283,20 @@ p.log.more {
 /* ===== Home boot reveal =====
    BaseLayout adds html.booting on the first home visit per session. Banner rows
    (--i) and later .boot-step blocks (--d) appear one after another like streaming
-   log output: no fades, each line just arrives. */
+   log output: no fades, each line just arrives. The animation only ever hides:
+   it holds the row hidden through its delay (fill: backwards) and then stops
+   applying, so the row's own visible style takes over. Don't animate *to*
+   visible with a forwards fill — Chrome can finish a stepped animation a
+   float-rounding hair before its end and leave the row hidden for good. */
 @keyframes boot-line {
-  from {
-    visibility: hidden;
-  }
+  from,
   to {
-    visibility: visible;
+    visibility: hidden;
   }
 }
 html.booting .banner .row,
 html.booting .boot-step {
-  animation: boot-line 1ms steps(1, end) both;
+  animation: boot-line 1ms backwards;
 }
 html.booting .banner .row {
   animation-delay: calc(var(--i, 0) * 110ms);
