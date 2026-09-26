@@ -21,8 +21,6 @@ const tags = groupBySlug(posts, 'tags').map((group) => ({
 
 const totalTagged = tags.reduce((sum, t) => sum + t.count, 0);
 const maxCount = tags[0]?.count ?? 1;
-const longTailThreshold = 5;
-const longTail = tags.filter((t) => t.count < longTailThreshold).length;
 
 // `top` header, every figure real. Load average is posts per month averaged
 // over the last 1, 5 and 15 months (top's 1/5/15-minute windows, scaled).
@@ -98,15 +96,6 @@ Refs: {totalTagged} total, {(totalTagged / posts.length).toFixed(1)} per post</p
       }
     </tbody>
   </table>
-
-  {
-    longTail > 0 && (
-      <p class="log" style="margin-top: 1rem">
-        <span class="tag-note">[NOTE]</span> {longTail} tags appear in fewer than{' '}
-        {longTailThreshold} posts &middot; consider consolidating before they fragment further.
-      </p>
-    )
-  }
 
   <Prompt />
 </BaseLayout>
