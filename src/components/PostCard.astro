@@ -1,57 +1,80 @@
 ---
 import { slugify } from '../utils/slug';
+import { postState } from '../utils/post-state';
 
 interface Props {
   title: string;
   date: Date;
+  updated?: Date;
   description?: string;
   tags?: string[];
   readingTime: string;
   href: string;
   image?: string;
   categories?: string[];
-  draft?: boolean;
+  /** Delay for the home boot reveal, e.g. "900ms". */
+  bootDelay?: string;
 }
 
 const {
   title,
   date,
+  updated,
   description,
   tags = [],
   readingTime,
   href,
   image,
   categories = [],
-  draft = false,
+  bootDelay,
 } = Astro.props;
 
 const isoDate = date.toISOString();
 const ymd = isoDate.slice(0, 10);
-const metaCategory = categories.slice(0, 2).join(' / ');
+// categories shown as systemd control groups, e.g. /software-development
+const cgroups = categories.slice(0, 2).map((c) => ({ slug: slugify(c) }));
+const state = postState(date, updated);
 ---
 
-<div class="unit" class:list={[{ 'has-thumb': Boolean(image) }]}>
+{/* Laid out like `systemctl status`: marker + unit, then labelled fields. */}
+<div
+  class:list={['unit', 'boot-step', { 'has-thumb': Boolean(image) }]}
+  style={bootDelay ? `--d: ${bootDelay}` : undefined}
+>
   <div class="unit-body">
-    <div class="head">
-      <span class="dot" class:list={[{ draft }]} aria-hidden="true">●</span>
-      <span class="name"><a href={href}>{title}</a></span>
-    </div>
-    <div class="meta">
-      <time datetime={isoDate}>{ymd}</time> &middot; {readingTime}{
-        metaCategory && <> &middot; {metaCategory}</>
-      }
-    </div>
+    <span class="name"
+      ><span class:list={['dot', `state-${state.kind}`]} title={state.title} aria-hidden="true"
+        >{state.marker}</span
+      ><a href={href}>{title}</a></span
+    >
     {description && <div class="desc">{description}</div>}
+    <span class="k">Active:</span>
+    <span class="meta">
+      <span class:list={['state', `state-${state.kind}`]}>{state.label}</span> since{' '}
+      <time datetime={isoDate}>{ymd}</time>; {readingTime} read
+    </span>
+    {
+      cgroups.length > 0 && (
+        <>
+          <span class="k">CGroup:</span>
+          <span class="meta">
+            {cgroups.map((c) => (
+              <a href={`/categories/${c.slug}/`} set:text={`/${c.slug}`} />
+            ))}
+          </span>
+        </>
+      )
+    }
     {
       tags.length > 0 && (
-        <div class="tags">
-          <span class="label">tags</span>
-          {tags.slice(0, 4).map((tag) => (
-            <a href={`/tags/${slugify(tag)}/`} class="tag-link">
-              {tag}
-            </a>
-          ))}
-        </div>
+        <>
+          <span class="k">Tags:</span>
+          <div class="tags">
+            {tags.slice(0, 4).map((tag) => (
+              <a href={`/tags/${slugify(tag)}/`} class="tag-link" set:text={slugify(tag)} />
+            ))}
+          </div>
+        </>
       )
     }
   </div>

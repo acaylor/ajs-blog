@@ -23,6 +23,9 @@ function astroVersion(): string {
 
 // Evaluated once per build process (module scope), not per page render.
 export const commitSha = git('git rev-parse --short HEAD');
-export const buildYmd = new Date().toISOString().slice(0, 10);
+const builtAt = new Date();
+export const buildYmd = builtAt.toISOString().slice(0, 10);
+// tmux's default status-right clock format (%H:%M %d-%b-%y), in UTC, e.g. "04:12 25-Sep-26".
+export const buildClock = `${builtAt.toISOString().slice(11, 16)} ${String(builtAt.getUTCDate()).padStart(2, '0')}-${builtAt.toLocaleString('en-US', { month: 'short', timeZone: 'UTC' })}-${String(builtAt.getUTCFullYear()).slice(2)}`;
 export const buildVersion = buildYmd.replaceAll('-', '.');
 export const astroRelease = astroVersion();

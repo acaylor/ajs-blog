@@ -6,24 +6,36 @@
 
 @import '@fontsource/dm-mono/400.css';
 @import '@fontsource/dm-mono/500.css';
+@import '@fontsource-variable/literata/opsz.css';
+@import '@fontsource-variable/literata/opsz-italic.css';
 
 :root {
   --font-mono: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  /* Post body text only. The chrome, headings, metadata and code stay mono. */
+  --font-read: 'Literata Variable', Georgia, 'Times New Roman', serif;
+
+  /* One width for header, main and footer. A rem value, not ch: ch scales with
+     each element's font-size, so the 11.5px header and 14.5px body resolved
+     96ch to different widths and the nav sat inset from the content. */
+  --page-width: 52rem;
 
   --bg: #faf6ee;
   --bg-deep: #f1ead9;
   --bg-card: #f6f1e2;
   --fg: #1c1b18;
   --fg-soft: #4a463d;
-  --fg-faint: #8a8474;
+  --fg-faint: #6c685b;
   --rule: #d8cfb8;
-  --amber: #b56b00;
-  --amber-soft: #b56b0015;
+  --amber: #985a00;
+  --amber-soft: #985a0015;
   --amber-strong: #8a5300;
-  --ok: #2c7a4a;
-  --warn: #b85c2e;
+  --ok: #2a7447;
+  --warn: #a1522b;
   --note: #5a4eb8;
 
+  /* Every text token clears WCAG AA (4.5:1) on --bg, --bg-deep and --bg-card
+     in both themes. The dmesg look leans on --fg-faint for small log text, so
+     it sits just past the threshold rather than below it. */
   color-scheme: light dark;
 }
 
@@ -33,7 +45,7 @@
   --bg-card: #16140e;
   --fg: #e8dfc4;
   --fg-soft: #b8ad8b;
-  --fg-faint: #6e6852;
+  --fg-faint: #868069;
   --rule: #2a2620;
   --amber: #ffb000;
   --amber-soft: #ffb00018;
@@ -69,10 +81,6 @@ body {
   flex-direction: column;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-[data-theme='dark'] body {
-  background-image: radial-gradient(ellipse at top, rgba(255, 176, 0, 0.04), transparent 70%);
 }
 
 html.theme-loaded body {

@@ -3,11 +3,11 @@ import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Banner from '../../../components/Banner.astro';
 import Module from '../../../components/Module.astro';
-import PostEntry from '../../../components/PostEntry.astro';
+import JournalList from '../../../components/JournalList.astro';
 import Pagination from '../../../components/Pagination.astro';
 import Prompt from '../../../components/Prompt.astro';
 import { getCollection } from 'astro:content';
-import { getReadingTime } from '../../../utils/reading-time';
+import { journalSummary } from '../../../utils/journal';
 import { groupBySlug } from '../../../utils/taxonomy';
 
 export const getStaticPaths = (async ({ paginate }) => {
@@ -16,15 +16,15 @@ export const getStaticPaths = (async ({ paginate }) => {
   return groupBySlug(posts, 'tags').flatMap((group) =>
     paginate(group.posts, {
       params: { tag: group.slug },
-      props: { display: group.display },
+      props: { display: group.display, journal: journalSummary(group.posts) },
       pageSize: 12,
     }),
   );
 }) satisfies GetStaticPaths;
 
 const { tag } = Astro.params;
-const { page, display } = Astro.props;
-const moduleName = `page_${String(page.currentPage).padStart(3, '0')}`;
+const { page, display, journal } = Astro.props;
+const moduleName = `entries ${page.start + 1}–${page.end + 1}`;
 const pageLabel = `page ${page.currentPage}/${page.lastPage}`;
 const basePath = `/tags/${tag}`;
 ---
@@ -46,19 +46,9 @@ const basePath = `/tags/${tag}`;
     <a href="/tags/">&larr; all tags</a>
   </p>
 
-  <Module name={moduleName} />
+  <Module name={moduleName} count={`of ${page.total}`} />
 
-  {
-    page.data.map((post) => (
-      <PostEntry
-        title={post.data.title}
-        date={post.data.date}
-        href={`/posts/${post.id}/`}
-        readingTime={getReadingTime(post.body || '')}
-        tags={post.data.tags}
-      />
-    ))
-  }
+  <JournalList posts={page.data} journal={journal} />
 
   <Pagination currentPage={page.currentPage} lastPage={page.lastPage} basePath={basePath} />
 

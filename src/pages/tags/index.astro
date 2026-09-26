@@ -4,6 +4,8 @@ import Banner from '../../components/Banner.astro';
 import Prompt from '../../components/Prompt.astro';
 import { getCollection } from 'astro:content';
 import { groupBySlug } from '../../utils/taxonomy';
+import { getBlogStats } from '../../utils/blog-stats';
+import { buildClock } from '../../utils/build-info';
 
 const posts = await getCollection('blog', ({ data }) => !data.draft);
 
@@ -19,8 +21,26 @@ const tags = groupBySlug(posts, 'tags').map((group) => ({
 
 const totalTagged = tags.reduce((sum, t) => sum + t.count, 0);
 const maxCount = tags[0]?.count ?? 1;
-const longTailThreshold = 5;
-const longTail = tags.filter((t) => t.count < longTailThreshold).length;
+
+// `top` header, every figure real. Load average is posts per month averaged
+// over the last 1, 5 and 15 months (top's 1/5/15-minute windows, scaled).
+// "running" tags were used by a post in the last 30 days, as of the build.
+const { uptimeDays } = await getBlogStats();
+const MONTH = 30.44 * 86_400_000;
+const now = Date.now();
+const load = [1, 5, 15].map(
+  (m) => posts.filter((p) => now - p.data.date.valueOf() < m * MONTH).length / m,
+);
+const runningSlugs = new Set(
+  groupBySlug(
+    posts.filter((p) => now - p.data.date.valueOf() < 30 * 86_400_000),
+    'tags',
+  ).map((g) => g.slug),
+);
+const running = tags.filter((t) => runningSlugs.has(t.slug)).length;
+const clock = buildClock.split(' ')[0];
+// "users" are distinct post authors (posts without one are the site owner's).
+const users = new Set(posts.map((p) => p.data.author ?? 'aj')).size;
 ---
 
 <BaseLayout title="Tags">
@@ -34,7 +54,15 @@ const longTail = tags.filter((t) => t.count < longTailThreshold).length;
   />
 
   <h1 class="title">tags</h1>
-  <p class="title-sub">{tags.length} unique tags across {posts.length} posts</p>
+
+  <pre
+    class="top-head">top - {clock} up {uptimeDays} days,  {users} {users === 1 ? 'user' : 'users'},  load average: <span title="posts per month, averaged over the last 1, 5 and 15 months">{
+        load.map((l) => l.toFixed(2)).join(', ')
+      }</span>
+Tags: {tags.length} total, <span title="used by a post in the last 30 days">{running} running</span>, {
+      tags.length - running
+    } sleeping
+Refs: {totalTagged} total, {(totalTagged / posts.length).toFixed(1)} per post</pre>
 
   <table class="stat" aria-label="Tag frequency">
     <thead>
@@ -68,15 +96,6 @@ const longTail = tags.filter((t) => t.count < longTailThreshold).length;
       }
     </tbody>
   </table>
-
-  {
-    longTail > 0 && (
-      <p class="log" style="margin-top: 1rem">
-        <span class="tag-note">[NOTE]</span> {longTail} tags appear in fewer than{' '}
-        {longTailThreshold} posts &middot; consider consolidating before they fragment further.
-      </p>
-    )
-  }
 
   <Prompt />
 </BaseLayout>

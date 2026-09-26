@@ -1,7 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import Banner from '../components/Banner.astro';
-import Module from '../components/Module.astro';
 import Prompt from '../components/Prompt.astro';
 import ShareButtons from '../components/ShareButtons.astro';
 import TableOfContents from '../components/TableOfContents.astro';
@@ -55,29 +54,38 @@ const wordsText = wordCount
   ? `${wordCount >= 1000 ? `${(wordCount / 1000).toFixed(1)}k` : wordCount} words`
   : null;
 
-const bannerStatus = {
-  tag: 'ok' as const,
-  label: '[ OK ]',
-  text: [wordsText, readingTime, ymd].filter(Boolean).join(' · '),
-};
+// Banner status lines state real facts about the post. [WARN] fires when the
+// post hasn't been touched in over two years (as of the build), because
+// commands and versions in older homelab posts do go stale.
+const STALE_YEARS = 2;
+const lastTouched = updated ?? date;
+const isStale = Date.now() - lastTouched.valueOf() > STALE_YEARS * 365.25 * 86_400_000;
+const bannerLines = [
+  { tag: 'ok' as const, text: [wordsText, readingTime, ymd].filter(Boolean).join(' · ') },
+  ...(updatedYmd ? [{ tag: 'note' as const, text: `updated ${updatedYmd}` }] : []),
+  ...(isStale
+    ? [
+        {
+          tag: 'warn' as const,
+          text: `last touched ${lastTouched.toISOString().slice(0, 10)}, over ${STALE_YEARS} years ago; commands and versions may be stale`,
+        },
+      ]
+    : []),
+];
 
 const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://blog.ayjc.net').toString();
 ---
 
 <BaseLayout title={title} description={description} mainClass="post">
   <article>
-    <Banner command={`cat /posts/${postId}.md`} status={bannerStatus} />
+    <Banner command={`cat /posts/${postId}.md`} lines={bannerLines} />
 
     <div class="post-meta">
       <time datetime={isoDate}>{ymd}</time>
-      <span class="dot" aria-hidden="true">&middot;</span>
       <span>{readingTime}</span>
       {
         author && (
           <>
-            <span class="dot" aria-hidden="true">
-              &middot;
-            </span>
             <span>by {author}</span>
           </>
         )
@@ -85,9 +93,6 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://blog.ayjc.net
       {
         categories.length > 0 && (
           <>
-            <span class="dot" aria-hidden="true">
-              &middot;
-            </span>
             <span>
               {categories.map((cat, i) => (
                 <>
@@ -104,9 +109,6 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://blog.ayjc.net
       {
         updatedYmd && (
           <>
-            <span class="dot" aria-hidden="true">
-              &middot;
-            </span>
             <span>updated {updatedYmd}</span>
           </>
         )
@@ -118,11 +120,8 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://blog.ayjc.net
     {
       tags.length > 0 && (
         <div class="post-tags-row">
-          <span class="label">tags</span>
           {tags.map((tag) => (
-            <a href={`/tags/${slugify(tag)}/`} class="tag-link">
-              {tag}
-            </a>
+            <a href={`/tags/${slugify(tag)}/`} class="tag-link" set:text={slugify(tag)} />
           ))}
         </div>
       )
@@ -136,13 +135,10 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://blog.ayjc.net
       )
     }
 
-    <Module name="body" />
-
     <div class="prose">
       <slot />
     </div>
 
-    <Module name="share" />
     <ShareButtons title={title} url={pageUrl} />
 
     {

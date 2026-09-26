@@ -50,39 +50,32 @@ const hardware: HardwareRow[] = [
 ];
 ---
 
-<BaseLayout title="About">
+<BaseLayout title="About" readingFont>
   <Banner
     command="cat /about"
     status={{
       tag: 'ok',
       label: '[ OK ]',
-      text: 'loading runtime: astro · nginx · static',
+      text: 'loading runtime: astro · aws amplify · static',
     }}
   />
 
   <h1 class="title">whoami</h1>
-  <p class="title-sub">acaylor &middot; senior platform engineer</p>
+  <p class="title-sub">acaylor, senior platform engineer</p>
 
   <Module name="intro" />
-  <p class="log">
-    This site is a personal blog focused on software, technology, and the cloud. The main purpose is
-    to share what I'm running at home and what I learned getting it to stay up.
-  </p>
   <div class="figure avatar">
     <img src="/images/whoami/whoami.png" alt="Profile photo" />
-    <div class="figcap">
-      <b>fig. 0 — operator portrait</b>github.com/acaylor &middot; gitlab.com/acaylor
-    </div>
+    <p class="log read">
+      This site is a personal blog focused on software, technology, and the cloud. The main purpose
+      is to share what I'm running at home and what I learned getting it to stay up. I'm currently a
+      Senior Platform Engineer, and I enjoy working with the latest technology in my homelab and
+      writing posts that survive past the first edit.
+    </p>
   </div>
 
-  <Module name="author" />
-  <p class="log">
-    <span class="tag-info">[INFO]</span> Currently a Senior Platform Engineer. I enjoy working with the
-    latest technology in my homelab and writing posts that survive past the first edit.
-  </p>
-
   <Module name="contact" id="contact" />
-  <p class="log">
+  <p class="log read">
     <span class="tag-warn">[WARN]</span> comments are disabled. The previous platform added ads and there
     was no engagement. write directly if you have something to say. I appreciate folks who have reached
     out over the years.
@@ -111,25 +104,24 @@ const hardware: HardwareRow[] = [
   </dl>
 
   <Module name="history" />
-  <p class="log">
+  <p class="log read">
     The lab began with the first-model Raspberry Pi while I was in school. I wrote a version of
     Snake in Java, compiled it to a jar, dropped it on the Pi behind an Apache web server, and used
     a proxy so I could pull it down from anywhere. That hooked me on networking and self-hosting.
   </p>
-  <p class="log">
+  <p class="log read">
     I set up an Ubuntu NAS with SMB and moved everything off the Pi. My coursework was Java until a
     final web-dev class that ran on ASP.NET. My capstone project was a meal-prep app with a recipe
     database which was the first time I used <code>git</code> to collaborate.
   </p>
-  <p class="log">
+  <p class="log read">
     First job was Windows AD plus a Linux HPC fleet. I ran a Dell PowerEdge R510 at home with ESXi
     and Windows VMs for AD lab work. Every job after has been Linux-shaped. Around 2018 I moved the
     lab to Proxmox and TrueNAS. Later jobs centered on Kubernetes, so the lab followed with Ubuntu
     VMs running k8s clusters. Now I am running a mix of Raspberry Pis and Proxmox VMs with k3s.
   </p>
 
-  <Module name="hardware" />
-  <p class="log"><span class="tag-info">[INFO]</span> scanning hardware ...</p>
+  <Module name="hardware" count={`${hardware.length} nodes`} />
   <table class="proc" aria-label="Hardware inventory">
     <thead>
       <tr>
@@ -157,22 +149,13 @@ const hardware: HardwareRow[] = [
     password manager for secrets
   </p>
 
-  <Module name="projects" />
-  <p class="log">
-    <span class="tag-info">[INFO]</span> active units &middot;
-    <span style="color: var(--fg-faint)">
-      use <a href="/posts/">posts</a> for more
-    </span>
-  </p>
+  <Module name="projects" count={`${projects.length} units`} />
   {
     projects.map((project) => {
       const isExternal = project.url.startsWith('http');
       return (
         <div class="unit">
           <div class="head">
-            <span class="dot" aria-hidden="true">
-              ●
-            </span>
             <span class="name">
               <a
                 href={project.url}
@@ -185,7 +168,6 @@ const hardware: HardwareRow[] = [
           <div class="desc">{project.description}</div>
           {project.tags.length > 0 && (
             <div class="tags">
-              <span class="label">tags</span>
               {project.tags.map((tag) => (
                 <span class="tag-link">{tag}</span>
               ))}

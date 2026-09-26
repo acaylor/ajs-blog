@@ -2,60 +2,80 @@
 import { buildVersion, commitSha, astroRelease } from '../utils/build-info';
 import { resetClock, nextTs } from '../utils/log-clock';
 
+type Tag = 'ok' | 'info' | 'warn' | 'note' | 'err';
+
+interface LogLine {
+  tag?: Tag;
+  label?: string;
+  text: string;
+}
+
 interface Props {
   /** Override the `command line: cat /<route>` default. */
   command?: string;
-  /** Optional `[ OK ]` (or other status) line shown beneath the command. */
-  status?: {
-    tag?: 'ok' | 'info' | 'warn' | 'note' | 'err';
-    label?: string;
-    text: string;
-  };
+  /** Extra boot lines between the command line and the status line. Must state real facts. */
+  lines?: LogLine[];
+  /** Optional `[ OK ]` (or other status) line shown last. */
+  status?: LogLine;
   /** Hide the version preamble (used on /404 where it'd feel ironic, not playful). */
   showPreamble?: boolean;
 }
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
-const { command = `cat ${path}`, status, showPreamble = true } = Astro.props;
+const { command = `cat ${path}`, lines = [], status, showPreamble = true } = Astro.props;
 
-const tagClass = status?.tag ? `tag-${status.tag}` : 'tag-ok';
-const tagLabel = status?.label ?? '[ OK ]';
+const defaultLabels: Record<Tag, string> = {
+  ok: '[ OK ]',
+  info: '[INFO]',
+  warn: '[WARN]',
+  note: '[NOTE]',
+  err: '[FAIL]',
+};
 
-// The banner is the first log element on every page, so it owns starting
-// the page's fake dmesg clock. Modules further down keep ticking it.
+// The banner is the first log element on every page, so it owns starting the
+// page's clock. Stamps are taken in render order so they stay monotonic.
 resetClock(Astro.url.pathname);
-const tsPreamble = showPreamble ? nextTs(Astro.url.pathname) : null;
-const tsCommand = nextTs(Astro.url.pathname);
-const tsStatus = status ? nextTs(Astro.url.pathname) : null;
+
+interface Row {
+  ts: string;
+  tag?: Tag;
+  label?: string;
+  html: string;
+}
+
+const rows: Row[] = [];
+if (showPreamble) {
+  rows.push({
+    ts: nextTs(Astro.url.pathname),
+    html: `<b>aj's blog</b> v${buildVersion} (${commitSha}) astro/${astroRelease} &middot; gitlab-ci`,
+  });
+}
+const escape = (s: string) =>
+  s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+rows.push({ ts: nextTs(Astro.url.pathname), html: `command line: <b>${escape(command)}</b>` });
+for (const line of [...lines, ...(status ? [{ tag: 'ok' as Tag, ...status }] : [])]) {
+  rows.push({
+    ts: nextTs(Astro.url.pathname),
+    tag: line.tag,
+    label: line.tag ? (line.label ?? defaultLabels[line.tag]) : undefined,
+    html: escape(line.text),
+  });
+}
 ---
 
 <div class="banner">
   {
-    showPreamble && (
-      <div class="row">
+    rows.map((row, i) => (
+      <div class="row" style={`--i: ${i}`}>
         <span class="ts" aria-hidden="true">
-          {tsPreamble}
+          {row.ts}
         </span>
         <span>
-          <b>aj's blog</b> v{buildVersion} ({commitSha}) astro/{astroRelease} &middot; gitlab-ci
+          {row.tag && <span class={`tag-${row.tag}`}>{row.label}</span>}
+          {row.tag && ' '}
+          <Fragment set:html={row.html} />
         </span>
       </div>
-    )
-  }
-  <div class="row">
-    <span class="ts" aria-hidden="true">{tsCommand}</span>
-    <span>command line: <b>{command}</b></span>
-  </div>
-  {
-    status && (
-      <div class="row">
-        <span class="ts" aria-hidden="true">
-          {tsStatus}
-        </span>
-        <span>
-          <span class={tagClass}>{tagLabel}</span> {status.text}
-        </span>
-      </div>
-    )
+    ))
   }
 </div>

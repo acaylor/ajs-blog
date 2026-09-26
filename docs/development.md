@@ -88,7 +88,7 @@ src/
   layouts/             # BaseLayout (term-head/term-foot chrome), PostLayout
   pages/               # routes (posts, tags, categories, about, 404, RSS)
   styles/
-    global.css         # dmesg color tokens, DM Mono import, reset, base elements, print
+    global.css         # dmesg color tokens, font imports, reset, base elements, print
     patterns.css       # boot-log primitives (.banner, .module, .unit, .entry, .post, etc.)
   utils/               # reading time helper
 public/
@@ -97,4 +97,4 @@ public/
 docs/                  # project documentation
 ```
 
-The site uses [DM Mono](https://fontsource.org/fonts/dm-mono) (via `@fontsource/dm-mono`) for the whole UI and a dmesg / boot-log visual direction — see `src/styles/global.css` for the token palette and `src/styles/patterns.css` for the primitive set.
+The site uses [DM Mono](https://fontsource.org/fonts/dm-mono) (via `@fontsource/dm-mono`) for the UI chrome, [Literata](https://fontsource.org/fonts/literata) (via `@fontsource-variable/literata`) for post body text, and a dmesg / boot-log visual direction — see `src/styles/global.css` for the token palette and `src/styles/patterns.css` for the primitive set.

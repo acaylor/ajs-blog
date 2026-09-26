@@ -13,49 +13,52 @@ const categories = groupBySlug(posts, 'categories').map((group) => ({
   count: group.posts.length,
 }));
 
-const totalUses = categories.reduce((sum, c) => sum + c.count, 0);
 const maxCount = categories[0]?.count ?? 1;
 ---
 
 <BaseLayout title="Categories">
   <Banner
-    command="ls -lah /categories"
+    command="df -h /categories"
     status={{
       tag: 'info',
-      label: '[INFO]',
-      text: `${categories.length} categories · sorted by count desc`,
+      text: `${categories.length} filesystems · sorted by size desc`,
     }}
   />
 
   <h1 class="title">categories</h1>
-  <p class="title-sub">{categories.length} categories across {posts.length} posts</p>
 
-  <table class="stat" aria-label="Category frequency">
+  {
+    /* df -h: size = posts in the category; use% = share of all posts carrying it
+      (a post can sit in two categories, so the column doesn't sum to 100). */
+  }
+  <table class="stat df" aria-label="Categories by post count">
     <thead>
       <tr>
-        <th scope="col">category</th>
-        <th scope="col" class="bar">usage</th>
-        <th scope="col">count</th>
-        <th scope="col">%</th>
+        <th scope="col">filesystem</th>
+        <th scope="col" class="num">size</th>
+        <th scope="col" class="bar"></th>
+        <th scope="col" class="pct">use%</th>
+        <th scope="col" class="mnt">mounted on</th>
       </tr>
     </thead>
     <tbody>
       {
         categories.map(({ slug, name, count }) => {
-          const pct = (count / totalUses) * 100;
+          const use = (count / posts.length) * 100;
           const barPct = (count / maxCount) * 100;
           return (
             <tr>
-              <td class="name">
+              <td class="fs name">
                 <a href={`/categories/${slug}/`}>{name}</a>
               </td>
+              <td class="count num">{count}</td>
               <td class="bar">
                 <span class="bar-track" aria-hidden="true">
                   <span class="bar-fill" style={`width: ${barPct.toFixed(1)}%`} />
                 </span>
               </td>
-              <td class="count">{count}</td>
-              <td class="pct">{pct.toFixed(1)}%</td>
+              <td class="pct">{Math.round(use)}%</td>
+              <td class="mnt">/categories/{slug}/</td>
             </tr>
           );
         })
