@@ -41,6 +41,8 @@ const runningSlugs = new Set(
 );
 const running = tags.filter((t) => runningSlugs.has(t.slug)).length;
 const clock = buildClock.split(' ')[0];
+// "users" are distinct post authors (posts without one are the site owner's).
+const users = new Set(posts.map((p) => p.data.author ?? 'aj')).size;
 ---
 
 <BaseLayout title="Tags">
@@ -56,7 +58,7 @@ const clock = buildClock.split(' ')[0];
   <h1 class="title">tags</h1>
 
   <pre
-    class="top-head">top - {clock} up {uptimeDays} days,  1 user,  load average: <span title="posts per month, averaged over the last 1, 5 and 15 months">{
+    class="top-head">top - {clock} up {uptimeDays} days,  {users} {users === 1 ? 'user' : 'users'},  load average: <span title="posts per month, averaged over the last 1, 5 and 15 months">{
         load.map((l) => l.toFixed(2)).join(', ')
       }</span>
 Tags: {tags.length} total, <span title="used by a post in the last 30 days">{running} running</span>, {

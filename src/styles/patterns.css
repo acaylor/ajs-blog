@@ -1321,6 +1321,33 @@ aside.toc .tree {
 }
 
 /* ===== Mobile ===== */
+/* ===== Header: shed parts as the bar narrows =====
+   .windows scrolls with no visible scrollbar, so anything that pushes it
+   narrower than its content hides nav links. Items drop out in order of
+   least use: the clock first, then the session name and text gauge (which
+   becomes a hairline along the header's bottom edge). Phones go further
+   below. */
+@media (max-width: 1023px) {
+  .term-head .status-right {
+    display: none;
+  }
+}
+@media (max-width: 800px) {
+  .term-head .session,
+  .term-head .progress {
+    display: none;
+  }
+  body.is-post .term-head::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    height: 2px;
+    width: calc(var(--read, 0) * 100%);
+    background: var(--amber);
+  }
+}
+
 @media (max-width: 640px) {
   body {
     font-size: 12.5px;
@@ -1334,26 +1361,13 @@ aside.toc .tree {
   .term-foot .inner {
     padding: 0.5rem 0.9rem;
   }
-  /* phones: one status line. Session, clock and window numbers drop out, and
-     the reading gauge becomes a hairline along the header's bottom edge. */
-  .term-head .session,
-  .term-head .status-right,
-  .term-head .progress,
+  /* phones: window numbers and the toggle's `:set` drop out too */
   .term-head .windows .idx,
   .term-head .toggle .set {
     display: none;
   }
   .term-head .windows {
     gap: 1.5ch;
-  }
-  body.is-post .term-head::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -1px;
-    height: 2px;
-    width: calc(var(--read, 0) * 100%);
-    background: var(--amber);
   }
 
   h1.title {
@@ -1444,5 +1458,16 @@ aside.toc .tree {
   }
   .navnext {
     grid-template-columns: 1fr;
+  }
+}
+
+/* the smallest phones (320px): tighten the bar so all five windows fit.
+   After the 640px block so it wins the cascade. */
+@media (max-width: 359px) {
+  .term-head .inner {
+    padding: 0 0.5rem;
+  }
+  .term-head .windows {
+    gap: 1ch;
   }
 }

@@ -20,14 +20,16 @@ const totalWords = posts.reduce((sum, p) => sum + (p.body ?? '').trim().split(/\
 const tags = groupBySlug(posts, 'tags');
 const tagRefs = tags.reduce((sum, t) => sum + t.posts.length, 0);
 const categoryCount = groupBySlug(posts, 'categories').length;
-const latest = posts[0];
+// Last write is the most recent publish *or* update, which can be an older post.
+const writtenAt = (p: (typeof posts)[number]) => (p.data.updated ?? p.data.date).valueOf();
+const latest = posts.reduce((a, b) => (writtenAt(b) > writtenAt(a) ? b : a));
 const kWords = `${Math.round(totalWords / 1000)}k`;
 
 const bootLines = [
   { text: `mounting /posts: ${totalPosts} entries, ${kWords} words` },
   { text: `loading taxonomy: ${tags.length} tags (${tagRefs} refs), ${categoryCount} categories` },
   {
-    text: `last write: ${latest.data.date.toISOString().slice(0, 10)} /posts/${latest.id}.md`,
+    text: `last write: ${new Date(writtenAt(latest)).toISOString().slice(0, 10)} /posts/${latest.id}.md`,
   },
 ];
 
