@@ -1,10 +1,12 @@
 ---
 import ThemeToggle from '../components/ThemeToggle.astro';
 import { getBlogStats } from '../utils/blog-stats';
+import { buildClock } from '../utils/build-info';
 import '../styles/global.css';
 import '../styles/patterns.css';
 import dmMono400 from '@fontsource/dm-mono/files/dm-mono-latin-400-normal.woff2?url';
 import dmMono500 from '@fontsource/dm-mono/files/dm-mono-latin-500-normal.woff2?url';
+import literata from '@fontsource-variable/literata/files/literata-latin-opsz-normal.woff2?url';
 
 interface Props {
   title: string;
@@ -12,6 +14,8 @@ interface Props {
   mainClass?: string;
   /** Keep the page out of the index. Set on pages that are not real destinations. */
   noindex?: boolean;
+  /** Preload Literata. Set on pages whose body text uses --font-read; posts get it automatically. */
+  readingFont?: boolean;
 }
 
 const {
@@ -19,14 +23,26 @@ const {
   description = 'A personal blog focused on software, technology, and the cloud',
   mainClass,
   noindex = false,
+  readingFont = false,
 } = Astro.props;
 
 const path = Astro.url.pathname;
 const isCurrent = (prefix: string) =>
   prefix === '/' ? path === '/' : path === prefix || path.startsWith(prefix + '/');
 
+// tmux window list. Home is only "current" on the exact root; posts owns /posts/*.
+const windows = [
+  { name: 'home', href: '/', current: path === '/' },
+  { name: 'posts', href: '/posts/', current: isCurrent('/posts') },
+  { name: 'tags', href: '/tags/', current: isCurrent('/tags') },
+  { name: 'categories', href: '/categories/', current: isCurrent('/categories') },
+  { name: 'about', href: '/about/', current: isCurrent('/about') },
+];
+const siteHost = Astro.site?.host ?? 'aj-blog';
+
 const year = new Date().getFullYear();
 const isPost = mainClass === 'post';
+const preloadReading = isPost || readingFont;
 const { postCount, uptimeDays } = await getBlogStats();
 
 // Self-referencing canonical. Astro.site is the production origin, so this stays
@@ -49,6 +65,11 @@ const canonical = noindex ? null : new URL(path, Astro.site).href;
     <link rel="alternate" type="application/rss+xml" title="AJ's Blog" href="/rss.xml" />
     <link rel="preload" as="font" type="font/woff2" href={dmMono400} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={dmMono500} crossorigin />
+    {
+      preloadReading && (
+        <link rel="preload" as="font" type="font/woff2" href={literata} crossorigin />
+      )
+    }
     <title>{title} | AJ's Blog</title>
     <script is:inline>
       (function () {
@@ -56,6 +77,15 @@ const canonical = noindex ? null : new URL(path, Astro.site).href;
         var preferred =
           stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', preferred);
+        // Home plays its boot sequence once per browser session, not on every visit.
+        try {
+          if (location.pathname === '/' && !sessionStorage.getItem('booted')) {
+            sessionStorage.setItem('booted', '1');
+            document.documentElement.classList.add('booting');
+          }
+        } catch {
+          // storage blocked: skip the animation
+        }
         requestAnimationFrame(function () {
           requestAnimationFrame(function () {
             document.documentElement.classList.add('theme-loaded');
@@ -64,35 +94,39 @@ const canonical = noindex ? null : new URL(path, Astro.site).href;
       })();
     </script>
   </head>
-  <body>
+  <body class={isPost ? 'is-post' : undefined}>
+    <a class="skip-link" href="#main">skip to content</a>
     <header class="term-head">
       <div class="inner">
-        <a href="/" class="brand">aj@blog</a>
-        <nav class="crumb" aria-label="Primary">
-          <a href="/posts/" class={isCurrent('/posts') ? 'current' : undefined}>posts</a>
-          <span class="sep" aria-hidden="true">·</span>
-          <a href="/tags/" class={isCurrent('/tags') ? 'current' : undefined}>tags</a>
-          <span class="sep" aria-hidden="true">·</span>
-          <a href="/categories/" class={isCurrent('/categories') ? 'current' : undefined}
-            >categories</a
-          >
-          <span class="sep" aria-hidden="true">·</span>
-          <a href="/about/" class={isCurrent('/about') ? 'current' : undefined}>about</a>
+        <a href="/" class="session" aria-label="aj's blog home">[aj@blog]</a>
+        <nav class="windows" aria-label="Primary">
+          {
+            windows.map((w, i) => (
+              <a
+                href={w.href}
+                aria-current={w.current ? 'page' : undefined}
+                aria-label={w.name}
+                set:html={`<span class="idx">${i}:</span>${w.name}${w.current ? '*' : ''}`}
+              />
+            ))
+          }
         </nav>
-        <span class="spacer"></span>
-        {
-          isPost && (
-            <span class="progress" aria-hidden="true">
-              <span class="cells" />
-              <span class="pct" />
-            </span>
-          )
-        }
-        <ThemeToggle />
+        <span class="right">
+          {
+            isPost && (
+              <span class="progress" aria-hidden="true">
+                <span class="cells" />
+                <span class="pct" />
+              </span>
+            )
+          }
+          <span class="status-right" title="Build time (UTC)">"{siteHost}" {buildClock}</span>
+          <ThemeToggle />
+        </span>
       </div>
     </header>
 
-    <main class={mainClass}>
+    <main id="main" class={mainClass} tabindex="-1">
       <slot />
     </main>
 
@@ -183,6 +217,16 @@ const canonical = noindex ? null : new URL(path, Astro.site).href;
           var doc = document.documentElement;
           var max = doc.scrollHeight - window.innerHeight;
           var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 1;
+          // phones draw the gauge as a hairline under the header instead
+          el.closest('.term-head').style.setProperty('--read', String(p));
+          if (p >= 0.995) {
+            // reached the bottom: the gauge becomes a completed boot line
+            el.classList.add('done');
+            cells.textContent = '[ OK ]';
+            pct.textContent = 'reached end of post';
+            return;
+          }
+          el.classList.remove('done');
           var filled = Math.round(p * SLOTS);
           cells.textContent = '[' + '#'.repeat(filled) + '-'.repeat(SLOTS - filled) + ']';
           pct.textContent = String(Math.round(p * 100)).padStart(3, ' ') + '%';

@@ -1,10 +1,12 @@
 ---
-// Small uppercase text button matching the .term-head chrome.
-// Label shows the inverted theme (e.g. when light is active, the button reads "dark").
+// Text button in the tmux status line, labelled with vim's command for switching
+// background (`:set bg=dark`). Label shows the theme a click switches to.
 // Pre-paint script in BaseLayout sets data-theme before this renders.
 ---
 
-<button id="theme-toggle" type="button" class="toggle" aria-label="Toggle color theme">dark</button>
+<button id="theme-toggle" type="button" class="toggle" aria-label="Toggle color theme"
+  ><span class="set">:set </span>bg=<span class="val">dark</span></button
+>
 
 <script is:inline>
   (function () {
@@ -12,7 +14,7 @@
       var btn = document.getElementById('theme-toggle');
       if (!btn) return;
       var cur = document.documentElement.getAttribute('data-theme') || 'light';
-      btn.textContent = cur === 'dark' ? 'light' : 'dark';
+      btn.querySelector('.val').textContent = cur === 'dark' ? 'light' : 'dark';
     }
 
     function setTheme(t) {

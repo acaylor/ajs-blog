@@ -1,0 +1,48 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PostEntry from './PostEntry.astro';
+import { getReadingTime } from '../utils/reading-time';
+import type { JournalSummary } from '../utils/journal';
+
+interface Props {
+  /** This page's entries, newest first. */
+  posts: CollectionEntry<'blog'>[];
+  /** Facts about the whole list, not just this page. */
+  journal: JournalSummary;
+}
+
+const { posts, journal } = Astro.props;
+
+// journalctl prints "-- Reboot --" between boots; here a boot is a calendar
+// year. A separator goes wherever the year changes between two entries.
+const rows = posts.map((post, i) => {
+  const year = String(post.data.date.getUTCFullYear());
+  const prevYear = i > 0 ? String(posts[i - 1].data.date.getUTCFullYear()) : year;
+  return { post, reboot: year !== prevYear ? year : null };
+});
+const plural = (n: number) => `${n} ${n === 1 ? 'entry' : 'entries'}`;
+---
+
+<p class="journal-marker">
+  -- Journal begins at {journal.first}, ends at {journal.last}. {plural(journal.total)}. --
+</p>
+<div class="journal">
+  {
+    rows.map(({ post, reboot }) => (
+      <>
+        {reboot && (
+          <p class="journal-marker">
+            -- Reboot: {reboot} ({plural(journal.years[reboot])}) --
+          </p>
+        )}
+        <PostEntry
+          title={post.data.title}
+          date={post.data.date}
+          href={`/posts/${post.id}/`}
+          readingTime={getReadingTime(post.body || '')}
+          tags={post.data.tags}
+        />
+      </>
+    ))
+  }
+</div>

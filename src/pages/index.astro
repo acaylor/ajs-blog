@@ -6,6 +6,7 @@ import PostCard from '../components/PostCard.astro';
 import Prompt from '../components/Prompt.astro';
 import { getCollection } from 'astro:content';
 import { getReadingTime } from '../utils/reading-time';
+import { groupBySlug } from '../utils/taxonomy';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
@@ -13,52 +14,68 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
 
 const recent = posts.slice(0, 6);
 const totalPosts = posts.length;
+
+// Every boot line reports a real figure computed from the collection.
+const totalWords = posts.reduce((sum, p) => sum + (p.body ?? '').trim().split(/\s+/).length, 0);
+const tags = groupBySlug(posts, 'tags');
+const tagRefs = tags.reduce((sum, t) => sum + t.posts.length, 0);
+const categoryCount = groupBySlug(posts, 'categories').length;
+// Last write is the most recent publish *or* update, which can be an older post.
+const writtenAt = (p: (typeof posts)[number]) => (p.data.updated ?? p.data.date).valueOf();
+const latest = posts.reduce((a, b) => (writtenAt(b) > writtenAt(a) ? b : a));
+const kWords = `${Math.round(totalWords / 1000)}k`;
+
+const bootLines = [
+  { text: `mounting /posts: ${totalPosts} entries, ${kWords} words` },
+  { text: `loading taxonomy: ${tags.length} tags (${tagRefs} refs), ${categoryCount} categories` },
+  {
+    text: `last write: ${new Date(writtenAt(latest)).toISOString().slice(0, 10)} /posts/${latest.id}.md`,
+  },
+];
+
+// Boot reveal timing: the banner streams its rows at 110ms each (see patterns.css),
+// then the rest of the page arrives in quicker steps.
+const bannerRows = 2 + bootLines.length + 1;
+const step = (n: number) => `${bannerRows * 110 + n * 70}ms`;
 ---
 
 <BaseLayout title="Home">
   <Banner
     command="cat /"
-    status={{
-      tag: 'ok',
-      label: '[ OK ]',
-      text: `mounting filesystem · ${totalPosts} posts loaded`,
-    }}
+    lines={bootLines}
+    status={{ tag: 'ok', text: 'reached target blog.target' }}
   />
 
-  <p class="hero-eyebrow">welcome</p>
-  <h1 class="hero">aj's blog</h1>
-  <p class="hero-sub">
+  <h1 class="hero boot-step" style={`--d: ${step(0)}`}>aj's blog</h1>
+  <p class="hero-sub boot-step" style={`--d: ${step(1)}`}>
     A personal blog focused on software, technology, and the cloud. Sharing what I'm working with at
     home — what broke, what stayed up, and what I learned getting it there.
   </p>
-  <p class="hero-cta"><a href="/posts/">browse all posts</a></p>
 
-  <Module name="recent" />
-  <p class="log">
-    <span class="tag-info">[INFO]</span>
-    {recent.length} most recent ·
-    <span style="color: var(--fg-faint)">sorted by date desc</span>
-  </p>
+  <div class="boot-step" style={`--d: ${step(2)}`}>
+    <Module name="recent" count={`${recent.length}/${totalPosts}`} />
+  </div>
 
   {
-    recent.map((post) => (
+    recent.map((post, i) => (
       <PostCard
         title={post.data.title}
         date={post.data.date}
+        updated={post.data.updated}
         description={post.data.description}
         tags={post.data.tags}
         categories={post.data.categories}
         image={post.data.image}
         readingTime={getReadingTime(post.body || '')}
         href={`/posts/${post.id}/`}
-        draft={post.data.draft}
+        bootDelay={step(3 + i)}
       />
     ))
   }
 
-  <p class="log" style="margin-top: 1.5rem">
-    <span class="tag-note">[NOTE]</span>
-    <a href="/posts/">view all {totalPosts} posts</a> · feed at <a href="/rss.xml">/rss.xml</a>
+  <p class="log more boot-step" style={`--d: ${step(3 + recent.length)}`}>
+    {recent.length} of {totalPosts} post units listed. Pass <a href="/posts/">--all</a> to see the rest,
+    or follow <a href="/rss.xml">/rss.xml</a>.
   </p>
 
   <Prompt />

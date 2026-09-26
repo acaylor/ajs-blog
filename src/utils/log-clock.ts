@@ -1,34 +1,21 @@
-// Fake-but-plausible dmesg timestamps. Banner starts the clock for a page;
-// every subsequent tick (banner rows, module dividers) advances it by a
-// deterministic, growing step so timestamps read down the page like a real
-// boot log. Keyed by pathname so concurrent page renders don't interleave.
+// dmesg timestamps are seconds since boot. Here "boot" is the moment a page
+// starts rendering at build time: Banner resets the clock, and every later
+// stamp on that page (banner rows, module dividers) is the real elapsed render
+// time, so the numbers are measurements rather than decoration. Keyed by
+// pathname so concurrent page renders don't share a clock.
 
-const clocks = new Map<string, { t: number; i: number }>();
-
-/** FNV-1a hash mapped to [0, 1) — deterministic jitter so builds are stable. */
-function jitter(seed: string): number {
-  let h = 2166136261;
-  for (let i = 0; i < seed.length; i++) {
-    h ^= seed.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return (h >>> 0) / 4294967296;
-}
+const clocks = new Map<string, bigint>();
 
 export function resetClock(path: string): void {
-  clocks.set(path, { t: 0, i: 0 });
+  clocks.set(path, process.hrtime.bigint());
 }
 
 export function nextTs(path: string): string {
-  let clock = clocks.get(path);
-  if (!clock) {
-    clock = { t: 0, i: 0 };
-    clocks.set(path, clock);
+  let start = clocks.get(path);
+  if (start === undefined) {
+    start = process.hrtime.bigint();
+    clocks.set(path, start);
   }
-  if (clock.i > 0) {
-    const step = 0.0001 * 3 ** Math.min(clock.i, 8);
-    clock.t += step * (0.5 + jitter(`${path}#${clock.i}`));
-  }
-  clock.i += 1;
-  return clock.t.toFixed(6);
+  const ns = process.hrtime.bigint() - start;
+  return (Number(ns) / 1e9).toFixed(6);
 }

@@ -6,98 +6,136 @@
 /* ===== Main column ===== */
 main {
   flex: 1;
-  max-width: 96ch;
+  max-width: var(--page-width);
   width: 100%;
   margin: 0 auto;
   padding: 1.5rem 1.25rem 3rem;
   min-width: 0;
 }
+/* focused programmatically by the skip link; no ring around the whole page */
+main:focus {
+  outline: none;
+}
 
-/* ===== Terminal header ===== */
+/* ===== Skip link: first tab stop, visible only when focused ===== */
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -3rem;
+  z-index: 30;
+  padding: 0.25rem 0.6rem;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 12px;
+}
+.skip-link:focus {
+  top: 0.35rem;
+}
+
+/* ===== Terminal header: a tmux status line =====
+   A quiet status line rather than tmux's default green bar: it sits on
+   --bg-deep with a hairline rule, in faint text, so it reads as chrome and
+   not as the loudest thing on the page. Left: session name (the one green
+   accent) and window list, current window flagged with "*". Right: the
+   reading gauge on posts, the build clock (tmux's status-right format), and
+   the theme toggle. */
 .term-head {
   position: sticky;
   top: 0;
   z-index: 20;
   background: var(--bg-deep);
   border-bottom: 1px solid var(--rule);
-  font-size: 11.5px;
   color: var(--fg-faint);
+  font-size: 12px;
 }
 .term-head .inner {
-  max-width: 96ch;
+  max-width: var(--page-width);
   margin: 0 auto;
-  padding: 0.5rem 1.25rem;
+  padding: 0 1.25rem;
   display: flex;
-  gap: 1rem;
+  gap: 1ch;
   align-items: center;
-  flex-wrap: wrap;
+  min-height: 1.9rem;
 }
-.term-head .brand {
+.term-head a {
+  color: var(--fg-soft);
+  text-decoration: none;
+}
+.term-head a:hover {
+  background: none;
+  color: var(--fg);
+  text-decoration: underline;
+}
+.term-head .session {
+  color: var(--ok);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.term-head .windows {
+  display: flex;
+  gap: 1ch;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  white-space: nowrap;
+}
+/* 24px-tall hit areas (WCAG 2.5.8) without making the bar look taller */
+.term-head .windows a,
+.term-head .session,
+.term-head .toggle {
+  display: inline-block;
+  line-height: 24px;
+}
+.term-head .windows a {
+  padding: 0 0.1ch;
+}
+.term-head .windows .idx {
+  color: var(--fg-faint);
+}
+.term-head .windows a[aria-current='page'] {
   color: var(--fg);
   font-weight: 500;
-  text-decoration: none;
 }
-.term-head .brand::before {
-  content: '◉ ';
-  color: var(--ok);
+.term-head .right {
+  margin-left: auto;
+  display: flex;
+  gap: 1ch;
+  align-items: center;
 }
-.term-head .brand:hover {
-  background: none;
-  color: var(--amber);
-}
-.term-head .crumb {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  align-items: baseline;
-}
-.term-head .crumb a {
-  color: var(--fg-faint);
-  text-decoration: none;
-}
-.term-head .crumb a:hover {
-  color: var(--amber);
-  background: none;
-}
-.term-head .crumb a.current {
-  color: var(--fg);
-}
-.term-head .crumb .sep {
-  color: var(--fg-faint);
-  user-select: none;
-}
-.term-head .spacer {
-  flex: 1;
+.term-head .status-right {
+  white-space: nowrap;
 }
 .term-head .toggle {
   background: none;
-  border: 1px solid var(--rule);
-  color: var(--fg-faint);
+  border: 0;
+  color: var(--fg-soft);
   font: inherit;
-  font-size: 11px;
-  padding: 0.15rem 0.6rem;
+  line-height: 24px;
+  padding: 0;
   cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  transition:
-    color 120ms,
-    border-color 120ms,
-    background 120ms;
+  white-space: nowrap;
 }
 .term-head .toggle:hover {
-  color: var(--amber);
-  border-color: var(--amber);
+  color: var(--fg);
+  text-decoration: underline;
 }
 .term-head .progress {
   display: inline-flex;
   gap: 0.5ch;
-  font-size: 11px;
-  color: var(--fg-faint);
   font-variant-numeric: tabular-nums;
   white-space: pre;
 }
-.term-head .progress .cells {
-  color: var(--amber);
+.term-head .progress.done {
+  color: var(--ok);
+}
+/* phones hide .cells; this selector outranks that rule so the [ OK ] still shows */
+.term-head .progress.done .cells {
+  display: inline;
+  font-weight: 500;
+}
+.term-head :focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 1px;
 }
 
 /* ===== Status tags ([ OK ] / [INFO] / [WARN] / [NOTE]) ===== */
@@ -172,6 +210,10 @@ main {
 .module .ts {
   font-size: 11px;
 }
+.module .count {
+  color: var(--fg-faint);
+  font-weight: 400;
+}
 .module .name {
   color: var(--amber);
   font-weight: 500;
@@ -199,10 +241,6 @@ h1.title {
   word-break: break-word;
   line-height: 1.3;
 }
-h1.title::before {
-  content: '> ';
-  color: var(--amber);
-}
 .title-sub {
   color: var(--fg-soft);
   font-size: 13px;
@@ -217,75 +255,94 @@ p.log {
 p.log + p.log {
   margin-top: 0.5rem;
 }
+/* Reading-text paragraphs outside posts (about page). Matches .prose body
+   text; inline status tags and code stay in the mono chrome. */
+p.log.read {
+  font-family: var(--font-read);
+  font-size: 18px;
+  line-height: 1.65;
+  max-width: 38em;
+  text-wrap: pretty;
+  font-optical-sizing: auto;
+}
+p.log.read + p.log.read {
+  margin-top: 1.1em;
+}
+p.log.read [class^='tag-'],
+p.log.read code {
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+}
+/* systemctl-style list footer: "6 of 177 post units listed. Pass --all …" */
+p.log.more {
+  margin-top: 1.25rem;
+  color: var(--fg-soft);
+  font-size: 13px;
+}
+
+/* ===== Home boot reveal =====
+   BaseLayout adds html.booting on the first home visit per session. Banner rows
+   (--i) and later .boot-step blocks (--d) appear one after another like streaming
+   log output: no fades, each line just arrives. */
+@keyframes boot-line {
+  from {
+    visibility: hidden;
+  }
+  to {
+    visibility: visible;
+  }
+}
+html.booting .banner .row,
+html.booting .boot-step {
+  animation: boot-line 1ms steps(1, end) both;
+}
+html.booting .banner .row {
+  animation-delay: calc(var(--i, 0) * 110ms);
+}
+html.booting .boot-step {
+  animation-delay: var(--d, 0ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  html.booting .banner .row,
+  html.booting .boot-step {
+    animation: none;
+  }
+}
 
 /* ===== Hero (home page) ===== */
-.hero-eyebrow {
-  margin-top: 1.5rem;
-  font-size: 11px;
-  color: var(--fg-faint);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-.hero-eyebrow::before {
-  content: '$ ';
-  color: var(--ok);
-  text-transform: none;
-  letter-spacing: 0;
-}
 h1.hero {
   font-family: var(--font-mono);
   font-size: 2rem;
   font-weight: 500;
   letter-spacing: -0.01em;
   line-height: 1.1;
-  margin: 0.4rem 0 0.75rem;
+  margin: 2rem 0 0.75rem;
   color: var(--fg);
 }
 .hero-sub {
   color: var(--fg-soft);
   font-size: 14px;
   max-width: 56ch;
-  margin-bottom: 1rem;
-}
-.hero-cta {
   margin-bottom: 2rem;
-  font-size: 13px;
-}
-.hero-cta a {
-  text-decoration: none;
-}
-.hero-cta a::before {
-  content: '→ ';
-  color: var(--amber);
+  text-wrap: pretty;
 }
 
-/* ===== Bordered-pill link (tag chips, share buttons) ===== */
+/* ===== Tag link — plain #tag text ===== */
 .tag-link {
-  display: inline-block;
-  border: 1px solid var(--rule);
-  color: var(--fg-soft);
-  background: var(--bg);
-  padding: 0.05rem 0.5rem;
-  font-size: 11px;
+  color: var(--fg-faint);
+  font-size: 12px;
   text-decoration: none;
   text-transform: lowercase;
-  letter-spacing: 0.04em;
-  margin: 0 0.25rem 0.25rem 0;
-  line-height: 1.6;
-  transition:
-    color 120ms,
-    border-color 120ms,
-    background 120ms;
+  margin-right: 1ch;
+  white-space: nowrap;
 }
-.tag-link:hover {
+.tag-link::before {
+  content: '#';
+}
+a.tag-link:hover {
   color: var(--amber);
-  border-color: var(--amber);
-  background: var(--amber-soft);
-  text-decoration: none;
-}
-.tag-link.large {
-  font-size: 12px;
-  padding: 0.15rem 0.6rem;
+  background: none;
+  text-decoration: underline;
 }
 
 /* ===== /proc-style table (about → hardware) ===== */
@@ -307,8 +364,6 @@ table.proc th {
   color: var(--fg-faint);
   font-weight: 500;
   font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
 }
 table.proc td:first-child {
   color: var(--amber);
@@ -340,12 +395,6 @@ table.proc a:hover {
   align-items: baseline;
   flex-wrap: wrap;
 }
-.unit .dot {
-  color: var(--ok);
-}
-.unit .dot.draft {
-  color: var(--warn);
-}
 .unit .name {
   color: var(--fg);
   font-weight: 500;
@@ -360,6 +409,9 @@ table.proc a:hover {
   color: var(--amber);
 }
 .unit .meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 2ch;
   color: var(--fg-faint);
   font-size: 12px;
   margin-top: 0.15rem;
@@ -372,11 +424,76 @@ table.proc a:hover {
   max-width: 64ch;
 }
 .unit .tags {
-  margin-top: 0.45rem;
+  margin-top: 0.35rem;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 0;
+  align-items: baseline;
+}
+/* PostCard: `systemctl status` layout. Column 1 holds the state marker and the
+   right-aligned field labels ("Active:", "CGroup:", "Tags:"); column 2 the values. */
+.unit .unit-body {
+  display: grid;
+  grid-template-columns: 7ch minmax(0, 1fr);
+  column-gap: 1ch;
+  align-items: baseline;
+}
+.unit-body > .k {
+  grid-column: 1;
+  justify-self: end;
+}
+.unit-body > :not(.k) {
+  grid-column: 2;
+}
+/* the "● title" line and the description run full width, like systemctl's header line */
+.unit-body > .name,
+.unit-body > .desc {
+  grid-column: 1 / -1;
+}
+.unit-body .dot {
+  margin-right: 1ch;
+}
+.unit-body > .k {
+  color: var(--fg-faint);
+  font-size: 12px;
+}
+.unit-body > .desc {
+  margin: 0.2rem 0 0.35rem;
+}
+.unit-body > .meta {
+  display: block;
+  margin-top: 0;
+}
+.unit-body > .meta a {
+  color: var(--fg-soft);
+  text-decoration: none;
+}
+.unit-body > .meta a + a {
+  margin-left: 1ch;
+}
+.unit-body > .meta a:hover {
+  color: var(--amber);
+  text-decoration: underline;
+  background: none;
+}
+.unit-body > .tags {
+  margin-top: 0;
+}
+/* state markers: green = new, amber = recently updated, grey = older */
+.state-running {
+  color: var(--ok);
+}
+.state-reloaded {
+  color: var(--amber);
+}
+.state-idle {
+  color: var(--fg-faint);
+}
+.unit-body .state {
+  font-weight: 500;
+}
+.unit-body .state-idle.state {
+  color: var(--fg-soft);
+  font-weight: 400;
 }
 .unit.has-thumb {
   display: grid;
@@ -393,10 +510,10 @@ table.proc a:hover {
 }
 .unit .thumb img {
   display: block;
-  width: 5.5rem;
-  height: 5.5rem;
+  width: 9rem;
+  height: 6rem;
   object-fit: contain;
-  padding: 0.45rem;
+  padding: 0.35rem;
   background: var(--bg-card);
   border: 1px solid var(--rule);
   filter: grayscale(0.7) contrast(1.05) sepia(0.35);
@@ -419,10 +536,58 @@ table.proc a:hover {
     transition: none;
   }
 }
-.unit .tags .label {
+
+/* ===== Touch targets =====
+   Tag and category links are small inline text; on touch screens give them
+   24px of height so neighbouring rows' targets don't overlap. */
+@media (pointer: coarse) {
+  .tag-link,
+  .unit-body > .meta a,
+  .post-meta a {
+    display: inline-block;
+    padding-block: 3px;
+  }
+}
+
+/* ===== Row cursor on index pages =====
+   Hovering (or tabbing into) a row puts a block cursor in the gutter, like the
+   selected line in `less` or a TUI list. */
+.entry,
+.unit {
+  position: relative;
+}
+.entry:is(:hover, :focus-within)::before,
+.unit:is(:hover, :focus-within)::before {
+  content: '▌';
+  position: absolute;
+  left: -1.6ch;
+  color: var(--amber);
+}
+.entry::before {
+  top: 0.6rem;
+}
+.unit::before {
+  top: 0.75rem;
+}
+table.stat tbody tr:is(:hover, :focus-within) td:first-child {
+  box-shadow: inset 3px 0 0 var(--amber);
+  padding-left: 0.6rem;
+}
+
+/* ===== journalctl markers: "-- Journal begins at … --", "-- Reboot: 2025 … --" ===== */
+.journal-marker {
   color: var(--fg-faint);
-  font-size: 11.5px;
-  margin-right: 0.4rem;
+  font-size: 12px;
+  margin: 0.9rem 0 0.2rem;
+  font-variant-numeric: tabular-nums;
+}
+.journal > .journal-marker {
+  margin-top: 1.1rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--rule);
+}
+.journal > .entry:has(+ .journal-marker) {
+  border-bottom: none;
 }
 
 /* ===== Compact journalctl-style row (posts list, tag/category pages) ===== */
@@ -468,7 +633,23 @@ table.proc a:hover {
   grid-column: 2 / span 2;
   display: flex;
   flex-wrap: wrap;
-  margin-top: 0.15rem;
+}
+
+/* ===== `top` summary header above the /tags table ===== */
+pre.top-head {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0 0 1rem;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--fg-soft);
+  white-space: pre-wrap;
+}
+pre.top-head span[title] {
+  text-decoration: underline dotted var(--fg-faint);
+  text-underline-offset: 3px;
+  cursor: help;
 }
 
 /* ===== top-style frequency table (tags / categories index) ===== */
@@ -482,8 +663,6 @@ table.stat thead th {
   font-size: 11px;
   font-weight: 500;
   color: var(--fg-faint);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
   padding: 0.35rem 0.75rem 0.35rem 0;
   border-bottom: 1px solid var(--rule);
 }
@@ -495,25 +674,19 @@ table.stat tbody td {
 table.stat tbody tr:last-child td {
   border-bottom: none;
 }
+table.stat .name {
+  white-space: nowrap;
+}
 table.stat .name a {
-  display: inline-block;
-  border: 1px solid var(--rule);
-  background: var(--bg);
-  padding: 0.1rem 0.6rem;
   color: var(--fg);
   text-decoration: none;
   font-weight: 500;
-  font-size: 12.5px;
   text-transform: lowercase;
-  transition:
-    color 120ms,
-    border-color 120ms,
-    background 120ms;
 }
 table.stat .name a:hover {
   color: var(--amber);
-  border-color: var(--amber);
-  background: var(--amber-soft);
+  background: none;
+  text-decoration: underline;
 }
 table.stat .count {
   color: var(--amber);
@@ -541,6 +714,24 @@ table.stat .bar {
 }
 [data-theme='dark'] .bar-fill {
   opacity: 0.75;
+}
+table.stat .num {
+  text-align: right;
+}
+table.df .fs {
+  color: var(--fg);
+  white-space: nowrap;
+}
+table.df .bar {
+  min-width: 8ch;
+}
+table.df .fs a {
+  font-weight: 400;
+  text-transform: none;
+}
+table.df .mnt {
+  color: var(--fg-faint);
+  white-space: nowrap;
 }
 table.stat .pct {
   color: var(--fg-faint);
@@ -626,23 +817,19 @@ table.stat .pct {
 [data-theme='dark'] .figure img {
   filter: grayscale(1) contrast(1.05) brightness(0.85) sepia(0.5) hue-rotate(-10deg);
 }
-.figcap {
-  font-size: 12px;
-  color: var(--fg-soft);
-  max-width: 50ch;
-  line-height: 1.6;
+.figure p.log {
+  margin: 0;
 }
-.figcap b {
-  color: var(--fg);
-  font-weight: 500;
-  display: block;
-  margin-bottom: 0.25rem;
+/* keep the avatar + text row to the same right edge as p.log.read (38em at 18px) */
+.figure.avatar {
+  max-width: 42.75rem;
 }
 
 /* ===== Contact channels grid (about) ===== */
 .channels {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 68ch;
   gap: 0.25rem 1.5rem;
   margin-top: 0.5rem;
 }
@@ -670,10 +857,12 @@ table.stat .pct {
    Post layout (PostLayout.astro)
    =========================================================== */
 
+body.is-post {
+  --page-width: 68rem;
+}
 main.post {
-  max-width: 120ch;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 23ch;
+  grid-template-columns: minmax(0, 1fr) 15rem;
   gap: 2.25rem;
 }
 main.post > article {
@@ -695,15 +884,12 @@ main.post > article {
   font-size: 12px;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 0.75rem;
+  gap: 0.25rem 2ch;
   margin-top: 1.25rem;
   font-variant-numeric: tabular-nums;
 }
-.post-meta .dot {
-  color: var(--rule);
-}
 .post-meta .cat {
-  color: var(--note);
+  color: var(--fg-soft);
   text-decoration: none;
 }
 .post-meta .cat:hover {
@@ -712,18 +898,15 @@ main.post > article {
 }
 
 h1.post-title {
-  font-family: var(--font-mono);
-  font-size: 1.5rem;
-  font-weight: 500;
-  letter-spacing: -0.005em;
-  line-height: 1.2;
+  font-family: var(--font-read);
+  font-size: 2.25rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  text-wrap: balance;
   margin: 0.5rem 0 0.85rem;
   color: var(--fg);
   word-break: break-word;
-}
-h1.post-title::before {
-  content: '> ';
-  color: var(--amber);
 }
 
 .post-tags-row {
@@ -732,61 +915,80 @@ h1.post-title::before {
   align-items: center;
   margin-bottom: 1.5rem;
 }
-.post-tags-row .label {
-  color: var(--fg-faint);
-  font-size: 11.5px;
-  margin-right: 0.4rem;
-}
 
 /* ===== Prose (rendered markdown body) ===== */
+/* Running text and headings are set in --font-read; code, tables, captions
+   and the heading-level markers stay in the mono chrome. Text blocks are held to a readable measure while
+   code, tables and images keep the full column. */
 .prose {
-  font-size: 15.5px;
-  line-height: 1.75;
+  font-family: var(--font-read);
+  font-size: 18px;
+  line-height: 1.65;
   color: var(--fg);
   min-width: 0;
+  font-optical-sizing: auto;
+}
+.prose p,
+.prose ul,
+.prose ol,
+.prose blockquote,
+.prose h2,
+.prose h3,
+.prose h4 {
+  max-width: 38em;
 }
 .prose p {
-  margin-bottom: 1rem;
+  margin-bottom: 1.1em;
+  text-wrap: pretty;
+}
+/* .code-block is CopyCode's wrapper; its button uses font: inherit */
+.prose table,
+.prose figcaption,
+.prose kbd,
+.prose pre,
+.prose .code-block {
+  font-family: var(--font-mono);
+}
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-family: var(--font-read);
+  font-weight: 650;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  color: var(--fg);
+  text-wrap: balance;
+  scroll-margin-top: 4rem;
+}
+/* markdown-style level markers, kept in the mono chrome */
+.prose h2::before,
+.prose h3::before,
+.prose h4::before {
+  font-family: var(--font-mono);
+  font-size: 0.75em;
+  font-weight: 400;
+  color: var(--amber);
 }
 .prose h2 {
-  font-family: var(--font-mono);
-  font-size: 1.15rem;
-  font-weight: 500;
-  margin-top: 2.5rem;
-  margin-bottom: 0.5rem;
-  color: var(--fg);
-  letter-spacing: 0;
-  scroll-margin-top: 4rem;
+  font-size: 1.5em;
+  margin: 2.25em 0 0.5em;
 }
 .prose h2::before {
   content: '## ';
-  color: var(--amber);
 }
 .prose h3 {
-  font-family: var(--font-mono);
-  font-size: 1rem;
-  font-weight: 500;
-  margin-top: 1.75rem;
-  margin-bottom: 0.5rem;
-  color: var(--fg);
-  scroll-margin-top: 4rem;
+  font-size: 1.22em;
+  margin: 1.75em 0 0.45em;
 }
 .prose h3::before {
   content: '### ';
-  color: var(--amber);
 }
 .prose h4 {
-  font-family: var(--font-mono);
-  font-size: 0.95rem;
-  font-weight: 500;
-  margin-top: 1.5rem;
-  margin-bottom: 0.4rem;
-  color: var(--fg);
-  scroll-margin-top: 4rem;
+  font-size: 1.05em;
+  margin: 1.5em 0 0.4em;
 }
 .prose h4::before {
   content: '#### ';
-  color: var(--amber);
 }
 /* amber-strong instead of amber so body link text clears WCAG AA 4.5:1
    against the cream bg (regular amber on cream is ~3.85:1). The token
@@ -820,10 +1022,10 @@ h1.post-title::before {
 }
 .prose :not(pre) > code {
   background: var(--bg-card);
-  padding: 0.05em 0.4em;
+  padding: 0.05em 0.35em;
   border: 1px solid var(--rule);
   color: var(--amber-strong);
-  font-size: 0.9em;
+  font-size: 0.8em;
 }
 [data-theme='dark'] .prose :not(pre) > code {
   color: var(--amber);
@@ -901,29 +1103,26 @@ aside.toc {
   padding-top: 1.5rem;
 }
 aside.toc .toc-title {
-  font-size: 10.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-size: 11px;
   color: var(--fg-faint);
   margin-bottom: 0.5rem;
 }
 aside.toc .toc-title::before {
   content: '$ tree ';
   color: var(--ok);
-  text-transform: none;
-  letter-spacing: 0;
 }
 aside.toc ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
+/* glyph in its own column so long headings wrap under their text, not the tree */
 aside.toc li {
   font-family: var(--font-mono);
-  line-height: 1.7;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.5;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  padding: 0.15rem 0;
 }
 aside.toc li.depth-3,
 aside.toc li.depth-4 {
@@ -1077,7 +1276,7 @@ aside.toc .tree {
   background: var(--bg-deep);
 }
 .term-foot .inner {
-  max-width: 96ch;
+  max-width: var(--page-width);
   margin: 0 auto;
   padding: 1.25rem;
   display: flex;
@@ -1122,6 +1321,33 @@ aside.toc .tree {
 }
 
 /* ===== Mobile ===== */
+/* ===== Header: shed parts as the bar narrows =====
+   .windows scrolls with no visible scrollbar, so anything that pushes it
+   narrower than its content hides nav links. Items drop out in order of
+   least use: the clock first, then the session name and text gauge (which
+   becomes a hairline along the header's bottom edge). Phones go further
+   below. */
+@media (max-width: 1023px) {
+  .term-head .status-right {
+    display: none;
+  }
+}
+@media (max-width: 800px) {
+  .term-head .session,
+  .term-head .progress {
+    display: none;
+  }
+  body.is-post .term-head::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    height: 2px;
+    width: calc(var(--read, 0) * 100%);
+    background: var(--amber);
+  }
+}
+
 @media (max-width: 640px) {
   body {
     font-size: 12.5px;
@@ -1129,13 +1355,19 @@ aside.toc .tree {
   main {
     padding: 1rem 0.9rem 2rem;
   }
-  .term-head .inner,
+  .term-head .inner {
+    padding: 0 0.9rem;
+  }
   .term-foot .inner {
     padding: 0.5rem 0.9rem;
   }
-  /* keep the header to one row on phones — percentage only */
-  .term-head .progress .cells {
+  /* phones: window numbers and the toggle's `:set` drop out too */
+  .term-head .windows .idx,
+  .term-head .toggle .set {
     display: none;
+  }
+  .term-head .windows {
+    gap: 1.5ch;
   }
 
   h1.title {
@@ -1167,26 +1399,42 @@ aside.toc .tree {
   table.stat {
     font-size: 12px;
   }
-  table.stat .bar {
+  table.stat .bar,
+  table.df .mnt {
     display: none;
   }
 
   .unit .name {
     font-size: 13px;
   }
+  .channels {
+    grid-template-columns: minmax(0, 1fr);
+  }
   .unit .thumb img {
-    width: 4rem;
-    height: 4rem;
-    padding: 0.3rem;
+    width: 4.5rem;
+    height: 4.5rem;
+    padding: 0.25rem;
   }
 
+  /* two columns: date on its own line, then title | read time, then tags.
+     Every child is placed explicitly; the desktop "2 / span 2" on .tags would
+     otherwise create an implicit third column and stagger the titles. */
   .entry {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     column-gap: 0.5rem;
   }
   .entry .date {
-    grid-column: 1 / span 2;
+    grid-column: 1 / -1;
     font-size: 11px;
+  }
+  .entry .title {
+    grid-column: 1;
+  }
+  .entry .read {
+    grid-column: 2;
+  }
+  .entry .tags {
+    grid-column: 1 / -1;
   }
 
   /* mobile pager cap: prev · current · next · … · last (5 max) */
@@ -1197,14 +1445,12 @@ aside.toc .tree {
 
   /* post layout — tighter type on small screens */
   h1.post-title {
-    font-size: 1.25rem;
+    font-size: 1.75rem;
   }
-  .prose {
-    font-size: 13.5px;
-    line-height: 1.7;
-  }
-  .prose h2 {
-    font-size: 1.05rem;
+  .prose,
+  p.log.read {
+    font-size: 16.5px;
+    line-height: 1.6;
   }
   .prose pre {
     font-size: 11.5px;
@@ -1212,5 +1458,16 @@ aside.toc .tree {
   }
   .navnext {
     grid-template-columns: 1fr;
+  }
+}
+
+/* the smallest phones (320px): tighten the bar so all five windows fit.
+   After the 640px block so it wins the cascade. */
+@media (max-width: 359px) {
+  .term-head .inner {
+    padding: 0 0.5rem;
+  }
+  .term-head .windows {
+    gap: 1ch;
   }
 }
