@@ -4,8 +4,10 @@ author: aj
 date: 2024-04-20
 categories:
   - Homelab
+  - Networking
 tags:
   - homelab
+  - networking
 ---
 
 _updated 2024-04-28_

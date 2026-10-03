@@ -4,9 +4,11 @@ author: aj
 date: 2024-02-03
 categories:
   - Homelab
+  - Networking
 tags:
   - wireguard
   - homelab
+  - networking
 ---
 
 ## Remote site project
