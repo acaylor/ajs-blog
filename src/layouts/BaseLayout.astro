@@ -73,10 +73,18 @@ const canonical = noindex ? null : new URL(path, Astro.site).href;
     <title>{title} | AJ's Blog</title>
     <script is:inline>
       (function () {
-        var stored = localStorage.getItem('theme');
-        var preferred =
-          stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        document.documentElement.setAttribute('data-theme', preferred);
+        // Follow the system unless the toggle stored an override. An override is
+        // only ever stored when it differs from the system, so one that now
+        // matches means the system flipped since: drop it. See ThemeToggle.
+        var system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        var stored = null;
+        try {
+          stored = localStorage.getItem('theme');
+          if (stored === system) localStorage.removeItem('theme');
+        } catch {
+          // storage blocked: follow the system
+        }
+        document.documentElement.setAttribute('data-theme', stored || system);
         // Home plays its boot sequence once per browser session, not on every visit.
         try {
           if (location.pathname === '/' && !sessionStorage.getItem('booted')) {
