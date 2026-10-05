@@ -4,9 +4,11 @@ author: aj
 date: 2024-04-21
 categories:
   - Homelab
+  - Networking
 tags:
   - homelab
   - security
+  - networking
 ---
 
 ## Stage 2 Security

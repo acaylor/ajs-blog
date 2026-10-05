@@ -5,8 +5,10 @@ date: 2021-06-27T10:17:52-04:00
 
 categories:
   - Homelab
+  - Networking
 tags:
   - homelab
+  - networking
   - pi-hole
   - raspberry pi
 ---

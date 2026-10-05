@@ -7,8 +7,10 @@ categories:
   - Homelab
   - Containers
   - Virtual Machines
+  - Networking
 tags:
   - containers
+  - networking
   - docker
   - wireguard
   - linux
