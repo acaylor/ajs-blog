@@ -3,4 +3,4 @@ allowBuilds:
 minimumReleaseAge: 1440
 minimumReleaseAgeStrict: true
 overrides:
-  'yaml-language-server>yaml': '2.9.0'
+  'yaml-language-server>yaml': '2.9.1'
