@@ -4,7 +4,12 @@ frontend:
     preBuild:
       commands:
         - corepack enable
-        - pnpm install --frozen-lockfile
+        # Cache pnpm's content store, not node_modules: a restored node_modules
+        # tree can be stale (e.g. a flat npm-era layout) and shadow the
+        # lockfile's versions. Install links from the store, so a fresh
+        # node_modules costs seconds.
+        - rm -rf node_modules
+        - pnpm install --frozen-lockfile --store-dir .pnpm-store
     build:
       commands:
         - pnpm run build
@@ -14,4 +19,4 @@ frontend:
       - '**/*'
   cache:
     paths:
-      - node_modules/**/*
+      - .pnpm-store/**/*

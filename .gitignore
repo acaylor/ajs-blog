@@ -5,3 +5,4 @@ dist/
 
 # Local design source-of-truth, not shipped
 mockups/
+.pnpm-store/
