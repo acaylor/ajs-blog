@@ -20,15 +20,15 @@
     "@astrojs/sitemap": "^3.7.4",
     "@fontsource-variable/literata": "^5.3.0",
     "@fontsource/dm-mono": "^5.3.0",
-    "astro": "^7.4.2"
+    "astro": "^7.4.5"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
-    "@typescript-eslint/eslint-plugin": "^8.72.0",
-    "@typescript-eslint/parser": "^8.72.0",
-    "eslint": "^10.11.0",
+    "@typescript-eslint/eslint-plugin": "^8.72.1",
+    "@typescript-eslint/parser": "^8.72.1",
+    "eslint": "^10.14.0",
     "eslint-plugin-astro": "^3.2.1",
-    "html-validate": "^11.17.0",
+    "html-validate": "^11.18.0",
     "prettier": "^3.9.10",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^6.0.3"
