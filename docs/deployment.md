@@ -8,9 +8,9 @@ the two need to be changed together.
 ## AWS Amplify (production)
 
 `amplify.yml` covers the build (`pnpm install --frozen-lockfile`, `pnpm run build`, publish `dist/`). The build
-cache holds pnpm's store (`.pnpm-store/`), never `node_modules/`: a restored `node_modules` once shadowed the
-lockfile with a stale flat tree and broke the build (`ERR_PACKAGE_PATH_NOT_EXPORTED` from `@astrojs/internal-helpers`
-after the Astro 7.4 bump). It cannot express
+cache holds pnpm's store (`.pnpm-store/`), never `node_modules/`: in November 2026 a restored `node_modules`
+shadowed the lockfile with a stale flat tree and broke a content-only deploy (`ERR_PACKAGE_PATH_NOT_EXPORTED` from
+`@astrojs/internal-helpers`), even though the previous build had passed from the same lockfile. It cannot express
 redirects — Amplify keeps those as app-level "Rewrites and redirects", outside the repo. To stop
 them drifting, the intended rule set is committed to `amplify-redirects.json` and applied with:
 
