@@ -1,0 +1,102 @@
+# Grafana Alloy on a Proxmox node. Render with:
+#   d2 --layout elk --pad 40 alloy-proxmox.d2 alloy-proxmox.svg
+
+direction: down
+
+# Readable at blog column width (~800px): large text everywhere.
+(** -> **)[*].style.font-size: 20
+
+classes: {
+  host: {
+    shape: rectangle
+    style: {
+      font-size: 22
+      fill: "#fff8e8"
+      stroke: "#3b3428"
+      stroke-width: 2
+    }
+  }
+  part: {
+    shape: rectangle
+    style: {
+      fill: "#ffffff"
+      stroke: "#3b3428"
+      stroke-width: 1
+      font-size: 20
+    }
+  }
+  source: {
+    shape: rectangle
+    style: {
+      fill: "#eaf3ff"
+      stroke: "#2c5282"
+      stroke-width: 1
+      font-size: 20
+    }
+  }
+  store: {
+    shape: cylinder
+    style: {
+      font-size: 22
+      fill: "#f4efe2"
+      stroke: "#3b3428"
+      stroke-width: 2
+    }
+  }
+  zone: {
+    style: {
+      font-size: 24
+      fill: "#fcfaf5"
+      stroke: "#8a5300"
+      stroke-width: 2
+    }
+  }
+}
+
+node: "Proxmox node (same config on all five)" {
+  class: zone
+
+  timers: "prometheus-node-exporter-collectors\ntimers, every 15 min:\nsmartmon, apt, nvme" {class: source}
+
+  textdir: "/var/lib/prometheus/\nnode-exporter/\n*.prom" {class: store}
+
+  kernel: "/proc, /sys: CPU, memory,\ndisks, network, hwmon\nD-Bus: systemd units\n(pve-cluster, corosync, ...)" {class: source}
+  journal: "systemd journal\nsshd, PAM,\nkernel, PVE" {class: source}
+  files: "pve-firewall.log\npveam.log\napt/history.log" {class: source}
+
+  alloy: "Grafana Alloy" {
+    class: host
+    unix: "prometheus.exporter.unix\nnode_exporter, textfile,\nsystemd collectors" {class: part}
+    scrape: "prometheus.scrape\nevery 30s" {class: part}
+    rw: "prometheus.remote_write\nexternal_labels: host" {class: part}
+    jsrc: "loki.source.journal\nsession-N.scope →\nsession.scope" {class: part}
+    fsrc: "loki.source.file" {class: part}
+    lw: "loki.write\nexternal_labels:\nhost, collector" {class: part}
+
+    unix -> scrape
+    scrape -> rw
+    jsrc -> lw
+    fsrc -> lw
+  }
+
+  timers -> textdir
+  textdir -> alloy.unix
+  kernel -> alloy.unix
+  journal -> alloy.jsrc
+  files -> alloy.fsrc
+}
+
+prom: "Prometheus\n/api/v1/write" {class: store}
+loki: "Loki\n/loki/api/v1/push" {class: store}
+grafana: "Grafana\ndashboards" {class: host}
+
+node.alloy.rw -> prom: "HTTPS push"
+node.alloy.lw -> loki: "HTTPS push"
+prom -> grafana
+loki -> grafana
+
+# Layout only: invisible edges stack the sources into a metrics column and a
+# logs column so the diagram stays narrow enough to read in the blog column.
+node.kernel -> node.timers: {style.opacity: 0}
+node.journal -> node.files: {style.opacity: 0}
+node.alloy.jsrc -> node.alloy.fsrc: {style.opacity: 0}
