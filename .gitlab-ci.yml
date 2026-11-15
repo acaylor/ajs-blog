@@ -8,13 +8,14 @@ variables:
 
 lint:
   stage: test
-  image: node:24-alpine
+  image: node:26-alpine
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
       - node_modules/
   script:
-    - corepack enable
+    # pnpm then switches to the exact version in package.json `packageManager`
+    - npm install -g pnpm@12
     - pnpm install --frozen-lockfile
     - pnpm run lint
     - pnpm run check
@@ -22,13 +23,14 @@ lint:
 
 build_and_verify:
   stage: test
-  image: node:24-alpine
+  image: node:26-alpine
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
       - node_modules/
   script:
-    - corepack enable
+    # pnpm then switches to the exact version in package.json `packageManager`
+    - npm install -g pnpm@12
     - pnpm install --frozen-lockfile
     - pnpm run build
     # static a11y / HTML structure check on the rendered output

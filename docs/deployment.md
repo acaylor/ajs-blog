@@ -5,6 +5,42 @@ path below is for local and test hosting only — nothing in `nginx.conf` reache
 Any routing behaviour that has to hold for real users belongs in the Amplify rules, and
 the two need to be changed together.
 
+## Node version
+
+The site builds on Node 26 LTS, upgraded from Node 24 in November 2026. The version is set in four
+places, and they need to move together:
+
+| Where               | Setting                                                           |
+| ------------------- | ----------------------------------------------------------------- |
+| `.nvmrc`            | `26` (local development)                                          |
+| `.gitlab-ci.yml`    | `image: node:26-alpine` on the `lint` and `build_and_verify` jobs |
+| `Dockerfile`        | `FROM node:26-alpine AS build`                                    |
+| Amplify build image | the `nodebuild` image repo, set in the Amplify console            |
+
+`amplify.yml` doesn't set a Node version: production builds on whatever Node the Amplify app's
+custom build image ships. Bumping the repo without rebuilding that image leaves production on the
+old Node.
+
+## pnpm
+
+The pnpm version lives in one place: the `packageManager` field in `package.json`, which Renovate
+updates. Every environment installs some pnpm 12 and lets pnpm switch itself to that exact version
+the first time it runs in the repo:
+
+- CI and the Dockerfile: `npm install -g pnpm@12`.
+- Amplify: the build image ships pnpm on `PATH`, so `amplify.yml` calls `pnpm` directly.
+- Locally: any pnpm (mise, `npm install -g pnpm@12`, etc.).
+
+The `@12` only chooses the bootstrap version. Pinning the major stops CI from picking up a release
+published minutes ago, and it means no exact version to keep in sync outside `package.json`.
+
+This replaced corepack in November 2026. Node 25 and later no longer bundle corepack, so keeping it
+would have meant installing an extra npm package just to install pnpm. Don't add `corepack enable`
+back: on Node 26 it fails with `corepack: not found` unless corepack was installed first.
+
+Renovate is configured not to open major Node updates (`renovate.json`), so the next LTS move is a
+manual change like this one.
+
 ## AWS Amplify (production)
 
 `amplify.yml` covers the build (`pnpm install --frozen-lockfile`, `pnpm run build`, publish `dist/`). The build
@@ -98,7 +134,7 @@ docker build -t ajs-blog .
 docker run --rm -p 8080:80 ajs-blog
 ```
 
-The Dockerfile uses a multi-stage build: `node:24-alpine` builds the site, `nginx:alpine` serves it.
+The Dockerfile uses a multi-stage build: `node:26-alpine` builds the site, `nginx:alpine` serves it.
 
 The nginx config (`nginx.conf`) uses `absolute_redirect off` and a `try_files` order of `$uri $uri/index.html $uri/` to serve Astro's directory-based output. It also mirrors the Amplify redirect rules so test hosting routes like production; see `amplify-redirects.json` and keep the two in sync.
 

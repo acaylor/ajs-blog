@@ -3,7 +3,9 @@ frontend:
   phases:
     preBuild:
       commands:
-        - corepack enable
+        # The build image ships pnpm on PATH; it switches itself to the
+        # `packageManager` version. No corepack (Node 25+ doesn't bundle it).
+        - pnpm --version
         # Cache pnpm's content store, not node_modules: a restored node_modules
         # tree can be stale (e.g. a flat npm-era layout) and shadow the
         # lockfile's versions. Install links from the store, so a fresh
