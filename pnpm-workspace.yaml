@@ -4,3 +4,8 @@ minimumReleaseAge: 1440
 minimumReleaseAgeStrict: true
 overrides:
   'yaml-language-server>yaml': '2.9.1'
+packageExtensions:
+  '@astrojs/astro2tsx@0.1.3':
+    dependencies:
+      # Match its pinned @emnapi/core; the auto-installed v2 beta breaks astro check.
+      '@emnapi/runtime': '1.11.3'
