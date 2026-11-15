@@ -1,0 +1,332 @@
+# Homelab, November 2026: hosts and what runs on them. Render with:
+#   d2 --layout elk --pad 24 \
+#     --font-regular DMMono-Regular.ttf --font-bold DMMono-Medium.ttf \
+#     homelab-2026.d2 homelab-2026.svg
+# d2 fetches the icons at render time and embeds them in the SVG.
+# Most come from homarr-labs/dashboard-icons (Apache-2.0), pinned to one
+# commit; the Ollama glyph comes from Simple Icons, recolored for dark.
+# Colors are the blog's dark-theme tokens (src/styles/global.css).
+# Data flows (DNS sync, backups, telemetry) are in homelab-2026-flows.d2.
+
+vars: {
+  ic: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons@d767d7327db7f8ebd3715b552523f61889eea41c/svg
+}
+
+direction: down
+style.fill: "#0c0c0a"
+grid-columns: 1
+grid-gap: 36
+
+(** -> **)[*].style: {
+  stroke: "#868069"
+  font-color: "#b8ad8b"
+  font-size: 20
+}
+
+classes: {
+  zone: {
+    style: {
+      fill: "#14130f"
+      stroke: "#4a4535"
+      stroke-width: 2
+      stroke-dash: 4
+      font-color: "#ffb000"
+      font-size: 26
+      bold: true
+    }
+  }
+  host: {
+    style: {
+      fill: "#16140e"
+      stroke: "#868069"
+      stroke-width: 2
+      font-color: "#e8dfc4"
+      font-size: 22
+      bold: true
+    }
+  }
+  vm: {
+    width: 204
+    icon.near: top-center
+    label.near: bottom-center
+    style: {
+      fill: "#211d12"
+      stroke: "#ffb000"
+      stroke-width: 2
+      font-color: "#e8dfc4"
+      font-size: 19
+      bold: false
+    }
+  }
+  k8s: {
+    width: 190
+    icon.near: center-left
+    label.near: center-center
+    style: {
+      fill: "#122016"
+      stroke: "#6cc080"
+      stroke-width: 2
+      font-color: "#e8dfc4"
+      font-size: 19
+      bold: false
+    }
+  }
+  metal: {
+    width: 460
+    icon.near: center-left
+    label.near: center-center
+    style: {
+      fill: "#16140e"
+      stroke: "#868069"
+      stroke-width: 2
+      font-color: "#e8dfc4"
+      font-size: 19
+      bold: false
+    }
+  }
+  tile: {
+    width: 276
+    height: 76
+    icon.near: center-left
+    label.near: center-center
+    style: {
+      fill: "#16140e"
+      stroke: "#2a2620"
+      stroke-width: 1
+      font-color: "#e8dfc4"
+      font-size: 18
+      bold: false
+    }
+  }
+  endpoint: {
+    style: {
+      fill: "#0c0c0a"
+      stroke: "#868069"
+      stroke-dash: 4
+      font-color: "#b8ad8b"
+      font-size: 20
+    }
+  }
+  key: {
+    width: 170
+    height: 48
+    style: {
+      font-color: "#e8dfc4"
+      font-size: 17
+      bold: false
+    }
+  }
+}
+
+header: "" {
+  grid-columns: 1
+  grid-gap: 16
+  style.fill: transparent
+  style.stroke: transparent
+
+  title: "homelab · November 2026" {
+    shape: text
+    style: {
+      font-color: "#ffb000"
+      font-size: 34
+      bold: true
+    }
+  }
+  legend: "" {
+    grid-columns: 3
+    grid-gap: 12
+    style.fill: transparent
+    style.stroke: transparent
+    h: "physical host" {class: key; style: {fill: "#16140e"; stroke: "#868069"; stroke-width: 2}}
+    v: "Proxmox VM" {class: key; style: {fill: "#211d12"; stroke: "#ffb000"; stroke-width: 2}}
+    k: "k3s node" {class: key; style: {fill: "#122016"; stroke: "#6cc080"; stroke-width: 2}}
+  }
+}
+
+edge: "" {
+  grid-columns: 4
+  grid-gap: 50
+  style.fill: transparent
+  style.stroke: transparent
+  remote: "VPN clients\nWireGuard" {class: endpoint}
+  internet: "internet" {class: endpoint}
+  gateway: "UniFi gateway\nfirewall · DHCP\n3 networks" {
+    class: metal
+    width: 330
+    style.bold: true
+    icon: ${ic}/unifi.svg
+  }
+  home: "home VLAN\nIoT · firewalled" {
+    class: zone
+    grid-columns: 1
+    grid-gap: 24
+    macdaddy: "macdaddy\nMac mini\nPrometheus" {
+      class: metal
+      width: 280
+      icon: ${ic}/apple-light.svg
+    }
+    hass: "Home Assistant\non its own Pi" {
+      class: metal
+      width: 280
+      icon.near: top-center
+      label.near: bottom-center
+      icon: ${ic}/home-assistant.svg
+    }
+  }
+}
+edge.remote -> edge.internet
+edge.internet -> edge.gateway
+
+lab: "lab VLAN" {
+  class: zone
+  grid-columns: 1
+  grid-gap: 36
+
+  pve: "Proxmox VE · 5 nodes" {
+    class: zone
+    icon: ${ic}/proxmox.svg
+    grid-rows: 3
+    grid-columns: 2
+    grid-gap: 24
+
+    gamma: "gamma · Ryzen desktop" {
+      class: host
+      grid-rows: 2
+      grid-columns: 2
+      grid-gap: 14
+      rigel: "rigel\nAdGuard origin\nCaddy · Loki\nGrafana" {
+        class: vm
+        icon: ${ic}/adguard-home.svg
+      }
+      polaris: "polaris\nWireGuard" {
+        class: vm
+        icon: ${ic}/wireguard.svg
+      }
+      nas: "nas-backup\nZFS mirror\nNFS share" {
+        class: vm
+        icon: ${ic}/truenas.svg
+      }
+      w4: "worker-04\n4 vCPU · 8 GB" {class: k8s}
+    }
+    hp03: "hp03 · HP mini + UPS" {
+      class: host
+      grid-rows: 2
+      grid-columns: 2
+      grid-gap: 14
+      vega: "vega\nGitea · Actual\nKanboard\nAdGuard" {
+        class: vm
+        icon: ${ic}/gitea.svg
+      }
+      blackhole: "blackhole\nAdGuard" {
+        class: vm
+        icon: ${ic}/adguard-home.svg
+      }
+      cp3: "cp-03 · etcd\n2 vCPU · 4 GB" {class: k8s}
+      w3: "worker-03\n4 vCPU · 8 GB" {class: k8s}
+    }
+    hp01: "hp01 · HP mini + UPS" {
+      class: host
+      grid-columns: 2
+      grid-gap: 14
+      cp1: "cp-01 · etcd\n2 vCPU · 4 GB" {class: k8s}
+      w1: "worker-01\n4 vCPU · 8 GB" {class: k8s}
+    }
+    hp02: "hp02 · HP mini + UPS" {
+      class: host
+      grid-columns: 2
+      grid-gap: 14
+      cp2: "cp-02 · etcd\n2 vCPU · 4 GB" {class: k8s}
+      w2: "worker-02\n4 vCPU · 8 GB" {class: k8s}
+    }
+    beta: "beta · Ryzen mini PC\njoined in November\nno guests yet" {
+      class: host
+      style.stroke-dash: 4
+      style.bold: false
+    }
+  }
+
+  metal: "bare metal" {
+    class: zone
+    grid-columns: 2
+    grid-gap: 24
+    alpha: "alpha · Pi 4\nAdGuard standby\noff DHCP" {
+      class: metal
+      icon: ${ic}/raspberry-pi.svg
+    }
+    upsilon: "upsilon\nSynology NAS\nbulk storage" {
+      class: metal
+      icon: ${ic}/synology-dsm.svg
+    }
+    pis: "omnicron · rho\nPi 5 + UPS · arm64\n16 GB · 8 GB" {
+      class: metal
+      icon: ${ic}/raspberry-pi.svg
+      style: {fill: "#122016"; stroke: "#6cc080"}
+    }
+    ayymd: "ayymd · workstation\n24 threads · 96 GB\nRTX 4090" {
+      class: metal
+      icon: ${ic}/nvidia.svg
+      style: {fill: "#122016"; stroke: "#6cc080"}
+    }
+  }
+
+  k3s: "k3s v1.36 · 10 green nodes · 124 pods" {
+    class: zone
+    icon: ${ic}/k3s.svg
+    style.stroke: "#6cc080"
+    style.font-color: "#6cc080"
+    grid-columns: 1
+    grid-gap: 24
+
+    platform: "platform" {
+      class: zone
+      style.font-size: 22
+      style.stroke-dash: 0
+      grid-rows: 4
+      grid-columns: 3
+      grid-gap: 12
+      argo: "Argo CD\n29 apps · Gitea" {class: tile; icon: ${ic}/argo-cd.svg}
+      cilium: "Cilium CNI\ningress · L2 LB" {class: tile; icon: ${ic}/cilium.svg}
+      certs: "cert-manager\nLet's Encrypt" {class: tile; icon: ${ic}/cert-manager.svg}
+      secrets: "External Secrets\nfrom Bitwarden" {class: tile; icon: ${ic}/bitwarden.svg}
+      cnpg: "CloudNativePG\n3 Postgres DBs" {class: tile; icon: ${ic}/postgresql.svg}
+      gpu: "GPU Operator\nRTX 4090" {class: tile; icon: ${ic}/nvidia.svg}
+      prom: "Prometheus\nremote_write out" {class: tile; icon: ${ic}/prometheus.svg}
+      grafana: "Grafana\nwarm standby" {class: tile; icon: ${ic}/grafana.svg}
+      alloy: "Alloy DaemonSet\nlogs to Loki" {class: tile; icon: ${ic}/alloy.svg}
+      nfs: "nfs-client PVCs\non nas-backup" {class: tile; icon: ${ic}/truenas.svg}
+      s3: "VersityGW\nS3 gateway on NFS" {class: tile}
+      maint: "kured\ndescheduler" {class: tile; icon: ${ic}/kubernetes.svg}
+    }
+
+    apps: "apps" {
+      class: zone
+      style.font-size: 22
+      style.stroke-dash: 0
+      grid-rows: 2
+      grid-columns: 3
+      grid-gap: 12
+      ollama: "Ollama\non the GPU" {class: tile; icon: https://cdn.simpleicons.org/ollama/e8dfc4}
+      webui: "Open WebUI" {class: tile; icon: ${ic}/open-webui-light.svg}
+      n8n: "n8n" {class: tile; icon: ${ic}/n8n.svg}
+      searxng: "SearXNG" {class: tile; icon: ${ic}/searxng.svg}
+      hermes: "Hermes Agent" {class: tile}
+      speed: "LibreSpeed" {class: tile; icon: ${ic}/librespeed.svg}
+    }
+
+    projects: "my projects" {
+      class: zone
+      style.font-size: 22
+      style.stroke-dash: 0
+      grid-rows: 2
+      grid-columns: 2
+      grid-gap: 12
+      hass: "hass-poller\nHA sensors to TimescaleDB" {class: tile; width: 420; icon: ${ic}/go.svg}
+      tools: "web-tools\nmy it-tools fork" {class: tile; width: 420; icon: ${ic}/it-tools.svg}
+      devbox: "devbox\ndev container · NFS home" {class: tile; width: 420; icon: ${ic}/terminal.svg}
+      runners: "GitHub Actions runners\nCI for my repos" {class: tile; width: 420; icon: ${ic}/github-light.svg}
+    }
+  }
+}
+
+edge.gateway -> lab: "VLAN"
+edge.gateway -> edge.home: "VLAN"

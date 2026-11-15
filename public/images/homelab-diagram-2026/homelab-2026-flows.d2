@@ -1,0 +1,191 @@
+# Homelab, November 2026: what moves between hosts. Render with:
+#   d2 --layout elk --pad 24 \
+#     --font-regular DMMono-Regular.ttf --font-bold DMMono-Medium.ttf \
+#     homelab-2026-flows.d2 homelab-2026-flows.svg
+# Same palette and icon source as homelab-2026.d2, which shows where each
+# host runs. Edge colors: purple telemetry, amber backups, dashed DNS sync,
+# green GitOps.
+
+vars: {
+  ic: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons@d767d7327db7f8ebd3715b552523f61889eea41c/svg
+}
+
+direction: down
+style.fill: "#0c0c0a"
+
+(** -> **)[*].style: {
+  stroke-width: 3
+  font-size: 22
+}
+
+classes: {
+  zone: {
+    style: {
+      fill: "#14130f"
+      stroke: "#4a4535"
+      stroke-width: 2
+      stroke-dash: 4
+      font-color: "#ffb000"
+      font-size: 26
+      bold: true
+    }
+  }
+  node: {
+    width: 230
+    icon.near: top-center
+    label.near: bottom-center
+    style: {
+      fill: "#16140e"
+      stroke: "#868069"
+      stroke-width: 2
+      font-color: "#e8dfc4"
+      font-size: 24
+      bold: false
+    }
+  }
+  vm: {
+    width: 230
+    icon.near: top-center
+    label.near: bottom-center
+    style: {
+      fill: "#211d12"
+      stroke: "#ffb000"
+      stroke-width: 2
+      font-color: "#e8dfc4"
+      font-size: 24
+      bold: false
+    }
+  }
+  k8s: {
+    width: 230
+    icon.near: top-center
+    label.near: bottom-center
+    style: {
+      fill: "#122016"
+      stroke: "#6cc080"
+      stroke-width: 2
+      font-color: "#e8dfc4"
+      font-size: 24
+      bold: false
+    }
+  }
+  # Edge styles, one per kind of flow.
+  telemetry: {
+    style: {stroke: "#9a8eff"; font-color: "#9a8eff"}
+  }
+  backup: {
+    style: {stroke: "#ffb000"; font-color: "#ffb000"}
+  }
+  dns: {
+    style: {stroke: "#b8ad8b"; font-color: "#b8ad8b"; stroke-dash: 5}
+  }
+  gitops: {
+    style: {stroke: "#6cc080"; font-color: "#6cc080"}
+  }
+  key: {
+    shape: text
+    style: {font-size: 24; font-color: "#e8dfc4"}
+  }
+}
+
+title: "homelab · data flows" {
+  near: top-center
+  shape: text
+  style: {
+    font-color: "#ffb000"
+    font-size: 34
+    bold: true
+  }
+}
+
+legend: "" {
+  near: bottom-center
+  grid-columns: 4
+  grid-gap: 28
+  style.fill: transparent
+  style.stroke: transparent
+  t: "━━ telemetry" {class: key; style.font-color: "#9a8eff"}
+  b: "━━ backups" {class: key; style.font-color: "#ffb000"}
+  d: "╍╍ DNS sync" {class: key; style.font-color: "#b8ad8b"}
+  g: "━━ GitOps" {class: key; style.font-color: "#6cc080"}
+}
+
+# ---- sources -------------------------------------------------------------
+
+pve: "Proxmox\nnodes + VMs\nAlloy" {
+  class: node
+  icon: ${ic}/proxmox.svg
+}
+
+vega: "vega\nGitea · AdGuard" {
+  class: vm
+  icon: ${ic}/gitea.svg
+}
+
+ayymd: "ayymd\nworkstation" {
+  class: k8s
+  icon: ${ic}/nvidia.svg
+}
+
+k3s: "k3s cluster\nArgo CD · Alloy\nPrometheus\nCNPG · hass-poller" {
+  class: k8s
+  width: 290
+  icon: ${ic}/k3s.svg
+}
+
+# ---- destinations ----------------------------------------------------------
+
+rigel: "rigel\nAdGuard origin\nLoki · Grafana" {
+  class: vm
+  icon: ${ic}/adguard-home.svg
+}
+
+blackhole: "blackhole\nAdGuard" {
+  class: vm
+  icon: ${ic}/adguard-home.svg
+}
+
+alpha: "alpha · Pi 4\nAdGuard standby" {
+  class: node
+  icon: ${ic}/raspberry-pi.svg
+}
+
+nas: "nas-backup\nZFS mirror · NFS" {
+  class: vm
+  icon: ${ic}/truenas.svg
+}
+
+home: "home VLAN" {
+  class: zone
+  macdaddy: "macdaddy\nMac mini\nPrometheus" {
+    class: node
+    icon: ${ic}/apple-light.svg
+  }
+  ha: "Home Assistant\non its own Pi" {
+    class: node
+    icon: ${ic}/home-assistant.svg
+  }
+}
+
+# ---- flows -----------------------------------------------------------------
+
+# GitOps: Argo CD pulls the manifests repo from Gitea on vega.
+k3s -> vega: "Argo CD\npulls git" {class: gitops}
+
+# Telemetry
+pve -> rigel: "logs" {class: telemetry}
+pve -> home.macdaddy: "metrics" {class: telemetry}
+k3s -> rigel: "logs" {class: telemetry}
+k3s -> home.macdaddy: "remote_write" {class: telemetry}
+k3s -> home.ha: "hass-poller" {class: telemetry}
+
+# DNS: rigel is the adguardhome-sync origin
+rigel -> vega: "sync" {class: dns}
+rigel -> blackhole: "sync" {class: dns}
+rigel -> alpha: "sync" {class: dns}
+
+# Backups land on nas-backup
+vega -> nas: "weekly" {class: backup}
+rigel -> nas: "weekly" {class: backup}
+k3s -> nas: "Postgres\nvia S3 gateway" {class: backup}
+ayymd -> nas: "home dir\nSSH" {class: backup}
