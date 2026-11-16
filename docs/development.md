@@ -2,8 +2,13 @@
 
 ## Prerequisites
 
-- Node.js 24 (see `.nvmrc`)
-- pnpm 12.4.2 (pinned in `package.json`)
+- Node.js 26 LTS (see `.nvmrc`; upgraded from Node 24 in November 2026)
+- pnpm 12 (the exact version is pinned by `packageManager` in `package.json`)
+
+Install any pnpm 12, for example with mise or `npm install -g pnpm@12`. When it runs in this repo,
+pnpm switches itself to the version in `packageManager`. Corepack isn't used: Node 25 and later
+don't ship it. See [Node version](deployment.md#node-version) and [pnpm](deployment.md#pnpm) for
+where each is pinned.
 
 ## Setup
 

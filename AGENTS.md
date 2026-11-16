@@ -14,8 +14,8 @@ A personal blog. Astro 6 + TypeScript, static content collections under `src/con
 
 ## Toolchain
 
-- Node 24 (`.nvmrc`)
-- pnpm 12.4.2 (pinned in `package.json`)
+- Node 26 LTS (`.nvmrc`). Pinned in four places that move together — see "Node version" in `docs/deployment.md`.
+- pnpm 12; the exact version is `packageManager` in `package.json`, and nowhere else. CI and the Dockerfile run `npm install -g pnpm@12` and pnpm switches itself to the pinned version. No corepack — Node 25+ doesn't bundle it; don't reintroduce `corepack enable`.
 - git LFS (required — see "Git LFS" below)
 - lychee (Rust binary; install locally for link checks: `brew install lychee`)
 
